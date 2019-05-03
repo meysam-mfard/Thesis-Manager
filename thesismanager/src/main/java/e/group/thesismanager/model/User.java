@@ -2,17 +2,25 @@ package e.group.thesismanager.model;
 
 import lombok.Data;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+import static javax.persistence.FetchType.EAGER;
+
 @Data
+@Entity
 public class User extends BaseEntity{
 
     private String firstName;
     private String lastName;
-    private Set<String> roles = new HashSet<>();
+
+    @ElementCollection(fetch=EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
 
 
