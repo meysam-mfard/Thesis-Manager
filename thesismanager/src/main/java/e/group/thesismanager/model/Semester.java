@@ -4,12 +4,15 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import java.time.LocalDateTime;
+import java.time.Year;
 
 @Data
 @Entity
-public class Deadline {
+public class Semester extends BaseEntity{
+    private SemesterAT_SP semester;
+    private Year year;
     private LocalDateTime projectDescriptionDeadline;
     private LocalDateTime projectPlanDeadline;
-    private LocalDateTime projectReportDeadline;
-    private LocalDateTime projectFinalReportDeadline;
+    private LocalDateTime reportDeadline;
+    private LocalDateTime finalReportDeadline;
 }
