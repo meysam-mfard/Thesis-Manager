@@ -2,10 +2,9 @@ package e.group.thesismanager.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,20 +18,23 @@ public class Thesis extends BaseEntity{
     @ManyToOne
     private Semester semester;
 
-    @OneToOne
+    @ManyToOne
+    private User coordinator;
+
+    @ManyToOne
     private User supervisor;
 
-    @OneToMany
-    private Set<User> readers;
+    @ManyToMany
+    private Set<User> readers = new HashSet<>();
+
+    @ManyToMany
+    private Set<User> bidders = new HashSet<>();
+
+    @ManyToMany
+    private Set<User> opponent = new HashSet<>();
 
     @OneToMany
-    private Set<User> bidders;
-
-    @OneToOne
-    private User opponent;
-
-    @OneToMany
-    private List<Submission> submissions;
+    private List<Submission> submissions = new LinkedList<>();
 
     private Float finalGrade;
 
