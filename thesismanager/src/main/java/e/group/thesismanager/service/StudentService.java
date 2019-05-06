@@ -7,7 +7,7 @@ import e.group.thesismanager.model.User;
 
 public interface StudentService {
 
-    Thesis initThesis(User student, Semester semester);
+    void initThesis(User student, Semester semester);
 
     Thesis getThesis(Long id);
 

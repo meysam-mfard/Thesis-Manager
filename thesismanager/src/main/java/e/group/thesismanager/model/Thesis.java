@@ -33,7 +33,7 @@ public class Thesis extends BaseEntity{
     @ManyToMany
     private Set<User> opponent = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Submission> submissions = new LinkedList<>();
 
     private Float finalGrade;
