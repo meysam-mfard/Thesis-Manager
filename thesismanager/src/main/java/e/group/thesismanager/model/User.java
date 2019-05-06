@@ -1,6 +1,8 @@
 package e.group.thesismanager.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -12,6 +14,8 @@ import java.util.Set;
 import static javax.persistence.FetchType.EAGER;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class User extends BaseEntity{
 
