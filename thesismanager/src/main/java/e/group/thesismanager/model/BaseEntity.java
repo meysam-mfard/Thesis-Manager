@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
