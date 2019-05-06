@@ -38,5 +38,5 @@ public class Thesis extends BaseEntity{
 
     private Float finalGrade;
 
-
+    private boolean supervisorAccept;
 }
