@@ -1,4 +1,5 @@
 package e.group.thesismanager.service;
+
 import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
@@ -14,7 +15,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class AssessServiceImplTest {
     AssessmentService assessmentService;
@@ -90,7 +91,7 @@ public class AssessServiceImplTest {
         feedback.setSubmissionTime(submissionTime);
 
         when(feedbackRepository.save(any())).thenReturn(feedback);
-        assertEquals(feedback, assessmentService.feedbackDocument(comment,file,author,submissionTime,authorRole));
+        assertEquals(feedback, assessmentService.feedbackOnSubmission( THESIS_LIST.get(0).getId(),comment,file,author,authorRole,submissionTime));
     }
 
     @Test
@@ -108,22 +109,22 @@ public class AssessServiceImplTest {
         document.setSubmissionTime(submissionTime);
 
         SubmissionType submissionType=SubmissionType.PROJECT_DESCRIPTION;
-        Map<User,Float> grade = new HashMap<>();
+        Map<User,Float> grades = new HashMap<>();
 
         submission.setSubmittedDocument(document);
         submission.setType(submissionType);
         submission.setFeedbacks(feedbackRepository.findAll());
-        submission.setGrades(grade);
+        submission.setGrades(grades);
 
         when(submissionRepository.save(submission)).thenReturn(submission);
-        assessmentService.assessDocument(document,grade,submissionType);
+        assessmentService.assessSubmission(submission.getId(), new User(), 1F);
         assertEquals(submission.getSubmittedDocument(),document);
         assertEquals(submission.getType(),submissionType);
-        assertEquals(submission.getGrades(), grade);
+        assertEquals(submission.getGrades(), grades);
         //assertEquals(submission);
-       // assessmentService.assessDocument(document,grade,submissionType);
+        // assessmentService.assessSubmission(document,grade,submissionType);
 
-       // verify(assessmentService,times(3)).assessDocument(document,grade,submissionType);
+        // verify(assessmentService,times(3)).assessSubmission(document,grade,submissionType);
 
     }
 }

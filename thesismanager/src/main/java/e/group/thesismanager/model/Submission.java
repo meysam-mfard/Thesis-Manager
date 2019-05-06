@@ -12,6 +12,9 @@ import java.util.Map;
 @Entity
 public class Submission extends BaseEntity {
 
+    @ManyToOne
+    private Thesis thesis;
+
     @OneToOne
     private Document submittedDocument;
 

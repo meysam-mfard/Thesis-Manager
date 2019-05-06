@@ -1,57 +1,76 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
-import e.group.thesismanager.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import e.group.thesismanager.repository.FeedbackRepository;
+import e.group.thesismanager.repository.SubmissionRepository;
+import e.group.thesismanager.repository.ThesisRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AssessmentServiceImpl implements AssessmentService{
 
-    protected ThesisRepository thesisRepository;
+    private final ThesisRepository thesisRepository;
 
-    protected FeedbackRepository feedbackRepository;
+    private final FeedbackRepository feedbackRepository;
 
-    protected SubmissionRepository submissionRepository;
+    private final SubmissionRepository submissionRepository;
 
-    public AssessmentServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository, SubmissionRepository submissionRepository) {
+    public AssessmentServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
+                                 SubmissionRepository submissionRepository) {
         this.thesisRepository = thesisRepository;
         this.feedbackRepository = feedbackRepository;
         this.submissionRepository = submissionRepository;
     }
 
-    @Autowired
-
     @Override
     public List<Thesis> getThesis() {
-       return thesisRepository.findAll();
+        return thesisRepository.findAll();
     }
 
+    @Transactional
     @Override
-    public Document feedbackDocument(String comment, File file, User author, LocalDateTime submissionTime, Role authorRole) {
-       //files, comment
+    public Submission feedbackOnSubmission(Long submissionId, Feedback feedback) {
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new NotFoundException("Submission does not exist. Id: "+submissionId));
+
+        submission.getFeedbacks().add(feedback);
+        return submissionRepository.save(submission);
+    }
+
+    @Transactional
+    @Override
+    public Submission feedbackOnSubmission(Long submissionId, String comment, File file, User author,
+                                           Role authorRole, LocalDateTime submissionTime) {
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new NotFoundException("Submission does not exist. Id: "+submissionId));
+
         Feedback feedback = new Feedback();
         feedback.setComment(comment);
         feedback.setFile(file);
         feedback.setAuthor(author);
         feedback.setAuthorRole(authorRole);
         feedback.setSubmissionTime(submissionTime);
-        return feedbackRepository.save(feedback);
+        Feedback savedFeedback = feedbackRepository.save(feedback);
+
+        submission.getFeedbacks().add(savedFeedback);
+
+        return submissionRepository.save(submission);
     }
 
-    // Grade
+    @Transactional
     @Override
-    public void assessDocument(Document document, Map<User,Float> grade, SubmissionType submissionType) {
-       Submission submission = new Submission();
-       submission.setSubmittedDocument(document);
-       submission.setType(submissionType);
-       submission.setFeedbacks(feedbackRepository.findAll());
-       submission.setGrades(grade);
-      submissionRepository.save(submission);
+    public Submission assessSubmission(Long submissionId, User grader, Float grade) {
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new NotFoundException("Submission does not exist. Id: "+submissionId));
+
+        submission.getGrades().put(grader, grade);
+
+        return submissionRepository.save(submission);
     }
 }

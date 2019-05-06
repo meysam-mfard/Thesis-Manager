@@ -5,13 +5,14 @@ import e.group.thesismanager.model.*;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 public interface AssessmentService {
 
     List<Thesis> getThesis();
 
-    Document feedbackDocument(String comment, File file, User author, LocalDateTime submissionTime, Role authorRole);
+    Submission feedbackOnSubmission(Long submissionId, Feedback feedback);
 
-    void assessDocument(Document document, Map<User,Float> grade, SubmissionType submissionType);
+    Submission feedbackOnSubmission(Long submissionId, String comment, File file, User author, Role authorRole, LocalDateTime submissionTime);
+
+    Submission assessSubmission(Long submissionId, User grader, Float grade);
 }
