@@ -1,14 +1,28 @@
 package e.group.thesismanager.model;
 
-import javax.persistence.OneToOne;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+@Data
+@Entity
 public class Submission extends BaseEntity {
 
     @OneToOne
     private Document submittedDocument;
-    private Map<Role, Document> feedbacks;
-    private Map<User, Float> grades;
-    private DocumentType documentType;
+
+    @OneToMany
+    private List<Feedback> feedbacks = new LinkedList<>();
+
+    @ElementCollection
+    @MapKeyJoinColumn(name = "grader")
+    private Map<User, Float> grades = new HashMap<>();
+
+    @Enumerated(EnumType.STRING)
+    private SubmissionType type;
 
 }
