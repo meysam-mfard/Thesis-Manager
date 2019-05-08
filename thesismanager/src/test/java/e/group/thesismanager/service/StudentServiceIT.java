@@ -1,5 +1,6 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.repository.DocumentRepository;
 import e.group.thesismanager.repository.SemesterRepository;
 import e.group.thesismanager.repository.UserRepository;
@@ -29,7 +30,7 @@ public class StudentServiceIT {
 
     @Transactional
     @Test
-    public void studentServiceTest_InitThesisNotNull() {
+    public void studentServiceTest_InitThesisNotNull() throws MissingRoleException {
         studentService.initThesis(userRepository.findById(1L).get(), semesterRepository.findById(1L).get());
 
         Assertions.assertNotNull(studentService.getThesis(1L));
@@ -37,7 +38,7 @@ public class StudentServiceIT {
 
     @Transactional
     @Test
-    public void studentServiceTest_SubmitProjectDescription() {
+    public void studentServiceTest_SubmitProjectDescription() throws MissingRoleException {
         studentService.initThesis(userRepository.findById(1L).get(), semesterRepository.findById(1L).get());
         studentService.submitProjectDescription(studentService.getThesis(1L), documentRepository.findById(1L).get());
 
