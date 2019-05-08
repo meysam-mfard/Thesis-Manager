@@ -77,7 +77,7 @@ public class AssessServiceImplTest {
     }
 
     @Test
-    void feedbackDocument() {
+    void feedbackOnSubmission() {
         Feedback feedback = new Feedback();
         String comment="good";
         File file = new File("");
@@ -89,9 +89,16 @@ public class AssessServiceImplTest {
         feedback.setAuthor(author);
         feedback.setAuthorRole(authorRole);
         feedback.setSubmissionTime(submissionTime);
+        Submission submission = new Submission();
+        submission.setThesis(THESIS_LIST.get(0));
+        submission.setSubmittedDocument(new Document());
+        submission.setType(SubmissionType.PROJECT_DESCRIPTION);
+        submission.getFeedbacks().add(feedback);
 
         when(feedbackRepository.save(any())).thenReturn(feedback);
-        assertEquals(feedback, assessmentService.feedbackOnSubmission( THESIS_LIST.get(0).getId(),comment,file,author,authorRole,submissionTime));
+        when(submissionRepository.save(any())).thenReturn(submission);
+        when(submissionRepository.findById(any())).thenReturn(Optional.of(submission));
+        assertEquals(submission, assessmentService.feedbackOnSubmission( THESIS_LIST.get(0).getId(),comment,file,author,authorRole,submissionTime));
     }
 
     @Test
@@ -102,6 +109,8 @@ public class AssessServiceImplTest {
         File file = new File("");
         User author = new User(FN_1, "K", new HashSet<>(Arrays.asList(Role.STUDENT)));
         LocalDateTime submissionTime= LocalDateTime.now();
+        final Float OLD_GRADE = 1F;
+        final Float NEW_GRADE = 2F;
 
         document.setAuthor(author);
         document.setComment(comment);
@@ -109,22 +118,22 @@ public class AssessServiceImplTest {
         document.setSubmissionTime(submissionTime);
 
         SubmissionType submissionType=SubmissionType.PROJECT_DESCRIPTION;
-        Map<User,Float> grades = new HashMap<>();
 
         submission.setSubmittedDocument(document);
         submission.setType(submissionType);
         submission.setFeedbacks(feedbackRepository.findAll());
-        //submission.setGrade(grades);
+        submission.setGrade(OLD_GRADE);
 
+        when(submissionRepository.findById(any())).thenReturn(Optional.of(submission));
         when(submissionRepository.save(submission)).thenReturn(submission);
-        assessmentService.assessSubmission(submission.getId(), new User(), 1F);
+        assessmentService.assessSubmission(submission.getId(), NEW_GRADE);
         assertEquals(submission.getSubmittedDocument(),document);
         assertEquals(submission.getType(),submissionType);
-        assertEquals(submission.getGrade(), grades);
+        assertEquals(NEW_GRADE.floatValue(),submission.getGrade().floatValue());
+
         //assertEquals(submission);
         // assessmentService.assessSubmission(document,grade,submissionType);
 
         // verify(assessmentService,times(3)).assessSubmission(document,grade,submissionType);
-
     }
 }

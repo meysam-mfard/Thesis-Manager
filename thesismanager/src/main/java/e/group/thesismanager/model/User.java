@@ -24,7 +24,7 @@ public class User extends BaseEntity{
     private String firstName;
     private String lastName;
 
-    @ElementCollection(fetch=EAGER)
+    @ElementCollection
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 

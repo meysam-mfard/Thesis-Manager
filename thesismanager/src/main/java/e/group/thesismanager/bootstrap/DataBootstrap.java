@@ -87,18 +87,18 @@ public class DataBootstrap implements ApplicationRunner {
         Document doc1 = new Document();
         doc1.setAuthor(std1);
         doc1.setComment("This is my project description");
-        documentRepository.save(doc1);
+        //documentRepository.save(doc1);
         sub_prjDsc.setSubmittedDocument(doc1);
         //feedback
         Feedback feed1 = new Feedback();
         feed1.setAuthor(coo1);
         feed1.setAuthorRole(Role.COORDINATOR);
         feed1.setComment("This is my feedback on your project description");
-        feedbackRepository.save(feed1);
+        //feedbackRepository.save(feed1);
         sub_prjDsc.getFeedbacks().add(feed1);
-        //sub_prjDsc.getGrades().put(t1.getCoordinator(), 12.5F);
-        submissionRepository.save(sub_prjDsc);
-        t1.getSubmissions().add(sub_prjDsc);
+        sub_prjDsc.setGrade(12.5F);
+        //submissionRepository.save(sub_prjDsc);
+        t1.addSubmission(sub_prjDsc);
 
         log.info("Initializing thesis!");
         thesisRepository.save(t1);
