@@ -22,9 +22,7 @@ public class Submission extends BaseEntity {
     @OneToMany
     private List<Feedback> feedbacks = new LinkedList<>();
 
-    @ElementCollection
-    @MapKeyJoinColumn(name = "grader")
-    private Map<User, Float> grades = new HashMap<>();
+    private Float grade;
 
     @Enumerated(EnumType.STRING)
     private SubmissionType type;

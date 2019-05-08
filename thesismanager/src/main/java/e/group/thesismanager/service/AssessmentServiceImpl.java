@@ -69,7 +69,7 @@ public class AssessmentServiceImpl implements AssessmentService{
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new NotFoundException("Submission does not exist. Id: "+submissionId));
 
-        submission.getGrades().put(grader, grade);
+        //submission.getGrades().put(grader, grade);
 
         return submissionRepository.save(submission);
     }

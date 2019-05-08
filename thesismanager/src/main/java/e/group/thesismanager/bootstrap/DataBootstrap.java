@@ -96,7 +96,7 @@ public class DataBootstrap implements ApplicationRunner {
         feed1.setComment("This is my feedback on your project description");
         feedbackRepository.save(feed1);
         sub_prjDsc.getFeedbacks().add(feed1);
-        sub_prjDsc.getGrades().put(t1.getCoordinator(), 12.5F);
+        //sub_prjDsc.getGrades().put(t1.getCoordinator(), 12.5F);
         submissionRepository.save(sub_prjDsc);
         t1.getSubmissions().add(sub_prjDsc);
 

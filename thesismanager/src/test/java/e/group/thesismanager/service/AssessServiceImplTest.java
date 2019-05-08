@@ -114,13 +114,13 @@ public class AssessServiceImplTest {
         submission.setSubmittedDocument(document);
         submission.setType(submissionType);
         submission.setFeedbacks(feedbackRepository.findAll());
-        submission.setGrades(grades);
+        //submission.setGrade(grades);
 
         when(submissionRepository.save(submission)).thenReturn(submission);
         assessmentService.assessSubmission(submission.getId(), new User(), 1F);
         assertEquals(submission.getSubmittedDocument(),document);
         assertEquals(submission.getType(),submissionType);
-        assertEquals(submission.getGrades(), grades);
+        assertEquals(submission.getGrade(), grades);
         //assertEquals(submission);
         // assessmentService.assessSubmission(document,grade,submissionType);
 
