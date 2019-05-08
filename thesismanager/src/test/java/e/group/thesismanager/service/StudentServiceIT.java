@@ -9,8 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.beans.Transient;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,7 +27,7 @@ public class StudentServiceIT {
     @Autowired
     private DocumentRepository documentRepository;
 
-    @Transient
+    @Transactional
     @Test
     public void studentServiceTest_InitThesisNotNull() {
         studentService.initThesis(userRepository.findById(1L).get(), semesterRepository.findById(1L).get());
@@ -36,13 +35,12 @@ public class StudentServiceIT {
         Assertions.assertNotNull(studentService.getThesis(1L));
     }
 
-    @Transient
+    @Transactional
     @Test
     public void studentServiceTest_SubmitProjectDescription() {
         studentService.initThesis(userRepository.findById(1L).get(), semesterRepository.findById(1L).get());
-        //studentService.submitProjectDescription(studentService.getThesis(1L), documentRepository.findById(1L).get());
-        System.out.println(documentRepository.findById(1L).get());
+        studentService.submitProjectDescription(studentService.getThesis(1L), documentRepository.findById(1L).get());
 
-        Assertions.assertEquals(studentService.getThesis(1L).getSubmissions().size(), 1);
+        Assertions.assertEquals(2, studentService.getThesis(1L).getSubmissions().size());
     }
 }

@@ -27,6 +27,7 @@ public class StudentServiceImpl implements StudentService {
         Thesis thesis = new Thesis();
         thesis.setStudent(student);
         thesis.setSemester(semester);
+        thesis.setSubmissions(new ArrayList<>());
         thesisRepository.save(thesis);
     }
 
@@ -49,7 +50,6 @@ public class StudentServiceImpl implements StudentService {
     public void proposeSupervisor(Thesis thesis, User supervisor) {
         thesis.setSupervisor(supervisor);
         thesis.setSupervisorAccept(false);
-        thesisRepository.save(thesis);
     }
 
     @Override
@@ -76,8 +76,7 @@ public class StudentServiceImpl implements StudentService {
         Submission submission = new Submission();
         submission.setType(type);
         submission.setSubmittedDocument(document);
-        thesis.getSubmissions().add(submission);
-
+        thesis.addSubmission(submission);
         submissionRepository.save(submission);
         thesisRepository.save(thesis);
     }

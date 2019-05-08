@@ -33,10 +33,15 @@ public class Thesis extends BaseEntity{
     @ManyToMany
     private Set<User> opponent = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "thesis", cascade = CascadeType.ALL)
     private List<Submission> submissions = new LinkedList<>();
 
     private Float finalGrade;
 
     private boolean supervisorAccept;
+
+    public void addSubmission(Submission submission) {
+        submissions.add(submission);
+        submission.setThesis(this);
+    }
 }
