@@ -73,6 +73,6 @@ public class StudentServiceImpl implements StudentService {
         Submission submission = new Submission();
         submission.setType(type);
         submission.setSubmittedDocument(document);
-        thesis.getSubmissions().add(submission);
+        thesis.addSubmission(submission);
     }
 }

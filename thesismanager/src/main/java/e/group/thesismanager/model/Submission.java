@@ -12,7 +12,8 @@ import java.util.Map;
 @Entity
 public class Submission extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne (cascade = {CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.DETACH, CascadeType.REFRESH})
     private Thesis thesis;
 
     @OneToOne
