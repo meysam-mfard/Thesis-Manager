@@ -3,10 +3,7 @@ package e.group.thesismanager.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -43,5 +40,19 @@ public class Thesis extends BaseEntity{
     public void addSubmission(Submission submission) {
         submissions.add(submission);
         submission.setThesis(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Thesis)) return false;
+        Thesis thesis = (Thesis) o;
+        return student.equals(thesis.student) &&
+                semester.equals(thesis.semester);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(student, semester);
     }
 }

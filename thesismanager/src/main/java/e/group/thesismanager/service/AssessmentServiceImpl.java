@@ -30,6 +30,12 @@ public class AssessmentServiceImpl implements AssessmentService{
 
     @Override
     public List<Thesis> getThesis() {
+        /*List<Thesis> thesisList = thesisRepository.findAll();
+        thesisList.forEach(thesis -> {
+            thesis.getSubmissions();
+            thesis.setSubmissions(submissionRepository.findByThesisId(thesis.getId()));
+        });
+        return thesisList;*/
         return thesisRepository.findAll();
     }
 
@@ -39,7 +45,7 @@ public class AssessmentServiceImpl implements AssessmentService{
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new NotFoundException("Submission does not exist. Id: "+submissionId));
 
-        submission.getFeedbacks().add(feedback);
+        submission.addFeedback(feedback);
         return submissionRepository.save(submission);
     }
 
@@ -58,18 +64,18 @@ public class AssessmentServiceImpl implements AssessmentService{
         feedback.setSubmissionTime(submissionTime);
         Feedback savedFeedback = feedbackRepository.save(feedback);
 
-        submission.getFeedbacks().add(savedFeedback);
+        submission.addFeedback(savedFeedback);
 
         return submissionRepository.save(submission);
     }
 
     @Transactional
     @Override
-    public Submission assessSubmission(Long submissionId, User grader, Float grade) {
+    public Submission assessSubmission(Long submissionId, Float grade) {
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new NotFoundException("Submission does not exist. Id: "+submissionId));
 
-        submission.getGrades().put(grader, grade);
+        submission.setGrade(grade);
 
         return submissionRepository.save(submission);
     }

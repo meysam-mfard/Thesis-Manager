@@ -14,5 +14,5 @@ public interface AssessmentService {
 
     Submission feedbackOnSubmission(Long submissionId, String comment, File file, User author, Role authorRole, LocalDateTime submissionTime);
 
-    Submission assessSubmission(Long submissionId, User grader, Float grade);
+    Submission assessSubmission(Long submissionId, Float grade);
 }

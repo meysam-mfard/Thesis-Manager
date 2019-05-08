@@ -1,7 +1,9 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
+import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,19 +15,24 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     private final ThesisRepository thesisRepository;
+    private final SubmissionRepository submissionRepository;
 
     @Autowired
-    public StudentServiceImpl(ThesisRepository thesisRepository) {
+    public StudentServiceImpl(ThesisRepository thesisRepository, SubmissionRepository submissionRepository) {
         this.thesisRepository = thesisRepository;
+        this.submissionRepository = submissionRepository;
     }
 
     @Override
-    public Thesis initThesis(User student, Semester semester) {
+    public void initThesis(User student, Semester semester) throws MissingRoleException {
+        if(!student.getRoles().contains(Role.STUDENT))
+            throw new MissingRoleException("Could not initialize thesis; User is not a student");
+
         Thesis thesis = new Thesis();
         thesis.setStudent(student);
         thesis.setSemester(semester);
         thesis.setSubmissions(new ArrayList<>());
-        return thesis;
+        thesisRepository.save(thesis);
     }
 
     @Override
@@ -44,7 +51,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void proposeSupervisor(Thesis thesis, User supervisor) {
+    public void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException {
+        if(!supervisor.getRoles().contains(Role.SUPERVISOR))
+            throw new MissingRoleException("Could not propose supervisor; Proposed user is not a supervisor");
         thesis.setSupervisor(supervisor);
         thesis.setSupervisorAccept(false);
     }
@@ -74,5 +83,7 @@ public class StudentServiceImpl implements StudentService {
         submission.setType(type);
         submission.setSubmittedDocument(document);
         thesis.addSubmission(submission);
+        submissionRepository.save(submission);
+        thesisRepository.save(thesis);
     }
 }
