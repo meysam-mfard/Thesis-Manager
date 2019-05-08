@@ -14,7 +14,7 @@ public interface StudentService {
 
     Thesis getThesis(User student, Semester semester);
 
-    void proposeSupervisor(Thesis thesis, User supervisor);
+    void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException;
 
     void submitProjectDescription(Thesis thesis, Document projectDescription);
 
