@@ -130,10 +130,10 @@ public class AssessServiceImplTest {
         assertEquals(submission.getSubmittedDocument(),document);
         assertEquals(submission.getType(),submissionType);
         assertEquals(NEW_GRADE.floatValue(),submission.getGrade().floatValue());
+
         //assertEquals(submission);
         // assessmentService.assessSubmission(document,grade,submissionType);
 
         // verify(assessmentService,times(3)).assessSubmission(document,grade,submissionType);
-
     }
 }
