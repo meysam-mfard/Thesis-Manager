@@ -51,7 +51,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void proposeSupervisor(Thesis thesis, User supervisor) {
+    public void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException {
+        if(!supervisor.getRoles().contains(Role.SUPERVISOR))
+            throw new MissingRoleException("Could not propose supervisor; Proposed user is not a supervisor");
         thesis.setSupervisor(supervisor);
         thesis.setSupervisorAccept(false);
     }
