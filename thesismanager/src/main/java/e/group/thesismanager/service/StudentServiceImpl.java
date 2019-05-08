@@ -1,5 +1,6 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.SubmissionRepository;
@@ -23,7 +24,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void initThesis(User student, Semester semester) {
+    public void initThesis(User student, Semester semester) throws MissingRoleException {
+        if(!student.getRoles().contains(Role.STUDENT))
+            throw new MissingRoleException("Could not initialize thesis; User is not a student");
+
         Thesis thesis = new Thesis();
         thesis.setStudent(student);
         thesis.setSemester(semester);
