@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,12 +19,14 @@ class AssessmentServiceIT {
     @Autowired
     AssessmentService assessmentService;
 
+    @Transactional
     @Test
     void feedbackOnSubmissionTest() {
         final String COMMENT = "sample comment 123456";
         Thesis thesis = assessmentService.getThesis().get(0);
-        Integer submiossionNum = thesis.getSubmissions().size();
         Submission submission = thesis.getSubmissions().get(0);
+        Integer feedbacksCount = submission.getFeedbacks().size();
+
         Long submissionId = submission.getId();
         Feedback feedback = new Feedback();
         feedback.setComment(COMMENT);
@@ -34,7 +37,7 @@ class AssessmentServiceIT {
                 .getSubmissions().stream().filter(sub -> sub.getId().equals(submissionId))
                 .findFirst().get();
 
-        assertEquals(submiossionNum+1, thesis.getSubmissions().size());
+        assertEquals(feedbacksCount+1, newSubmission.getFeedbacks().size());
         assertEquals(1, newSubmission.getFeedbacks().stream().filter(filter ->
                 filter.getComment().equals(COMMENT)).count());
     }

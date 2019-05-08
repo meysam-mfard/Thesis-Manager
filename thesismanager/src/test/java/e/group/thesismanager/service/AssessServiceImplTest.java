@@ -109,6 +109,8 @@ public class AssessServiceImplTest {
         File file = new File("");
         User author = new User(FN_1, "K", new HashSet<>(Arrays.asList(Role.STUDENT)));
         LocalDateTime submissionTime= LocalDateTime.now();
+        final Float OLD_GRADE = 1F;
+        final Float NEW_GRADE = 2F;
 
         document.setAuthor(author);
         document.setComment(comment);
@@ -116,19 +118,18 @@ public class AssessServiceImplTest {
         document.setSubmissionTime(submissionTime);
 
         SubmissionType submissionType=SubmissionType.PROJECT_DESCRIPTION;
-        Map<User,Float> grades = new HashMap<>();
 
         submission.setSubmittedDocument(document);
         submission.setType(submissionType);
         submission.setFeedbacks(feedbackRepository.findAll());
-        submission.setGrades(grades);
+        submission.setGrade(OLD_GRADE);
 
         when(submissionRepository.findById(any())).thenReturn(Optional.of(submission));
         when(submissionRepository.save(submission)).thenReturn(submission);
-        assessmentService.assessSubmission(submission.getId(), new User(), 1F);
+        assessmentService.assessSubmission(submission.getId(), NEW_GRADE);
         assertEquals(submission.getSubmittedDocument(),document);
         assertEquals(submission.getType(),submissionType);
-        assertEquals(submission.getGrades(), grades);
+        assertEquals(NEW_GRADE.floatValue(),submission.getGrade().floatValue());
         //assertEquals(submission);
         // assessmentService.assessSubmission(document,grade,submissionType);
 
