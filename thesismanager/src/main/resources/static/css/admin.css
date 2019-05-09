@@ -5,18 +5,17 @@ h1{
     height: 200px;
     padding:20px 25px;
     border:1px solid #BFBFBF;
-    background: #000 url("title.jpg");
+    background: #000 url("../images/title.jpg");
     background-size:cover;
     /* Add box-shadow */
 }
 
 body{
-    /* 设置自动 */
     max-width: 100%;
     width:1500px;
     height:1500px;
     overflow:scroll;
-    background: url(admin.jpg)  no-repeat center center;
+    background: url(../images/admin.jpg)  no-repeat center center;
     background-size:cover;
     background-attachment:fixed;
     background-color:#CCCCCC;
