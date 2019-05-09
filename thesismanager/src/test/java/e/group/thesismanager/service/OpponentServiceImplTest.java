@@ -17,30 +17,30 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class AssessServiceImplTest {
-    AssessmentService assessmentService;
+public class OpponentServiceImplTest {
+
+    OpponentService opponentService;
     private static final List<Thesis> THESIS_LIST = new LinkedList<>();
     private static final String FN_1 = "fn1";
     private static final String LN_1 = "ln1";
-
+    private static final String UN_1 = "un1";
+    private static final String PW_1 = "pw1";
 
     @Mock
     ThesisRepository thesisRepository;
-
     @Mock
     FeedbackRepository feedbackRepository;
-
     @Mock
     SubmissionRepository submissionRepository;
 
-
     @BeforeEach
     void setUp() {
+
         MockitoAnnotations.initMocks(this);
-        assessmentService = new AssessmentServiceImpl(thesisRepository, feedbackRepository, submissionRepository);
-        User user1= new User(FN_1, LN_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
-        User user2 = new User(FN_1, LN_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
-        User user3 = new User(FN_1, LN_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        opponentService = new OpponentServiceImpl(thesisRepository, feedbackRepository, submissionRepository);
+        User user1= new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User user2 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User user3 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
         Semester semester = new Semester();
         Set<User> readers = new HashSet<>();
 
@@ -68,20 +68,22 @@ public class AssessServiceImplTest {
 
     @Test
     void getThesis() {
+
         when(thesisRepository.findAll()).thenReturn(null);
-        assertNull(assessmentService.getThesis());
+        assertNull(opponentService.getThesis());
 
         when(thesisRepository.findAll()).thenReturn(THESIS_LIST);
-        assertEquals(1, assessmentService.getThesis().size());
-        assertArrayEquals(THESIS_LIST.toArray(), assessmentService.getThesis().toArray());
+        assertEquals(1, opponentService.getThesis().size());
+        assertArrayEquals(THESIS_LIST.toArray(), opponentService.getThesis().toArray());
     }
 
     @Test
     void feedbackOnSubmission() {
+
         Feedback feedback = new Feedback();
         String comment="good";
         File file = new File("");
-        User author = new User(FN_1, "K", new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
         Role authorRole = Role.STUDENT;
         LocalDateTime submissionTime= LocalDateTime.now();
         feedback.setComment(comment);
@@ -98,16 +100,17 @@ public class AssessServiceImplTest {
         when(feedbackRepository.save(any())).thenReturn(feedback);
         when(submissionRepository.save(any())).thenReturn(submission);
         when(submissionRepository.findById(any())).thenReturn(Optional.of(submission));
-        assertEquals(submission, assessmentService.feedbackOnSubmission( THESIS_LIST.get(0).getId(),comment,file,author,authorRole,submissionTime));
+        assertEquals(submission, opponentService.feedbackOnSubmission(THESIS_LIST.get(0).getId(),comment,file,author,submissionTime,authorRole));
     }
 
     @Test
     void assessDocument() {
+
         Submission submission = new Submission();
         Document document = new Document();
         String comment="good";
         File file = new File("");
-        User author = new User(FN_1, "K", new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
         LocalDateTime submissionTime= LocalDateTime.now();
         final Float OLD_GRADE = 1F;
         final Float NEW_GRADE = 2F;
@@ -126,14 +129,9 @@ public class AssessServiceImplTest {
 
         when(submissionRepository.findById(any())).thenReturn(Optional.of(submission));
         when(submissionRepository.save(submission)).thenReturn(submission);
-        assessmentService.assessSubmission(submission.getId(), NEW_GRADE);
+        opponentService.assessSubmission(submission.getId(), NEW_GRADE);
         assertEquals(submission.getSubmittedDocument(),document);
         assertEquals(submission.getType(),submissionType);
         assertEquals(NEW_GRADE.floatValue(),submission.getGrade().floatValue());
-
-        //assertEquals(submission);
-        // assessmentService.assessSubmission(document,grade,submissionType);
-
-        // verify(assessmentService,times(3)).assessSubmission(document,grade,submissionType);
     }
 }

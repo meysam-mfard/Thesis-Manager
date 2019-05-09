@@ -7,7 +7,7 @@ import java.util.*;
 
 @Data
 @Entity
-public class Thesis extends BaseEntity{
+public class Thesis extends BaseEntity {
 
     @OneToOne
     private User student;
@@ -44,15 +44,18 @@ public class Thesis extends BaseEntity{
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (!(o instanceof Thesis)) return false;
         Thesis thesis = (Thesis) o;
+
         return student.equals(thesis.student) &&
                 semester.equals(thesis.semester);
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(student, semester);
     }
 }

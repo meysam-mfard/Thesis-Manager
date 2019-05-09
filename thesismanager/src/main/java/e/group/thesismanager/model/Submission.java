@@ -28,7 +28,7 @@ public class Submission extends BaseEntity {
     private SubmissionType type;
 
     public void addFeedback(Feedback feedback) {
+
         feedbacks.add(feedback);
     }
-
 }
