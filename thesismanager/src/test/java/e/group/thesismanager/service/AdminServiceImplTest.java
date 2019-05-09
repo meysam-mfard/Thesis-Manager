@@ -20,21 +20,23 @@ class AdminServiceImplTest {
 
     private static final String FN_1 = "fn1";
     private static final String LN_1 = "ln1";
+    private static final String UN_1 = "un1";
+    private static final String PW_1 = "pw1";
     private static final List<User> USER_LIST = new LinkedList<>();
 
     AdminService adminService;
-
 
     @Mock
     UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
+
         MockitoAnnotations.initMocks(this);
         adminService = new AdminServiceImpl(userRepository);
 
-        User u1 = new User(FN_1, LN_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
-        User u2 = new User(FN_1, LN_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User u2 = new User(FN_1, LN_1, UN_1, PW_1,new HashSet<>(Arrays.asList(Role.STUDENT)));
 
         USER_LIST.clear();
         USER_LIST.add(u1);
@@ -73,7 +75,6 @@ class AdminServiceImplTest {
         assertArrayEquals(new User[] {USER_LIST.get(0)}, adminService.findUsersByRole(Role.COORDINATOR).toArray());
 
         assertEquals(0, adminService.findUsersByRole(Role.SUPERVISOR).size());
-
     }
 
     @Test
@@ -91,7 +92,7 @@ class AdminServiceImplTest {
 
         String lastName = "last_name";
 
-        User u1 = new User(FN_1, lastName, new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
+        User u1 = new User(FN_1, lastName, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
         when(userRepository.save(u1)).thenReturn(u1);
         assertEquals(u1, adminService.saveUser(u1));
     }

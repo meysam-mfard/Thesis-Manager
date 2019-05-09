@@ -9,6 +9,7 @@ import java.time.Year;
 @Data
 @Entity
 public class Semester extends BaseEntity{
+
     private SemesterAT_SP semester;
     private Year year;
     private LocalDateTime projectDescriptionDeadline;

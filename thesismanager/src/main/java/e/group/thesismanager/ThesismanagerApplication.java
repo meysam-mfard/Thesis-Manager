@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ThesismanagerApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(ThesismanagerApplication.class, args);
     }
-
 }

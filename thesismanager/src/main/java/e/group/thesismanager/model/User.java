@@ -11,21 +11,18 @@ import javax.persistence.Enumerated;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.FetchType.EAGER;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     private String firstName;
     private String lastName;
+    private String username;
+    private String password;
 
-    @ElementCollection(fetch=EAGER)
+    @ElementCollection
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
-
-
-
 }

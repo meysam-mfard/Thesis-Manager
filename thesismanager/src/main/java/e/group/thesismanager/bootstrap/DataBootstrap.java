@@ -30,6 +30,7 @@ public class DataBootstrap implements ApplicationRunner {
 
     public DataBootstrap(UserRepository userRepository, ThesisRepository thesisRepository
             , SemesterRepository semesterRepository, SubmissionRepository submissionRepository, DocumentRepository documentRepository, FeedbackRepository feedbackRepository) {
+
         this.userRepository = userRepository;
         this.thesisRepository = thesisRepository;
         this.semesterRepository = semesterRepository;
@@ -41,6 +42,7 @@ public class DataBootstrap implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
+
         loadUsers();
     }
 
@@ -49,15 +51,15 @@ public class DataBootstrap implements ApplicationRunner {
         /*Adding Users*/
         List<User> userList = new ArrayList<>();
 
-        User std1 = new User("first1", "last1", new HashSet<Role>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
+        User std1 = new User("first1", "last1", "username1", "password1", new HashSet<Role>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
         userList.add(std1);
-        User std2 = new User("first2", "last2", new HashSet<Role>(Arrays.asList(Role.STUDENT)));
+        User std2 = new User("first2", "last2", "username2", "password2", new HashSet<Role>(Arrays.asList(Role.STUDENT)));
         userList.add(std2);
-        User sup1 = new User("first-sup1", "last-sup1", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
+        User sup1 = new User("first-sup1", "last-sup1", "username-sup1", "password-sup1", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
         userList.add(sup1);
-        User sup2 = new User("first-sup2", "last-sup2", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
+        User sup2 = new User("first-sup2", "last-sup2", "username-sup2", "password-sup2", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
         userList.add(sup2);
-        User coo1 = new User("first-coo1", "last-coo1", new HashSet<Role>(Arrays.asList(Role.COORDINATOR)));
+        User coo1 = new User("first-coo1", "last-coo1","username-coo1", "password-coo1", new HashSet<Role>(Arrays.asList(Role.COORDINATOR)));
         coo1.getRoles().add(Role.READER);
         userList.add(coo1);
 
@@ -81,27 +83,31 @@ public class DataBootstrap implements ApplicationRunner {
         t1.setStudent(std1);
         t1.setCoordinator(coo1);
         t1.setSupervisor(sup1);
+
         //submission
         Submission sub_prjDsc = new Submission();
         sub_prjDsc.setType(SubmissionType.PROJECT_DESCRIPTION);
         Document doc1 = new Document();
         doc1.setAuthor(std1);
         doc1.setComment("This is my project description");
-        documentRepository.save(doc1);
+
+        //documentRepository.save(doc1);
         sub_prjDsc.setSubmittedDocument(doc1);
+
         //feedback
         Feedback feed1 = new Feedback();
         feed1.setAuthor(coo1);
         feed1.setAuthorRole(Role.COORDINATOR);
         feed1.setComment("This is my feedback on your project description");
-        feedbackRepository.save(feed1);
+
+        //feedbackRepository.save(feed1);
         sub_prjDsc.getFeedbacks().add(feed1);
-        sub_prjDsc.getGrades().put(t1.getCoordinator(), 12.5F);
-        submissionRepository.save(sub_prjDsc);
-        t1.getSubmissions().add(sub_prjDsc);
+        sub_prjDsc.setGrade(12.5F);
+
+        //submissionRepository.save(sub_prjDsc);
+        t1.addSubmission(sub_prjDsc);
 
         log.info("Initializing thesis!");
         thesisRepository.save(t1);
-
     }
 }

@@ -1,5 +1,6 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.Document;
 import e.group.thesismanager.model.Semester;
 import e.group.thesismanager.model.Thesis;
@@ -7,13 +8,13 @@ import e.group.thesismanager.model.User;
 
 public interface StudentService {
 
-    Thesis initThesis(User student, Semester semester);
+    Thesis initThesis(User student, Semester semester) throws MissingRoleException;
 
     Thesis getThesis(Long id);
 
     Thesis getThesis(User student, Semester semester);
 
-    void proposeSupervisor(Thesis thesis, User supervisor);
+    void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException;
 
     void submitProjectDescription(Thesis thesis, Document projectDescription);
 
@@ -22,5 +23,4 @@ public interface StudentService {
     void submitReport(Thesis thesis, Document report);
 
     void submitFinalReport(Thesis thesis, Document finalReport);
-
 }
