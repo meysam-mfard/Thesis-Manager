@@ -1,6 +1,8 @@
 package e.group.thesismanager.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
@@ -9,16 +11,18 @@ import java.io.File;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class Document extends BaseEntity{
+public class Document extends BaseEntity {
 
-    private String comment;
+    protected String comment;
 
     @Lob
-    private File file;
+    protected File file;
 
     @ManyToOne
-    private User author;
+    protected User author;
 
-    private LocalDateTime submissionTime;
+    protected LocalDateTime submissionTime;
 }

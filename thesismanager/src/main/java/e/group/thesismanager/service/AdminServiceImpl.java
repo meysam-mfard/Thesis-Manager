@@ -17,21 +17,25 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     public AdminServiceImpl(UserRepository userRepository) {
+
         this.userRepository = userRepository;
     }
 
     @Override
     public List<User> findAllUsers() {
+
         return userRepository.findAll();
     }
 
     @Override
     public List<User> findUsersByLastName(String lastName) {
+
         return userRepository.findUsersByLastName(lastName);
     }
 
     @Override
     public List<User> findUsersByRole(Role role) {
+
         return userRepository.findAll().stream()
                 .filter(user -> user.getRoles().contains(role))
                 .collect(Collectors.toList());
@@ -39,27 +43,31 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public User findUserById(Long id) {
+
         return userRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("User does not exist. Id: "+id));
+                new NotFoundException("User does not exist. Id: " + id));
     }
 
     @Override
     public User saveUser(User user) {
+
         return userRepository.save(user);
     }
 
     @Override
     public void deleteUserById(Long id) {
+
         if (!userRepository.findById(id).isPresent())
-            throw new NotFoundException("User does not exist. Id: "+id);
+            throw new NotFoundException("User does not exist. Id: " + id);
 
         userRepository.deleteById(id);
     }
 
     @Override
     public User assignRoleToUserById(Long id, Role role) {
+
         User user = userRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("User does not exist. Id: "+id));
+                new NotFoundException("User does not exist. Id: " + id));
 
         user.getRoles().add(role);
         return user;

@@ -14,25 +14,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class AssessmentServiceIT {
+class OpponentServiceIT {
 
     @Autowired
-    AssessmentService assessmentService;
+    OpponentService opponentService;
 
     @Transactional
     @Test
     void feedbackOnSubmissionTest() {
+
         final String COMMENT = "sample comment 123456";
-        Thesis thesis = assessmentService.getThesis().get(0);
+        Thesis thesis = opponentService.getThesis().get(0);
         Submission submission = thesis.getSubmissions().get(0);
         Integer feedbacksCount = submission.getFeedbacks().size();
 
         Long submissionId = submission.getId();
         Feedback feedback = new Feedback();
         feedback.setComment(COMMENT);
-        assessmentService.feedbackOnSubmission(submission.getId(), feedback);
+        opponentService.feedbackOnSubmission(submission.getId(), feedback);
 
-        Submission newSubmission = assessmentService.getThesis().stream().filter(th -> th.getId().equals(thesis.getId()))
+        Submission newSubmission = opponentService.getThesis().stream().filter(th -> th.getId().equals(thesis.getId()))
                 .findFirst().get()
                 .getSubmissions().stream().filter(sub -> sub.getId().equals(submissionId))
                 .findFirst().get();

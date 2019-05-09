@@ -26,12 +26,15 @@ class AdminServiceIT {
 
     private static final String FN_1 = "fn1";
     private static final String LN_1 = "ln1";
+    private static final String UN_1 = "un1";
+    private static final String PW_1 = "pw1";
     private static final List<User> USER_LIST = new LinkedList<>();
 
     @Transactional
     @Test
     public void adminServiceTest_AddAndDelete() {
-        User u1 = new User(FN_1, LN_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+
+        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
         u1 = adminService.saveUser(u1);
         Long id = u1.getId();
         assertEquals(u1, adminService.findUserById(id));
@@ -42,15 +45,18 @@ class AdminServiceIT {
 
     @Test
     public void adminServiceTest_Exception() {
+
         assertThrows(NotFoundException.class, () -> adminService.findUserById(5506L));
     }
 
     @Transactional
     @Test
     void adminServiceTest_AssignRole() {
-        User u1 = new User(FN_1, LN_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+
+        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
         u1 = adminService.saveUser(u1);
         u1 = adminService.assignRoleToUserById(u1.getId(), Role.ADMIN);
+
         assertEquals(2, u1.getRoles().size());
         assertTrue(u1.getRoles().contains(Role.ADMIN));
         assertTrue(adminService.findUsersByRole(Role.ADMIN).
