@@ -79,7 +79,6 @@ public class OpponentServiceImplTest {
 
     @Test
     void feedbackOnSubmission() {
-
         Feedback feedback = new Feedback();
         String comment="good";
         File file = new File("");

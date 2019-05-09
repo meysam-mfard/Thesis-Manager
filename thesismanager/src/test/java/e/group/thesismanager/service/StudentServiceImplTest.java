@@ -14,7 +14,6 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StudentServiceImplTest {
-
     private ThesisRepository mockThesisRepository;
     private SubmissionRepository mockSubmissionRepository;
 
@@ -22,7 +21,6 @@ class StudentServiceImplTest {
 
     @BeforeEach
     void setUp() {
-
         mockThesisRepository = Mockito.mock(ThesisRepository.class);
         mockSubmissionRepository = Mockito.mock(SubmissionRepository.class);
 
@@ -31,7 +29,6 @@ class StudentServiceImplTest {
 
     @AfterEach
     void tearDown() {
-
         mockThesisRepository = null;
         mockSubmissionRepository = null;
         sut = null;
@@ -39,7 +36,6 @@ class StudentServiceImplTest {
 
     @Test
     void initThesisNotStudentShouldThrowException() {
-
         assertThrows(MissingRoleException.class, ()->{
             User user = new User();
             Semester semester = new Semester();
@@ -50,7 +46,6 @@ class StudentServiceImplTest {
 
     @Test
     void initThesis() throws MissingRoleException {
-
         User user = new User();
         user.getRoles().add(Role.STUDENT);
         Semester semester = new Semester();

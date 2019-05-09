@@ -38,7 +38,6 @@ public class Thesis extends BaseEntity {
     private boolean supervisorAccept;
 
     public void addSubmission(Submission submission) {
-
         submissions.add(submission);
         submission.setThesis(this);
     }

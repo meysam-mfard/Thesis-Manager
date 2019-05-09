@@ -19,7 +19,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     public StudentServiceImpl(ThesisRepository thesisRepository, SubmissionRepository submissionRepository) {
-
         this.thesisRepository = thesisRepository;
         this.submissionRepository = submissionRepository;
     }

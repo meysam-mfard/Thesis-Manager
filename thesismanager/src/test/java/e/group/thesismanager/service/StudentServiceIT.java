@@ -31,7 +31,6 @@ public class StudentServiceIT {
     @Transactional
     @Test
     public void studentServiceTest_InitThesisNotNull() throws MissingRoleException {
-
         studentService.initThesis(userRepository.findById(1L).get(), semesterRepository.findById(1L).get());
 
         Assertions.assertNotNull(studentService.getThesis(1L));
