@@ -2,14 +2,9 @@ package e.group.thesismanager.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import java.util.Collection;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +16,8 @@ public class User extends BaseEntity {
 
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String username;
     private String password;
 
