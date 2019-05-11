@@ -51,15 +51,15 @@ public class DataBootstrap implements ApplicationRunner {
         /*Adding Users*/
         List<User> userList = new ArrayList<>();
 
-        User std1 = new User("first1", "last1", "username1", "password1", new HashSet<Role>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
+        User std1 = new User("first1", "last1", "user1", "{noop}pass1", new HashSet<Role>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
         userList.add(std1);
-        User std2 = new User("first2", "last2", "username2", "password2", new HashSet<Role>(Arrays.asList(Role.STUDENT)));
+        User std2 = new User("first2", "last2", "username2", "{noop}password2", new HashSet<Role>(Arrays.asList(Role.STUDENT)));
         userList.add(std2);
-        User sup1 = new User("first-sup1", "last-sup1", "username-sup1", "password-sup1", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
+        User sup1 = new User("first-sup1", "last-sup1", "username-sup1", "{noop}password-sup1", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
         userList.add(sup1);
-        User sup2 = new User("first-sup2", "last-sup2", "username-sup2", "password-sup2", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
+        User sup2 = new User("first-sup2", "last-sup2", "username-sup2", "{noop}password-sup2", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
         userList.add(sup2);
-        User coo1 = new User("first-coo1", "last-coo1","username-coo1", "password-coo1", new HashSet<Role>(Arrays.asList(Role.COORDINATOR)));
+        User coo1 = new User("first-coo1", "last-coo1","username-coo1", "{noop}password-coo1", new HashSet<Role>(Arrays.asList(Role.COORDINATOR)));
         coo1.getRoles().add(Role.READER);
         userList.add(coo1);
 

@@ -21,7 +21,7 @@ public class User extends BaseEntity {
     private String username;
     private String password;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 }
