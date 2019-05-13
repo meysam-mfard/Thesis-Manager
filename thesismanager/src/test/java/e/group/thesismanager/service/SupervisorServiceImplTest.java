@@ -1,5 +1,6 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.FeedbackRepository;
@@ -12,7 +13,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 public class SupervisorServiceImplTest {
 
@@ -44,8 +47,20 @@ public class SupervisorServiceImplTest {
     }
 
     @Test
-    void replyOnSupervisionPropositionTest() {
+    void replyOnSupervisionPropositionErrorTest() {
 
         assertThrows(NotFoundException.class, () -> supervisorService.replyOnSupervisionProposition(THESIS_LIST.get(0).getId(), mockedSupervisor, true));
+    }
+
+    @Test
+    void replyOnSupervisionPropositionSuccessTest() throws MissingRoleException {
+
+        Thesis result = new Thesis();
+        when(thesisRepository.findById(result.getId())).thenReturn(Optional.of(result));
+        supervisorService.replyOnSupervisionProposition(result.getId(), mockedSupervisor, true);
+        result.setStudent(THESIS_LIST.get(0).getStudent());
+        result.setSemester(THESIS_LIST.get(0).getSemester());
+
+        assertEquals(THESIS_LIST.get(0), result);
     }
 }

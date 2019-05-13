@@ -22,6 +22,10 @@ class AdminServiceImplTest {
     private static final String LN_1 = "ln1";
     private static final String UN_1 = "un1";
     private static final String PW_1 = "pw1";
+    private static final String FN_2 = "fn2";
+    private static final String LN_2 = "ln2";
+    private static final String UN_2 = "un2";
+    private static final String PW_2 = "pw2";
     private static final List<User> USER_LIST = new LinkedList<>();
 
     AdminService adminService;
@@ -36,7 +40,7 @@ class AdminServiceImplTest {
         adminService = new AdminServiceImpl(userRepository);
 
         User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
-        User u2 = new User(FN_1, LN_1, UN_1, PW_1,new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User u2 = new User(FN_2, LN_2, UN_2, PW_2,new HashSet<>(Arrays.asList(Role.STUDENT)));
 
         USER_LIST.clear();
         USER_LIST.add(u1);
@@ -88,13 +92,15 @@ class AdminServiceImplTest {
     }
 
     @Test
-    void saveUser() {
+    void saveUser() throws Exception {
 
-        String lastName = "last_name";
+        User u2 = new User(FN_2, LN_2, UN_2, PW_2,new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
+        when(userRepository.save(u2)).thenReturn(u2);
+        assertEquals(u2, adminService.saveUser(u2));
 
-        User u1 = new User(FN_1, lastName, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
-        when(userRepository.save(u1)).thenReturn(u1);
-        assertEquals(u1, adminService.saveUser(u1));
+        //saving u2 for the second time -> duplicate usernames
+        when(userRepository.findByUsername(UN_2)).thenReturn(Optional.of(u2));
+        assertThrows(Exception.class, () -> adminService.saveUser(u2));
     }
 
     @Test
@@ -119,4 +125,22 @@ class AdminServiceImplTest {
         assertEquals(size+1, user.getRoles().size());
         assertTrue(user.getRoles().contains(Role.ADMIN));
     }
+
+    /*@Test
+    void updateUser() throws Exception {
+
+        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
+        //same as u1 with updated last name
+        User u2 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
+        u2.setLastName(LN_2);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(u1));
+        when(userRepository.save(any())).thenReturn(u2);
+
+        assertEquals(u2.getLastName(), adminService.updateUser(u2).getLastName());
+
+
+        //saving u1 for the second time -> duplicate usernames
+        when(userRepository.findByUsername(any())).thenReturn(Optional.of(u1));
+        assertThrows(Exception.class, () -> adminService.saveUser(u2));
+    }*/
 }

@@ -3,12 +3,11 @@ h1{
     text-align: center;
 }
 body{
-    /* 设置自动 */
     max-width: 100%;
     width:1500px;
     height:1500px;
     overflow:scroll;
-    background: url(lnu.jpg)  no-repeat center center;
+    background: url(../images/lnu.jpg)  no-repeat center center;
     background-size:cover;
     background-attachment:fixed;
     background-color:#CCCCCC;
