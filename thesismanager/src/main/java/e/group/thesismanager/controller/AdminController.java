@@ -33,7 +33,7 @@ public class AdminController {
 
     //runs for every controller
     /*@ModelAttribute("userList")
-    public Collection<User> populateUserList(Model model) {
+    public List<User> populateUserList(Model model) {
         return adminService.findAllUsers();
     }*/
     //////////////////////////////////////////////
@@ -62,7 +62,7 @@ public class AdminController {
         return "redirect:/admin";//return "redirect:/admin?" + SAVE_USER_SUCCESS;
     }
 
-    @PostMapping("updateuser")
+    @PostMapping("admin/updateuser")
     public String updateUser(@ModelAttribute User updateUser) {
         try {
             adminService.updateUser(updateUser);
@@ -71,6 +71,14 @@ public class AdminController {
             e.printStackTrace();
         }
 
-        return "redirect:/pages/admin/";
+        return "redirect:/admin";
+    }
+
+    @PostMapping("admin/search")
+    public String searchUser(Model model, @ModelAttribute("user") User user){
+        model.addAttribute("userList", adminService.searchUser("%"+user.getFirstName()+"%",
+                "%"+user.getLastName()+"%", "%"+user.getUsername()+"%"));
+
+        return "pages/admin";
     }
 }

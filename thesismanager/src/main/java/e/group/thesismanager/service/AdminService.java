@@ -26,4 +26,6 @@ public interface AdminService {
     Boolean usernameExist(String username);
 
     User updateUser(User updateUser) throws Exception;
+
+    List<User> searchUser(String firstName, String lastName, String username);
 }

@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
             .authorizeRequests()
                 .antMatchers("/static/**").permitAll()
-                .antMatchers("/admin").authenticated()
+                .antMatchers("/admin/**").authenticated()
                 .and()
             .formLogin().loginPage("/login").permitAll()
                 .failureUrl("/login?error").permitAll().and()

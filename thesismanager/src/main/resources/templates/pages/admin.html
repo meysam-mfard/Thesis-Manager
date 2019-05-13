@@ -43,41 +43,28 @@
             <div class="col">
               <div class="collapse multi-collapse" id="d1">
                 <div class="card card-body">
-                        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-                            <form class="form-inline">
-                                First Name: &nbsp;
-                                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                    Last Name: &nbsp;
-                                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                    Username (Email):&nbsp;
-                                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                    <button class="btn btn-primary" type="submit"data-toggle="collapse" data-target="#d3" aria-expanded="false" aria-controls="d3">Search</button>
-
-                            </form>
-                        </nav>
-                        <div class="collapse multi-collapse" id="d3">
+                    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+                        <form class="form" th:object="${user}" th:action="@{'/admin/search'}" method="post">
                             <div class="row">
-                                <div class="col">
-                                    Display User List Or Display Search Result
-                                    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-                                        <form class="form-inline">
-                                                Supervisor: &nbsp;
-                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                Reader: &nbsp;
-                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                Student:&nbsp;
-                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                Coordinator:&nbsp;
-                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                Opponent:&nbsp;
-                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Save</button>
-                                        </form>
-                                    </nav>
+                                <div class="col-md-3 form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="search" placeholder="Search" id="firstName" class="form-control" th:field="*{firstName}">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="search" placeholder="Search" id="lastName" class="form-control" th:field="*{lastName}">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="username">Username (Email)</label>
+                                    <input type="search" placeholder="Search" id="username" class="form-control" th:field="*{username}">
+                                </div>
+                                <div class="col-md-3">
+                                    <div style="height: 30px"></div>
+                                    <button class="btn btn-primary" type="submit">Search</button>
                                 </div>
                             </div>
-                        </div>
-
+                        </form>
+                    </nav>
                 </div>
               </div>
             </div>

@@ -105,4 +105,9 @@ public class AdminServiceImpl implements AdminService {
 
         return userRepository.save(user);
     }
+
+    @Override
+    public List<User> searchUser(String firstName, String lastName, String username) {
+        return userRepository.findAllByFirstNameLikeAndLastNameLikeAndUsernameLike(firstName, lastName, username);
+    }
 }
