@@ -39,9 +39,13 @@ public class StudentServiceIT {
     @Transactional
     @Test
     public void studentServiceTest_SubmitProjectDescription() throws MissingRoleException {
+        int expected = studentService.getThesis(1L).getSubmissions().size() + 1;
 
         studentService.initThesis(userRepository.findById(1L).get(), semesterRepository.findById(1L).get());
         studentService.submitProjectDescription(studentService.getThesis(1L), documentRepository.findById(1L).get());
-        Assertions.assertEquals(2, studentService.getThesis(1L).getSubmissions().size());
+
+        int actual =studentService.getThesis(1L).getSubmissions().size();
+
+        Assertions.assertEquals(expected, actual);
     }
 }
