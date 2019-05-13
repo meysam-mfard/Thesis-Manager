@@ -14,128 +14,167 @@
             
     <header>
 
-            <h1><br><br>Welcome To Admin page</h1>
+            <h1><br><br>Admin Page</h1>
     </header>
     <body>
+    <div class="container">
+
+        <div th:if="${param.success}" class="alert alert-success col-md-3" role="alert">
+            User was saved successfully.
+        </div>
+        <div th:if="${param.fail}" class="alert alert-danger col-md-3" role="alert">
+            Saving User failed!
+        </div>
+
         <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
             <form class="form-inline">
                 <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#d1" aria-expanded="false" aria-controls="d1">
                     Search User
                 </button>
                 &nbsp;
-                <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#d2" aria-expanded="false" aria-controls="d2">
+                <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#newUserCollapse" aria-expanded="false" aria-controls="newUserCollapse">
                     Create A New User
                 </button>
             </form>
         </nav>
 
-        <div class="container-fluid">
-
-            <div class="row">
-                <div class="col">
-                  <div class="collapse multi-collapse" id="d1">
-                    <div class="card card-body">
-                            <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-                                <form class="form-inline">
-                                    First Name: &nbsp;
-                                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                        Last Name: &nbsp;
-                                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                        User ID:&nbsp;
-                                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                        <button class="btn btn-primary" type="submit"data-toggle="collapse" data-target="#d3" aria-expanded="false" aria-controls="d3">Search</button>
-
-                                </form>
-                            </nav>
-                            <div class="collapse multi-collapse" id="d3">
-                                <div class="row">
-                                    <div class="col">
-                                        Display User List Or Display Search Result
-                                        <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-                                            <form class="form-inline">
-                                                    Supervisor: &nbsp;
-                                                    <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                    Reader: &nbsp;
-                                                    <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                    Student:&nbsp;
-                                                    <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                    Coordinator:&nbsp;
-                                                    <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                    Opponent:&nbsp;
-                                                    <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Save</button>
-                                            </form>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                  <div class="collapse multi-collapse" id="d2">
-                    <div class="card card-body">
+        <!--SEARCHING USER-->
+        <div class="row">
+            <div class="col">
+              <div class="collapse multi-collapse" id="d1">
+                <div class="card card-body">
                         <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
                             <form class="form-inline">
-                                    First Name: &nbsp;
+                                First Name: &nbsp;
                                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                                     Last Name: &nbsp;
                                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                    E-mail:&nbsp;
+                                    Username (Email):&nbsp;
                                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                    Password:&nbsp;
-                                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                            </form>
-                            <form class="form-inline">
-                                Supervisor: &nbsp;
-                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                Reader: &nbsp;
-                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                Student:&nbsp;
-                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                Coordinator:&nbsp;
-                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                Opponent:&nbsp;
-                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Save</button>
+                                    <button class="btn btn-primary" type="submit"data-toggle="collapse" data-target="#d3" aria-expanded="false" aria-controls="d3">Search</button>
+
                             </form>
                         </nav>
-                    </div>
-                  </div>
+                        <div class="collapse multi-collapse" id="d3">
+                            <div class="row">
+                                <div class="col">
+                                    Display User List Or Display Search Result
+                                    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+                                        <form class="form-inline">
+                                                Supervisor: &nbsp;
+                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
+                                                Reader: &nbsp;
+                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
+                                                Student:&nbsp;
+                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
+                                                Coordinator:&nbsp;
+                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
+                                                Opponent:&nbsp;
+                                                <input class="form-control mr-sm-2" type="checkbox" placeholder="Search" aria-label="Search">
+                                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Save</button>
+                                        </form>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+
                 </div>
+              </div>
             </div>
-
-            <div style="height: 30px"></div>
-
-            <!--LIST of USERS-->
-            <div class="row">
-                <div class="col-md-8 offset-md-2">
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead>
-                        <tr class="bg-warning">
-                            <th scope="col">ID</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Roles</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="table-primary" th:each="user : ${userList}">
-                            <th scope="row" th:text="${user.id}">1</th>
-                            <td th:text="${user.firstName}">Albert</td>
-                            <td th:text="${user.lastName}">Einstein</td>
-                            <td th:text="${user.username}">Albi@lnu.se</td>
-                            <td th:text="${user.roles}">Student</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
+
+
+        <!--NEW USER-->
+        <div class="row">
+            <div class="col">
+              <div class="collapse multi-collapse" id="newUserCollapse">
+                <div class="card card-body">
+                    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+                        <!--/*@thymesVar id="user" type="e.group.thesismanager.model.User"*/-->
+                        <form class="form" th:object="${user}" th:action="@{'/admin/newuser'}" method="post">
+                            <div class="row my-3">
+                                <div class="col-md-3 form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" class="form-control" th:field="*{firstName}">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" class="form-control" th:field="*{lastName}">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="username">Username (Email)</label>
+                                    <input type="email" id="username" class="form-control" th:field="*{username}">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" class="form-control" th:field="*{password}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Roles:
+                                </div>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" name="role" type="checkbox" id="coordinator" value="COORDINATOR" th:field="*{roles}">
+                                    <!--<input class="form-check-input" name="role" type="checkbox" id="coordinator" value="COORDINATOR" th:checked="${#sets.contains(user.roles,'COORDINATOR')}">-->
+                                    <label class="form-check-label" for="coordinator">Coordinator</label>
+                                </div>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" name="role" type="checkbox" id="supervisor" value="SUPERVISOR" th:field="*{roles}">
+                                    <label class="form-check-label" for="supervisor">Supervisor</label>
+                                </div>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" name="role" type="checkbox" id="student" value="STUDENT" th:field="*{roles}">
+                                    <label class="form-check-label" for="student">Student</label>
+                                </div>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" name="role" type="checkbox" id="reader" value="READER" th:field="*{roles}">
+                                    <label class="form-check-label" for="reader">Reader</label>
+                                </div>
+                                <div class="col form-check form-check-inline">
+                                    <input class="form-check-input" name="role" type="checkbox" id="opponent" value="OPPONENT" th:field="*{roles}">
+                                    <label class="form-check-label" for="opponent">Opponent</label>
+                                </div>
+
+                                <button class="col btn btn-primary" type="submit">Save</button>
+
+                            </div>
+                        </form>
+                    </nav>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div style="height: 30px"></div>
+
+
+        <!--LIST of USERS-->
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr class="bg-warning">
+                        <th scope="col">ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Roles</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="table-primary" th:each="user : ${userList}">
+                        <th scope="row" th:text="${user.id}">1</th>
+                        <td th:text="${user.firstName}">Albert</td>
+                        <td th:text="${user.lastName}">Einstein</td>
+                        <td th:text="${user.username}">Albi@lnu.se</td>
+                        <td th:text="${user.roles}">Student</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
     </body>
 </html>     

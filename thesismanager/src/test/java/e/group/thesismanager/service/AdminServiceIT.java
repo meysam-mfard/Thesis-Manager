@@ -32,7 +32,7 @@ class AdminServiceIT {
 
     @Transactional
     @Test
-    public void adminServiceTest_AddAndDelete() {
+    public void adminServiceTest_AddAndDelete() throws Exception {
 
         User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
         u1 = adminService.saveUser(u1);
@@ -51,7 +51,7 @@ class AdminServiceIT {
 
     @Transactional
     @Test
-    void adminServiceTest_AssignRole() {
+    void adminServiceTest_AssignRole() throws Exception {
 
         User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
         u1 = adminService.saveUser(u1);

@@ -15,9 +15,15 @@ public interface AdminService {
 
     User findUserById(Long id);
 
-    User saveUser(User user);
+    User saveUser(User user) throws Exception;
 
     void deleteUserById(Long id);
 
     User assignRoleToUserById(Long id, Role role);
+
+    User findUserByUsername(String username);
+
+    Boolean usernameExist(String username);
+
+    User updateUser(User updateUser) throws Exception;
 }

@@ -4,12 +4,14 @@ import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.User;
 import e.group.thesismanager.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -49,8 +51,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public User saveUser(User user) {
+    public User saveUser(User user) throws Exception {
 
+        if (usernameExist(user.getUsername())) {
+            //todo: throw customized exception
+            log.error("Username already exists! Username: "+user.getUsername());
+            throw new Exception("Username already exists!");
+        }
         return userRepository.save(user);
     }
 
@@ -71,5 +78,31 @@ public class AdminServiceImpl implements AdminService {
 
         user.getRoles().add(role);
         return user;
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() ->
+                new NotFoundException("User does not exist. Username: " + username));
+    }
+
+    @Override
+    public Boolean usernameExist(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public User updateUser(User updateUser) throws Exception {
+        User user = userRepository.findById(updateUser.getId()).orElseThrow(() ->
+                new NotFoundException("User does not exist. Id: " + updateUser.getId()));
+
+        if (!user.getUsername().equals(updateUser.getUsername())
+                && usernameExist(updateUser.getUsername())) {
+            //todo: throw customized exception
+            log.error("Username already exists! Username: "+updateUser.getUsername());
+            throw new Exception("Username already exists!");
+        }
+
+        return userRepository.save(user);
     }
 }
