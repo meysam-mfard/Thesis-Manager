@@ -58,6 +58,9 @@ public class AdminServiceImpl implements AdminService {
             log.error("Username already exists! Username: "+user.getUsername());
             throw new Exception("Username already exists!");
         }
+        String password = user.getPassword();
+        if (!password.startsWith("{noop}"))
+            user.setPassword("{noop}" + password);
         return userRepository.save(user);
     }
 
@@ -66,7 +69,6 @@ public class AdminServiceImpl implements AdminService {
 
         if (!userRepository.findById(id).isPresent())
             throw new NotFoundException("User does not exist. Id: " + id);
-
         userRepository.deleteById(id);
     }
 
@@ -92,7 +94,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public User updateUser(User updateUser) throws Exception {
+    public User editUser(User updateUser) throws Exception {
         User user = userRepository.findById(updateUser.getId()).orElseThrow(() ->
                 new NotFoundException("User does not exist. Id: " + updateUser.getId()));
 
@@ -103,11 +105,25 @@ public class AdminServiceImpl implements AdminService {
             throw new Exception("Username already exists!");
         }
 
-        return userRepository.save(user);
+        String password = updateUser.getPassword();
+        if (password.isEmpty())
+            updateUser.setPassword(user.getPassword());
+        else if (!password.startsWith("{noop}"))
+            updateUser.setPassword("{noop}" + password);
+        return userRepository.save(updateUser);
     }
 
     @Override
     public List<User> searchUser(String firstName, String lastName, String username) {
         return userRepository.findAllByFirstNameLikeAndLastNameLikeAndUsernameLike(firstName, lastName, username);
+    }
+
+    @Override
+    public void activeUserById(Long id, Boolean activate) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("User does not exist. Id: " + id));
+
+        user.setAccountIsActive(activate);
+        userRepository.save(user);
     }
 }

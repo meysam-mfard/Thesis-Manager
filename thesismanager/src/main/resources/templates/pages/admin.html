@@ -1,7 +1,7 @@
 <!DOCTYPE>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title> Admin page</title>
+        <title>Admin page</title>
         <meta charset="utf-8">
         <meta property="og:title" content="Start page" />
         <meta property="og:type" content="website" />
@@ -25,10 +25,11 @@
         <div th:if="${param.fail}" class="alert alert-danger col-md-3" role="alert">
             Saving User failed!
         </div>
+<!--
 
         <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
             <form class="form-inline">
-                <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#d1" aria-expanded="false" aria-controls="d1">
+                <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#searchCollapse" aria-expanded="false" aria-controls="d1">
                     Search User
                 </button>
                 &nbsp;
@@ -38,12 +39,118 @@
             </form>
         </nav>
 
-        <!--SEARCHING USER-->
+        &lt;!&ndash;SEARCHING USER&ndash;&gt;
         <div class="row">
             <div class="col">
-              <div class="collapse multi-collapse" id="d1">
-                <div class="card card-body">
-                    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+              <div class="collapse multi-collapse" id="searchCollapse">
+                <div class="card card-body" style="background-color: #e3f2fd;">
+                    <form class="form" th:object="${user}" th:action="@{'/admin/search'}" method="post">
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="search" placeholder="Search" id="firstName" class="form-control" th:field="*{firstName}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="search" placeholder="Search" id="lastName" class="form-control" th:field="*{lastName}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="username">Username (Email)</label>
+                                <input type="search" placeholder="Search" id="username" class="form-control" th:field="*{username}">
+                            </div>
+                            <div class="col-md-3">
+                                <div style="height: 30px"></div>
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        &lt;!&ndash;NEW USER&ndash;&gt;
+        <div class="row">
+            <div class="col">
+              <div class="collapse multi-collapse" id="newUserCollapse">
+                <div class="card card-body" style="background-color: #e3f2fd;">
+                    &lt;!&ndash;/*@thymesVar id="user" type="e.group.thesismanager.model.User"*/&ndash;&gt;
+                    <form class="form" th:object="${user}" th:action="@{'/admin/newuser'}" method="post">
+                        <div class="row my-3">
+                            <div class="col-md-3 form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" class="form-control" th:field="*{firstName}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" class="form-control" th:field="*{lastName}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="username">Username (Email)</label>
+                                <input type="email" id="username" class="form-control" th:field="*{username}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" class="form-control" th:field="*{password}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                Roles:
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="coordinator" value="COORDINATOR" th:field="*{roles}">
+                                &lt;!&ndash;<input class="form-check-input" name="role" type="checkbox" id="coordinator" value="COORDINATOR" th:checked="${#sets.contains(user.roles,'COORDINATOR')}">&ndash;&gt;
+                                <label class="form-check-label" for="coordinator">Coordinator</label>
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="supervisor" value="SUPERVISOR" th:field="*{roles}">
+                                <label class="form-check-label" for="supervisor">Supervisor</label>
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="student" value="STUDENT" th:field="*{roles}">
+                                <label class="form-check-label" for="student">Student</label>
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="reader" value="READER" th:field="*{roles}">
+                                <label class="form-check-label" for="reader">Reader</label>
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="opponent" value="OPPONENT" th:field="*{roles}">
+                                <label class="form-check-label" for="opponent">Opponent</label>
+                            </div>
+
+                            <button class="col btn btn-primary" type="submit">Save</button>
+
+                        </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div style="height: 30px"></div>
+-->
+
+
+        <div class="accordion" id="accordion">
+
+            <!--SEARCH USER-->
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <div class="mb-0">
+                        <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Search User
+                        </button>
+                        <a class="btn btn-info btn-lg" th:href="@{'/admin/'}" role="button">
+                            Show All Users
+                        </a>
+                    </div>
+                </div>
+
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body" style="background-color: #e3f2fd;">
                         <form class="form" th:object="${user}" th:action="@{'/admin/search'}" method="post">
                             <div class="row">
                                 <div class="col-md-3 form-group">
@@ -60,37 +167,39 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div style="height: 30px"></div>
-                                    <button class="btn btn-primary" type="submit">Search</button>
+                                    <button class="btn btn-success btn-lg" type="submit">Search</button>
                                 </div>
                             </div>
                         </form>
-                    </nav>
+                    </div>
                 </div>
-              </div>
             </div>
-        </div>
 
+            <!--NEW USER-->
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                            <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                            Create a New User
+                        </button>
+                    </h5>
+                </div>
 
-        <!--NEW USER-->
-        <div class="row">
-            <div class="col">
-              <div class="collapse multi-collapse" id="newUserCollapse">
-                <div class="card card-body">
-                    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-                        <!--/*@thymesVar id="user" type="e.group.thesismanager.model.User"*/-->
-                        <form class="form" th:object="${user}" th:action="@{'/admin/newuser'}" method="post">
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body" style="background-color: #e3f2fd;">
+                        <form class="form" th:object="${user}" th:action="@{'/admin/newUser'}" method="post">
                             <div class="row my-3">
                                 <div class="col-md-3 form-group">
                                     <label for="firstName">First Name</label>
-                                    <input type="text" id="firstName" class="form-control" th:field="*{firstName}">
+                                    <input type="text" id="firstName" class="form-control" th:field="*{firstName}" required>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" class="form-control" th:field="*{lastName}">
+                                    <input type="text" id="lastName" class="form-control" th:field="*{lastName}" required>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="username">Username (Email)</label>
-                                    <input type="email" id="username" class="form-control" th:field="*{username}">
+                                    <input type="email" id="username" class="form-control" th:field="*{username}" required>
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="password">Password</label>
@@ -122,15 +231,16 @@
                                     <input class="form-check-input" name="role" type="checkbox" id="opponent" value="OPPONENT" th:field="*{roles}">
                                     <label class="form-check-label" for="opponent">Opponent</label>
                                 </div>
-
-                                <button class="col btn btn-primary" type="submit">Save</button>
+                            </div>
+                            <div class="row">
+                                <button class="col-md-2 offset-md-5 btn btn-success btn-lg mt-3" type="submit">Save</button>
 
                             </div>
                         </form>
-                    </nav>
+                    </div>
                 </div>
-              </div>
             </div>
+
         </div>
 
         <div style="height: 30px"></div>
@@ -138,7 +248,7 @@
 
         <!--LIST of USERS-->
         <div class="row">
-            <div class="col-md-8 offset-md-2">
+            <div class="col">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr class="bg-warning">
@@ -146,7 +256,9 @@
                         <th scope="col">First Name</th>
                         <th scope="col">Last Name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Roles</th>
+                        <th scope="col">Active</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Edit</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -155,7 +267,9 @@
                         <td th:text="${user.firstName}">Albert</td>
                         <td th:text="${user.lastName}">Einstein</td>
                         <td th:text="${user.username}">Albi@lnu.se</td>
+                        <td th:text="${user.accountIsActive}">true</td>
                         <td th:text="${user.roles}">Student</td>
+                        <td><a th:href="@{'/admin/' + ${user.id} + '/edit/'}">Edit</a></td>
                     </tr>
                     </tbody>
                 </table>
