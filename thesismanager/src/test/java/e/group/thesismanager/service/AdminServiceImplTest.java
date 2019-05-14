@@ -127,20 +127,7 @@ class AdminServiceImplTest {
     }
 
     /*@Test
-    void updateUser() throws Exception {
+    void editUser() throws Exception {
 
-        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
-        //same as u1 with updated last name
-        User u2 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
-        u2.setLastName(LN_2);
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(u1));
-        when(userRepository.save(any())).thenReturn(u2);
-
-        assertEquals(u2.getLastName(), adminService.updateUser(u2).getLastName());
-
-
-        //saving u1 for the second time -> duplicate usernames
-        when(userRepository.findByUsername(any())).thenReturn(Optional.of(u1));
-        assertThrows(Exception.class, () -> adminService.saveUser(u2));
     }*/
 }

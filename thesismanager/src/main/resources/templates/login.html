@@ -38,22 +38,5 @@
                 </div>
             </form>
         </div>
-        <div class="LoginDIV">
-            <div th:if="${param.error}">
-                Invalid username and password.
-            </div>
-            <div th:if="${param.logout}">
-                You have been logged out.
-            </div>
-            <p1>Username
-                <input id="User" name="User">
-                <br>
-            </p1>
-            <p2>Password
-                <input id="Password" name="Password">
-                <br>
-                <button>Submit</button>
-            </p2>
-        </div>
     </body>
 </html>     
