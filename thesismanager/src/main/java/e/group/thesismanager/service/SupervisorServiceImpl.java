@@ -24,7 +24,7 @@ public class SupervisorServiceImpl extends AbstractService implements Supervisor
     }
 
     @Override
-    public Thesis replyOnSupervisionProposition (Long thesisId, User supervisor, boolean answer) throws MissingRoleException {
+    public Thesis replyOnSupervisionProposition(Long thesisId, User supervisor, boolean answer) throws MissingRoleException {
 
         Thesis thesis = thesisRepository.findById(thesisId).orElseThrow(() ->
                 new NotFoundException("Thesis does not exist. Id: " + thesisId));
@@ -35,5 +35,17 @@ public class SupervisorServiceImpl extends AbstractService implements Supervisor
         thesis.setSupervisor(supervisor);
         thesis.setSupervisorAccept(answer);
         return thesisRepository.save(thesis);
+    }
+
+    @Override
+    public List<Thesis> getThesis(User user) {
+
+        return thesisRepository.findThesesBySupervisorAndSupervisorAccept(user, true);
+    }
+
+    @Override
+    public List<Thesis> getRequests(User user) {
+
+        return thesisRepository.findThesesBySupervisorAndSupervisorAccept(user, false);
     }
 }
