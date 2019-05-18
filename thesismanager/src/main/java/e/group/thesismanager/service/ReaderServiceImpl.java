@@ -27,7 +27,7 @@ public class ReaderServiceImpl extends AbstractService implements ReaderService 
         Thesis thesis = thesisRepository.findById(thesisId).orElseThrow(() ->
                 new NotFoundException("Thesis does not exist. Id: " + thesisId));
 
-        if(!reader.getRoles().contains(Role.READER))
+        if(!reader.getRoles().contains(Role.ROLE_READER))
             throw new MissingRoleException("Could not bid on thesis; User is not a reader");
 
         thesis.getBidders().add(reader);

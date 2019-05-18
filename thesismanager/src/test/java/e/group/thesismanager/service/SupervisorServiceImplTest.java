@@ -2,7 +2,10 @@ package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
-import e.group.thesismanager.model.*;
+import e.group.thesismanager.model.Role;
+import e.group.thesismanager.model.Semester;
+import e.group.thesismanager.model.Thesis;
+import e.group.thesismanager.model.User;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
@@ -20,7 +23,7 @@ import static org.mockito.Mockito.when;
 public class SupervisorServiceImplTest {
 
     SupervisorService supervisorService;
-    User mockedSupervisor = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.SUPERVISOR)));
+    User mockedSupervisor = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.ROLE_SUPERVISOR)));
     private static final List<Thesis> THESIS_LIST = new LinkedList<>();
 
     @Mock
@@ -35,7 +38,7 @@ public class SupervisorServiceImplTest {
 
         MockitoAnnotations.initMocks(this);
         supervisorService = new SupervisorServiceImpl(thesisRepository, feedbackRepository, submissionRepository);
-        User supervisor = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.SUPERVISOR)));
+        User supervisor = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.ROLE_SUPERVISOR)));
         Thesis thesis = new Thesis();
         thesis.setStudent(new User());
         thesis.setSemester(new Semester());

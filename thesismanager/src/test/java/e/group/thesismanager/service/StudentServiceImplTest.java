@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StudentServiceImplTest {
     private ThesisRepository mockThesisRepository;
@@ -47,7 +47,7 @@ class StudentServiceImplTest {
     @Test
     void initThesis() throws MissingRoleException {
         User user = new User();
-        user.getRoles().add(Role.STUDENT);
+        user.getRoles().add(Role.ROLE_STUDENT);
         Semester semester = new Semester();
 
         sut.initThesis(user, semester);

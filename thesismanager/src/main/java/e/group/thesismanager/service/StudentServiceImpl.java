@@ -26,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Thesis initThesis(User student, Semester semester) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.STUDENT))
+        if(!student.getRoles().contains(Role.ROLE_STUDENT))
             throw new MissingRoleException("Could not initialize thesis; User is not a student");
 
 
@@ -58,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException {
 
-        if(!supervisor.getRoles().contains(Role.SUPERVISOR))
+        if(!supervisor.getRoles().contains(Role.ROLE_SUPERVISOR))
             throw new MissingRoleException("Could not propose supervisor; Proposed user is not a supervisor");
 
         thesis.setSupervisor(supervisor);

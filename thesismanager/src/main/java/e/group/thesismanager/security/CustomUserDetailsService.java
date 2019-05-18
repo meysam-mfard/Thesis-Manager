@@ -4,6 +4,7 @@ import e.group.thesismanager.model.User;
 import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,8 +37,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
+            /*return user.getRoles().stream().map(role ->
+                    (GrantedAuthority) () -> String.valueOf(role)).collect(Collectors.toList());*/
             return user.getRoles().stream().map(role ->
-                    (GrantedAuthority) () -> String.valueOf(role)).collect(Collectors.toList());
+                    new SimpleGrantedAuthority(String.valueOf(role))).collect(Collectors.toList());
         }
 
         @Override

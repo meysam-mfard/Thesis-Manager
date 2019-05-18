@@ -39,8 +39,8 @@ class AdminServiceImplTest {
         MockitoAnnotations.initMocks(this);
         adminService = new AdminServiceImpl(userRepository);
 
-        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
-        User u2 = new User(FN_2, LN_2, UN_2, PW_2,new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
+        User u2 = new User(FN_2, LN_2, UN_2, PW_2,new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
 
         USER_LIST.clear();
         USER_LIST.add(u1);
@@ -72,13 +72,13 @@ class AdminServiceImplTest {
     void findUsersByRole() {
 
         when(userRepository.findAll()).thenReturn(USER_LIST);
-        assertArrayEquals(USER_LIST.toArray(), adminService.findUsersByRole(Role.STUDENT).toArray());
-        assertEquals(0, adminService.findUsersByRole(Role.COORDINATOR).size());
+        assertArrayEquals(USER_LIST.toArray(), adminService.findUsersByRole(Role.ROLE_STUDENT).toArray());
+        assertEquals(0, adminService.findUsersByRole(Role.ROLE_COORDINATOR).size());
 
-        USER_LIST.get(0).getRoles().add(Role.COORDINATOR);
-        assertArrayEquals(new User[] {USER_LIST.get(0)}, adminService.findUsersByRole(Role.COORDINATOR).toArray());
+        USER_LIST.get(0).getRoles().add(Role.ROLE_COORDINATOR);
+        assertArrayEquals(new User[] {USER_LIST.get(0)}, adminService.findUsersByRole(Role.ROLE_COORDINATOR).toArray());
 
-        assertEquals(0, adminService.findUsersByRole(Role.SUPERVISOR).size());
+        assertEquals(0, adminService.findUsersByRole(Role.ROLE_SUPERVISOR).size());
     }
 
     @Test
@@ -94,7 +94,7 @@ class AdminServiceImplTest {
     @Test
     void saveUser() throws Exception {
 
-        User u2 = new User(FN_2, LN_2, UN_2, PW_2,new HashSet<>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
+        User u2 = new User(FN_2, LN_2, UN_2, PW_2,new HashSet<>(Arrays.asList(Role.ROLE_STUDENT, Role.ROLE_OPPONENT)));
         when(userRepository.save(u2)).thenReturn(u2);
         assertEquals(u2, adminService.saveUser(u2));
 
@@ -121,9 +121,9 @@ class AdminServiceImplTest {
         int size = user.getRoles().size();
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
-        user = adminService.assignRoleToUserById(1L, Role.ADMIN);
+        user = adminService.assignRoleToUserById(1L, Role.ROLE_ADMIN);
         assertEquals(size+1, user.getRoles().size());
-        assertTrue(user.getRoles().contains(Role.ADMIN));
+        assertTrue(user.getRoles().contains(Role.ROLE_ADMIN));
     }
 
     /*@Test

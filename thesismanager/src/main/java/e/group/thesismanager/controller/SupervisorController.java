@@ -41,7 +41,7 @@ public class SupervisorController {
 
         try {
 
-            supervisorService.feedbackOnSubmission(submissionId, comment, file, author, LocalDateTime.now(), Role.SUPERVISOR);
+            supervisorService.feedbackOnSubmission(submissionId, comment, file, author, LocalDateTime.now(), Role.ROLE_SUPERVISOR);
         } catch (Exception e) {
 
             //todo: replace with validator
@@ -57,7 +57,7 @@ public class SupervisorController {
 
         try {
 
-            supervisorService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, author, LocalDateTime.now(), Role.SUPERVISOR);
+            supervisorService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, author, LocalDateTime.now(), Role.ROLE_SUPERVISOR);
         } catch (Exception e) {
 
             //todo: replace with validator

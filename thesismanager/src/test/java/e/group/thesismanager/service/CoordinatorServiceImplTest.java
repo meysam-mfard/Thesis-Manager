@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 public class CoordinatorServiceImplTest {
 
     CoordinatorService coordinatorService;
-    User mockedStudent = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.STUDENT)));
+    User mockedStudent = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
     private static final List<Thesis> THESIS_LIST = new LinkedList<>();
 
     @Mock
@@ -32,7 +32,7 @@ public class CoordinatorServiceImplTest {
     void setUp(){
 
         MockitoAnnotations.initMocks(this);
-        User student = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User student = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         Thesis thesis = new Thesis();
         thesis.setStudent(student);
 
@@ -95,7 +95,7 @@ public class CoordinatorServiceImplTest {
 
         when(coordinatorService.getThesis()).thenReturn(THESIS_LIST);
 
-        User supervisor = new User("s1", "s11", "s111", "s1111", new HashSet<>(Arrays.asList(Role.SUPERVISOR)));
+        User supervisor = new User("s1", "s11", "s111", "s1111", new HashSet<>(Arrays.asList(Role.ROLE_SUPERVISOR)));
 
 
         Thesis testSupervisor = coordinatorService.assignSupervisor(mockedStudent, supervisor);
@@ -107,7 +107,7 @@ public class CoordinatorServiceImplTest {
 
         when(coordinatorService.getThesis()).thenReturn(THESIS_LIST);
         Set<User> mockedOpponent = new HashSet<>();
-        User opponent1 = new User("01", "011", "0111", "01111", new HashSet<>(Arrays.asList(Role.SUPERVISOR)));
+        User opponent1 = new User("01", "011", "0111", "01111", new HashSet<>(Arrays.asList(Role.ROLE_SUPERVISOR)));
         mockedOpponent.add(opponent1);
 
         Thesis testOpponent = coordinatorService.assignOpponent(mockedStudent,mockedOpponent);
