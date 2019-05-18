@@ -34,7 +34,7 @@ class AdminServiceIT {
     @Test
     public void adminServiceTest_AddAndDelete() throws Exception {
 
-        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         u1 = adminService.saveUser(u1);
         Long id = u1.getId();
         assertEquals(u1, adminService.findUserById(id));
@@ -53,13 +53,13 @@ class AdminServiceIT {
     @Test
     void adminServiceTest_AssignRole() throws Exception {
 
-        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        User u1 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         u1 = adminService.saveUser(u1);
-        u1 = adminService.assignRoleToUserById(u1.getId(), Role.ADMIN);
+        u1 = adminService.assignRoleToUserById(u1.getId(), Role.ROLE_ADMIN);
 
         assertEquals(2, u1.getRoles().size());
-        assertTrue(u1.getRoles().contains(Role.ADMIN));
-        assertTrue(adminService.findUsersByRole(Role.ADMIN).
+        assertTrue(u1.getRoles().contains(Role.ROLE_ADMIN));
+        assertTrue(adminService.findUsersByRole(Role.ROLE_ADMIN).
                 stream().filter(user -> user.getLastName().equals(LN_1))
                 .count() != 0 );
     }

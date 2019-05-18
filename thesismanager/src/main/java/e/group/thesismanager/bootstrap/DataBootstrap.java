@@ -51,17 +51,19 @@ public class DataBootstrap implements ApplicationRunner {
         /*Adding Users*/
         List<User> userList = new ArrayList<>();
 
-        User std1 = new User("first1", "last1", "user1", "{noop}pass1", new HashSet<Role>(Arrays.asList(Role.STUDENT, Role.OPPONENT)));
+        User std1 = new User("first1", "last1", "user1@lnu.se", "{noop}pass1", new HashSet<Role>(Arrays.asList(Role.ROLE_STUDENT, Role.ROLE_OPPONENT)));
         userList.add(std1);
-        User std2 = new User("first2", "last2", "username2", "{noop}password2", new HashSet<Role>(Arrays.asList(Role.STUDENT)));
+        User std2 = new User("first2", "last2", "username2@lnu.se", "{noop}password2", new HashSet<Role>(Arrays.asList(Role.ROLE_STUDENT)));
         userList.add(std2);
-        User sup1 = new User("first-sup1", "last-sup1", "username-sup1", "{noop}password-sup1", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
+        User sup1 = new User("first-sup1", "last-sup1", "username-sup1@lnu.se", "{noop}password-sup1", new HashSet<Role>(Arrays.asList(Role.ROLE_SUPERVISOR, Role.ROLE_READER)));
         userList.add(sup1);
-        User sup2 = new User("first-sup2", "last-sup2", "username-sup2", "{noop}password-sup2", new HashSet<Role>(Arrays.asList(Role.SUPERVISOR, Role.READER)));
+        User sup2 = new User("first-sup2", "last-sup2", "username-sup2@lnu.se", "{noop}password-sup2", new HashSet<Role>(Arrays.asList(Role.ROLE_SUPERVISOR, Role.ROLE_READER)));
         userList.add(sup2);
-        User coo1 = new User("first-coo1", "last-coo1","username-coo1", "{noop}password-coo1", new HashSet<Role>(Arrays.asList(Role.COORDINATOR)));
-        coo1.getRoles().add(Role.READER);
+        User coo1 = new User("first-coo1", "last-coo1","username-coo1@lnu.se", "{noop}password-coo1", new HashSet<Role>(Arrays.asList(Role.ROLE_COORDINATOR)));
+        coo1.getRoles().add(Role.ROLE_READER);
         userList.add(coo1);
+        User admin = new User("admin1", "admin2", "admin@lnu.se", "{noop}admin", new HashSet<Role>(Arrays.asList(Role.ROLE_ADMIN)));
+        userList.add(admin);
 
         log.info("Initializing users!");
         userRepository.saveAll(userList);
@@ -97,7 +99,7 @@ public class DataBootstrap implements ApplicationRunner {
         //feedback
         Feedback feed1 = new Feedback();
         feed1.setAuthor(coo1);
-        feed1.setAuthorRole(Role.COORDINATOR);
+        feed1.setAuthorRole(Role.ROLE_COORDINATOR);
         feed1.setComment("This is my feedback on your project description");
 
         //feedbackRepository.save(feed1);

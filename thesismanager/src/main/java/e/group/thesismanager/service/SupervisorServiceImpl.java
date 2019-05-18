@@ -11,9 +11,6 @@ import e.group.thesismanager.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
-
 @Service
 public class SupervisorServiceImpl extends AbstractService implements SupervisorService {
 
@@ -29,7 +26,7 @@ public class SupervisorServiceImpl extends AbstractService implements Supervisor
         Thesis thesis = thesisRepository.findById(thesisId).orElseThrow(() ->
                 new NotFoundException("Thesis does not exist. Id: " + thesisId));
 
-        if(!supervisor.getRoles().contains(Role.SUPERVISOR))
+        if(!supervisor.getRoles().contains(Role.ROLE_SUPERVISOR))
             throw new MissingRoleException("Could not reply on supervision proposition; User is not a supervisor");
 
         thesis.setSupervisor(supervisor);
