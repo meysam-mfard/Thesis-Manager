@@ -11,6 +11,8 @@ import e.group.thesismanager.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SupervisorServiceImpl extends AbstractService implements SupervisorService {
 

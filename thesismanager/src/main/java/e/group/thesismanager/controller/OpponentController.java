@@ -1,6 +1,8 @@
 package e.group.thesismanager.controller;
 
-import e.group.thesismanager.model.*;
+import e.group.thesismanager.model.Role;
+import e.group.thesismanager.model.Thesis;
+import e.group.thesismanager.model.User;
 import e.group.thesismanager.service.OpponentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -38,7 +40,7 @@ public class OpponentController {
 
         try {
 
-            opponentService.feedbackOnSubmission(submissionId, comment, file, author, LocalDateTime.now(), Role.OPPONENT);
+            opponentService.feedbackOnSubmission(submissionId, comment, file, author, LocalDateTime.now(), Role.ROLE_OPPONENT);
         } catch (Exception e) {
 
             //todo: replace with validator
@@ -54,7 +56,7 @@ public class OpponentController {
 
         try {
 
-            opponentService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, author, LocalDateTime.now(), Role.OPPONENT);
+            opponentService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, author, LocalDateTime.now(), Role.ROLE_OPPONENT);
         } catch (Exception e) {
 
             //todo: replace with validator
