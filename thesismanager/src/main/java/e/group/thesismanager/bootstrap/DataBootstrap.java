@@ -1,7 +1,9 @@
 package e.group.thesismanager.bootstrap;
 
 import e.group.thesismanager.model.*;
-import e.group.thesismanager.repository.*;
+import e.group.thesismanager.repository.SemesterRepository;
+import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -24,19 +26,20 @@ public class DataBootstrap implements ApplicationRunner {
     private final UserRepository userRepository;
     private final ThesisRepository thesisRepository;
     private final SemesterRepository semesterRepository;
-    private final SubmissionRepository submissionRepository;
+    /*private final SubmissionRepository submissionRepository;
     private final DocumentRepository documentRepository;
-    private final FeedbackRepository feedbackRepository;
+    private final FeedbackRepository feedbackRepository;*/
 
     public DataBootstrap(UserRepository userRepository, ThesisRepository thesisRepository
-            , SemesterRepository semesterRepository, SubmissionRepository submissionRepository, DocumentRepository documentRepository, FeedbackRepository feedbackRepository) {
+            , SemesterRepository semesterRepository/*, SubmissionRepository submissionRepository
+            , DocumentRepository documentRepository, FeedbackRepository feedbackRepository*/) {
 
         this.userRepository = userRepository;
         this.thesisRepository = thesisRepository;
         this.semesterRepository = semesterRepository;
-        this.submissionRepository = submissionRepository;
+        /*this.submissionRepository = submissionRepository;
         this.documentRepository = documentRepository;
-        this.feedbackRepository = feedbackRepository;
+        this.feedbackRepository = feedbackRepository;*/
     }
 
     @Override
@@ -92,8 +95,14 @@ public class DataBootstrap implements ApplicationRunner {
         Document doc1 = new Document();
         doc1.setAuthor(std1);
         doc1.setComment("This is my project description");
-        
-        //documentRepository.save(doc1);
+        //creating a Byte array file
+        String str = "fake file content";
+        Byte[] file = new Byte[str.getBytes().length];
+        int i = 0;
+        for (byte b : str.getBytes()){
+            file[i++] = b;
+        }
+        doc1.setFile(file);
         sub_prjDsc.setSubmittedDocument(doc1);
 
         //feedback

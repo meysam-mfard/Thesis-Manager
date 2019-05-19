@@ -8,7 +8,6 @@ import e.group.thesismanager.repository.ThesisRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public abstract class AbstractService {
     }
 
     @Transactional
-    public Submission feedbackOnSubmission(Long submissionId, String comment, File file, User author,
+    public Submission feedbackOnSubmission(Long submissionId, String comment, Byte[] file, User author,
                                            LocalDateTime submissionTime, Role authorRole) {
 
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
@@ -71,8 +70,8 @@ public abstract class AbstractService {
     }
 
     @Transactional
-    public Submission editFeedbackOnSubmission(Long submissionId, Long feedbackId, String updatedComment, File updatedFile, User updatedAuthor,
-                                           LocalDateTime updatedSubmissionTime, Role updatedAuthorRole) {
+    public Submission editFeedbackOnSubmission(Long submissionId, Long feedbackId, String updatedComment, Byte[] updatedFile, User updatedAuthor,
+                                               LocalDateTime updatedSubmissionTime, Role updatedAuthorRole) {
 
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new NotFoundException("Submission does not exist. Id: " + submissionId));
@@ -84,9 +83,6 @@ public abstract class AbstractService {
 
         if(updatedComment.isEmpty())
             updatedComment = feedback.getComment();
-
-        if(!updatedFile.exists())
-            updatedFile = feedback.getFile();
 
         if(updatedAuthor == null)
             updatedAuthor = feedback.getAuthor();
