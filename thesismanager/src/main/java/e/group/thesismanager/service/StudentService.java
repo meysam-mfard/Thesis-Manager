@@ -18,6 +18,8 @@ public interface StudentService {
 
     List<Semester> getSemesters();
 
+    List<User> getSupervisors();
+
     void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException;
 
     void submitProjectDescription(Thesis thesis, Document projectDescription);

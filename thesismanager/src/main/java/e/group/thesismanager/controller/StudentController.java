@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.File;
 import java.util.Arrays;
 
 @Controller
@@ -29,27 +28,28 @@ public class StudentController {
 
     @GetMapping("/submit")
     public String getSubmit(Model model) {
-        model.addAttribute("semester", studentService.getSemesters()); // todo: filter by "active" semesters?
+        model.addAttribute("semesters", studentService.getSemesters()); // todo: filter by "active" semesters?
         model.addAttribute("submissionTypes", Arrays.asList(SubmissionType.values()));
+
         return "pages/student-submit";
     }
 
     @PostMapping("/submit")
-    public String postSubmit(@ModelAttribute User user,
-                             @ModelAttribute File file,
+    public String postSubmit(@ModelAttribute User student,
+                             @ModelAttribute Byte[] file,
                              @ModelAttribute Semester semester,
                              @ModelAttribute SubmissionType type) {
 
         try {
-            Thesis thesis = studentService.getThesis(user, semester);
+            Thesis thesis = studentService.getThesis(student, semester);
 
             if(thesis == null) {
-                thesis = studentService.initThesis(user, semester);
+                thesis = studentService.initThesis(student, semester);
             }
 
             Document document = new Document();
             document.setFile(file);
-            document.setAuthor(user);
+            document.setAuthor(student);
 
             Submission submission = new Submission();
             submission.setType(type);
@@ -62,5 +62,29 @@ public class StudentController {
         }
 
         return "pages/student-submit?success";
+    }
+
+    @GetMapping("/requestSupervisor")
+    public String getRequestSupervisor(Model model) {
+        model.addAttribute("supervisors", studentService.getSupervisors());
+        model.addAttribute("semesters", studentService.getSemesters()); // todo: filter by "active" semesters?
+
+        return "request-supervisor";
+    }
+
+    @PostMapping("/requestSupervisor")
+    public String postRequestSupervisor(@ModelAttribute User student,
+                                        @ModelAttribute Semester semester,
+                                        @ModelAttribute User supervisor) {
+
+        Thesis thesis = studentService.getThesis(student, semester);
+
+        try {
+            studentService.proposeSupervisor(thesis, supervisor);
+        } catch (MissingRoleException e) {
+            return "request-supervisor?fail";
+        }
+
+        return "request-supervisor?success";
     }
 }
