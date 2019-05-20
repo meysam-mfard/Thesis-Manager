@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student</title>
+    <meta property="og:title" content="Start page" />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/student.css"/>
+</head>
+<body>
+<div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="accordion" id="accordionExample">
+                <nav aria-label="...">
+                    <ul class="pagination pagination-sm">
+                        <div>Name Surname</div>
+                        <div class="col-md-3 form-group">
+                            <select class="custom-select">
+                                <option selected>Role</option>
+                                <option value="1">Role 1</option>
+                                <option value="2">Role 2</option>
+                                <option value="3">Role 3</option>
+                            </select>
+                        </div>
+                        <div class="offset-md-3"><a class="page-link" href="http://www.google.com">Logout</a></div>
+                    </ul>
+                </nav>
+                <p>
+                    <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Project Description</a>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Project Plan</button>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample3" aria-expanded="false" aria-controls="multiCollapseExample3">Supervisor Request</button>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample4" aria-expanded="false" aria-controls="multiCollapseExample4">Report</button>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample5" aria-expanded="false" aria-controls="multiCollapseExample5">Final Report</button>
+                </p>
+                <div class="row">
+                    <div class="collapse multi-collapse" id="multiCollapseExample1">
+                        <div class="card-body">
+                            <table class="table table-striped hover-square">
+                                <tbody>
+                                <tr class="thead-light">
+                                    <td>Attempt Number</td>
+                                    <td>This is attempt 1 (X attempts allowed)</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade</td>
+                                    <td>A-F</td>
+                                </tr>
+                                <tr>
+                                    <td>Due date</td>
+                                    <td>Deadline</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-md-8 offset-md-5">
+                                    <button class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="collapse multi-collapse" id="multiCollapseExample2">
+                        <div class="card-body">
+                            <table class="table table-striped hover-square">
+                                <tbody>
+                                <tr class="thead-light">
+                                    <td>Attempt Number</td>
+                                    <td>This is attempt 2 (X attempts allowed)</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade</td>
+                                    <td>A-F</td>
+                                </tr>
+                                <tr>
+                                    <td>Due date</td>
+                                    <td>Deadline</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="offset-md-5">
+                                    <button class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="collapse multi-collapse" id="multiCollapseExample3">
+                        <div class="card-body">
+                            <table class="table table-striped hover-square">
+                                <tbody>
+                                <tr class="thead-light">
+                                    <td>Attempt Number</td>
+                                    <td>This is attempt 3 (X attempts allowed)</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade</td>
+                                    <td>A-F</td>
+                                </tr>
+                                <tr>
+                                    <td>Due date</td>
+                                    <td>Deadline</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="offset-md-5">
+                                    <button class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="collapse multi-collapse" id="multiCollapseExample4">
+                        <div class="card-body">
+                            <table class="table table-striped hover-square">
+                                <tbody>
+                                <tr class="thead-light">
+                                    <td>Attempt Number</td>
+                                    <td>This is attempt 4 (X attempts allowed)</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade</td>
+                                    <td>A-F</td>
+                                </tr>
+                                <tr>
+                                    <td>Due date</td>
+                                    <td>Deadline</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="offset-md-5">
+                                    <button class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="collapse multi-collapse" id="multiCollapseExample5">
+                        <div class="card-body">
+                            <table class="table table-striped hover-square">
+                                <tbody>
+                                <tr class="thead-light">
+                                    <td>Attempt Number</td>
+                                    <td>This is attempt 5 (X attempts allowed)</td>
+                                </tr>
+                                <tr>
+                                    <td>Grade</td>
+                                    <td>A-F</td>
+                                </tr>
+                                <tr>
+                                    <td>Due date</td>
+                                    <td>Deadline</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="offset-md-5">
+                                    <button class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h1>
+        </div>
+    </div>
+</div>
+</body>
+</html>
