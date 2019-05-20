@@ -1,0 +1,66 @@
+package e.group.thesismanager.controller;
+
+import e.group.thesismanager.exception.MissingRoleException;
+import e.group.thesismanager.model.*;
+import e.group.thesismanager.service.StudentService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.io.File;
+import java.util.Arrays;
+
+@Controller
+@RequestMapping("student")
+public class StudentController {
+    private StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
+    @RequestMapping("")
+    public String getStudentHome() {
+        return "pages/student";
+    }
+
+    @GetMapping("/submit")
+    public String getSubmit(Model model) {
+        model.addAttribute("semester", studentService.getSemesters()); // todo: filter by "active" semesters?
+        model.addAttribute("submissionTypes", Arrays.asList(SubmissionType.values()));
+        return "pages/student-submit";
+    }
+
+    @PostMapping("/submit")
+    public String postSubmit(@ModelAttribute User user,
+                             @ModelAttribute File file,
+                             @ModelAttribute Semester semester,
+                             @ModelAttribute SubmissionType type) {
+
+        try {
+            Thesis thesis = studentService.getThesis(user, semester);
+
+            if(thesis == null) {
+                thesis = studentService.initThesis(user, semester);
+            }
+
+            Document document = new Document();
+            document.setFile(file);
+            document.setAuthor(user);
+
+            Submission submission = new Submission();
+            submission.setType(type);
+            submission.setSubmittedDocument(document);
+
+            thesis.addSubmission(submission);
+
+        } catch (MissingRoleException e) {
+            return "pages/student-submit?fail";
+        }
+
+        return "pages/student-submit?success";
+    }
+}

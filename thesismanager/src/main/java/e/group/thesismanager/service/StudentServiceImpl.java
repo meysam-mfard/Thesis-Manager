@@ -3,6 +3,7 @@ package e.group.thesismanager.service;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
+import e.group.thesismanager.repository.SemesterRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,16 @@ public class StudentServiceImpl implements StudentService {
 
     private final ThesisRepository thesisRepository;
     private final SubmissionRepository submissionRepository;
+    private final SemesterRepository semesterRepository;
 
     @Autowired
-    public StudentServiceImpl(ThesisRepository thesisRepository, SubmissionRepository submissionRepository) {
+    public StudentServiceImpl(ThesisRepository thesisRepository,
+                              SubmissionRepository submissionRepository,
+                              SemesterRepository semesterRepository) {
+
         this.thesisRepository = thesisRepository;
         this.submissionRepository = submissionRepository;
+        this.semesterRepository = semesterRepository;
     }
 
     @Override
@@ -53,6 +59,11 @@ public class StudentServiceImpl implements StudentService {
             throw new NotFoundException("Thesis not found. Student Id: " + student.getId() + " Semester Id: " + semester.getId());
 
         return theses.get(0);
+    }
+
+    @Override
+    public List<Semester> getSemesters() {
+        return semesterRepository.findAll();
     }
 
     @Override
