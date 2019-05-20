@@ -3,8 +3,10 @@ package e.group.thesismanager.service;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
+import e.group.thesismanager.repository.SemesterRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,19 @@ public class StudentServiceImpl implements StudentService {
 
     private final ThesisRepository thesisRepository;
     private final SubmissionRepository submissionRepository;
+    private final SemesterRepository semesterRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public StudentServiceImpl(ThesisRepository thesisRepository, SubmissionRepository submissionRepository) {
+    public StudentServiceImpl(ThesisRepository thesisRepository,
+                              SubmissionRepository submissionRepository,
+                              SemesterRepository semesterRepository,
+                              UserRepository userRepository) {
+
         this.thesisRepository = thesisRepository;
         this.submissionRepository = submissionRepository;
+        this.semesterRepository = semesterRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -53,6 +63,26 @@ public class StudentServiceImpl implements StudentService {
             throw new NotFoundException("Thesis not found. Student Id: " + student.getId() + " Semester Id: " + semester.getId());
 
         return theses.get(0);
+    }
+
+    @Override
+    public List<Thesis> getTheses(User student) {
+        return thesisRepository.findThesesByUser(student);
+    }
+
+    @Override
+    public List<Semester> getSemesters() {
+        return semesterRepository.findAll();
+    }
+
+    @Override
+    public List<User> getSupervisors() {
+        List<User> users = userRepository.findAll();
+        for (User u : users) {
+            if(!u.getRoles().contains(Role.ROLE_SUPERVISOR))
+                users.remove(u);
+        }
+        return users;
     }
 
     @Override
@@ -95,7 +125,6 @@ public class StudentServiceImpl implements StudentService {
         submission.setType(type);
         submission.setSubmittedDocument(document);
         thesis.addSubmission(submission);
-        //submissionRepository.save(submission);//not need: submission will be update when thesis is changed (CascadeType.ALL)
         thesisRepository.save(thesis);
     }
 }

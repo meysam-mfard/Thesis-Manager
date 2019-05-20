@@ -2,8 +2,10 @@ package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
+import e.group.thesismanager.repository.SemesterRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import static org.mockito.Mockito.verify;
 class StudentServiceImplTest {
     private ThesisRepository mockThesisRepository;
     private SubmissionRepository mockSubmissionRepository;
+    private SemesterRepository mockSemesterRepository;
+    private UserRepository mockUserRepository;
 
     private StudentService studentService;
 
@@ -26,7 +30,10 @@ class StudentServiceImplTest {
         mockThesisRepository = Mockito.mock(ThesisRepository.class);
         mockSubmissionRepository = Mockito.mock(SubmissionRepository.class);
 
-        studentService = new StudentServiceImpl(mockThesisRepository, mockSubmissionRepository);
+        studentService = new StudentServiceImpl(mockThesisRepository,
+                                                mockSubmissionRepository,
+                                                mockSemesterRepository,
+                                                mockUserRepository);
     }
 
     @AfterEach
