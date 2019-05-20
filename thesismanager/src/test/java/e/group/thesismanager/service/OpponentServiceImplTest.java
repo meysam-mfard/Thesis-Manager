@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -82,7 +81,7 @@ public class OpponentServiceImplTest {
 
         Feedback feedback = new Feedback();
         String comment="good";
-        File file = new File("");
+        Byte[] file = new Byte[0];
         User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         Role authorRole = Role.ROLE_STUDENT;
         LocalDateTime submissionTime= LocalDateTime.now();
@@ -109,7 +108,7 @@ public class OpponentServiceImplTest {
         Submission submission = new Submission();
         Document document = new Document();
         String comment="good";
-        File file = new File("");
+        Byte[] file = new Byte[0];
         User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         LocalDateTime submissionTime= LocalDateTime.now();
         final Float OLD_GRADE = 1F;

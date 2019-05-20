@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.io.File;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -36,7 +35,7 @@ public class OpponentController {
     }
 
     @PostMapping("opponent/newFeedback")
-    public String newFeedback(Long submissionId, String comment, File file, User author) {
+    public String newFeedback(Long submissionId, String comment, Byte[] file, User author) {
 
         try {
 
@@ -52,7 +51,7 @@ public class OpponentController {
     }
 
     @PostMapping("opponent/editFeedback")
-    public String editFeedback(Long submissionId, Long feedbackId,String comment, File file, User author) {
+    public String editFeedback(Long submissionId, Long feedbackId,String comment, Byte[] file, User author) {
 
         try {
 

@@ -106,7 +106,7 @@ public class StudentServiceImpl implements StudentService {
         submission.setType(type);
         submission.setSubmittedDocument(document);
         thesis.addSubmission(submission);
-        submissionRepository.save(submission);
+        //submissionRepository.save(submission);//not need: submission will be update when thesis is changed (CascadeType.ALL)
         thesisRepository.save(thesis);
     }
 }
