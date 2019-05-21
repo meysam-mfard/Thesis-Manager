@@ -16,8 +16,6 @@ public interface StudentService {
 
     Thesis getThesis(User student, Semester semester);
 
-    List<Thesis> getTheses(User student);
-
     List<Semester> getSemesters();
 
     List<User> getSupervisors();
