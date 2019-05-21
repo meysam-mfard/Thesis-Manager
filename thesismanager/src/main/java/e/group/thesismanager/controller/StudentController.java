@@ -22,11 +22,7 @@ public class StudentController {
     }
 
     @RequestMapping("")
-    public String getStudentHome(Model model,
-                                 @ModelAttribute User student) {
-
-        model.addAttribute("theses", studentService.getTheses(student));
-
+    public String getStudentHome() {
         return "pages/student";
     }
 
