@@ -2,10 +2,10 @@ package e.group.thesismanager.model;
 
 public enum Role {
 
-    ADMIN,
-    STUDENT,
-    COORDINATOR,
-    SUPERVISOR,
-    READER,
-    OPPONENT
+    ROLE_ADMIN,
+    ROLE_STUDENT,
+    ROLE_COORDINATOR,
+    ROLE_SUPERVISOR,
+    ROLE_READER,
+    ROLE_OPPONENT;
 }

@@ -8,7 +8,6 @@ import e.group.thesismanager.repository.ThesisRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,6 +40,12 @@ public abstract class AbstractService {
         return thesisRepository.findAll();
     }
 
+    public Thesis getThesisById(Long id) {
+
+        return thesisRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Thesis does not exist. Id: " + id));
+    }
+
     @Transactional
     public Submission feedbackOnSubmission(Long submissionId, Feedback feedback) {
 
@@ -52,7 +57,7 @@ public abstract class AbstractService {
     }
 
     @Transactional
-    public Submission feedbackOnSubmission(Long submissionId, String comment, File file, User author,
+    public Submission feedbackOnSubmission(Long submissionId, String comment, Byte[] file, User author,
                                            LocalDateTime submissionTime, Role authorRole) {
 
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
@@ -65,12 +70,54 @@ public abstract class AbstractService {
     }
 
     @Transactional
+    public Submission editFeedbackOnSubmission(Long submissionId, Long feedbackId, String updatedComment, Byte[] updatedFile, User updatedAuthor,
+                                               LocalDateTime updatedSubmissionTime, Role updatedAuthorRole) {
+
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new NotFoundException("Submission does not exist. Id: " + submissionId));
+
+        Feedback feedback = feedbackRepository.findById(feedbackId).orElseThrow(() ->
+                new NotFoundException("Feedback does not exist. Id: " + feedbackId));
+
+        int oldFeedbackIndex = submission.getFeedbacks().indexOf(feedback);
+
+        if(updatedComment.isEmpty())
+            updatedComment = feedback.getComment();
+
+        if(updatedAuthor == null)
+            updatedAuthor = feedback.getAuthor();
+
+        feedback.setComment(updatedComment);
+        feedback.setFile(updatedFile);
+        feedback.setAuthor(updatedAuthor);
+        feedback.setSubmissionTime(updatedSubmissionTime);
+        feedback.setAuthorRole(updatedAuthorRole);
+
+        feedbackRepository.save(feedback);
+        submission.getFeedbacks().set(oldFeedbackIndex, feedback);
+        return submissionRepository.save(submission);
+    }
+
+    @Transactional
     public Submission assessSubmission(Long submissionId, Float grade) {
 
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new NotFoundException("Submission does not exist. Id: " + submissionId));
 
         submission.setGrade(grade);
+        return submissionRepository.save(submission);
+    }
+
+    @Transactional
+    public Submission editAssessmentSubmission(Long submissionId, Float updatedGrade) {
+
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new NotFoundException("Submission does not exist. Id: " + submissionId));
+
+        if(updatedGrade == null)
+            updatedGrade = submission.getGrade();
+
+        submission.setGrade(updatedGrade);
         return submissionRepository.save(submission);
     }
 }

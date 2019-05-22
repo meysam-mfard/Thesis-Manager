@@ -1,0 +1,127 @@
+<!DOCTYPE>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Admin page</title>
+    <meta charset="utf-8">
+    <meta property="og:title" content="Start page" />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/admin.css"/>
+    <head>
+
+        <header>
+
+            <h1><br><br>Admin Page</h1>
+        </header>
+<body>
+<div class="container">
+
+    <div th:if="${param.success}" class="alert alert-success col-md-3" role="alert">
+        User was saved successfully.
+    </div>
+    <div th:if="${param.fail}" class="alert alert-danger col-md-3" role="alert">
+        Saving User failed!
+    </div>
+
+    <div class="card">
+        <h5 class="card-header">Edit User</h5>
+        <div class="card-body" style="background-color: #e3f2fd;">
+            <form class="form" th:object="${user}" th:action="@{'/admin/editUser'}" method="post">
+                <div class="row my-3">
+                    <input type="hidden" th:field="*{id}"/>
+                    <div class="col-md-3 form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" class="form-control" th:field="*{firstName}" required>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" class="form-control" th:field="*{lastName}" required>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="username">Username (Email)</label>
+                        <input type="email" id="username" class="form-control" th:field="*{username}" required>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" th:field="*{password}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        Roles:
+                    </div>
+                    <div class="col form-check form-check-inline">
+                        <input class="form-check-input" name="role" type="checkbox" id="coordinator" value="ROLE_COORDINATOR" th:field="*{roles}">
+                        <!--<input class="form-check-input" name="role" type="checkbox" id="coordinator" value="COORDINATOR" th:checked="${#sets.contains(user.roles,'COORDINATOR')}">-->
+                        <label class="form-check-label" for="coordinator">Coordinator</label>
+                    </div>
+                    <div class="col form-check form-check-inline">
+                        <input class="form-check-input" name="role" type="checkbox" id="supervisor" value="ROLE_SUPERVISOR" th:field="*{roles}">
+                        <label class="form-check-label" for="supervisor">Supervisor</label>
+                    </div>
+                    <div class="col form-check form-check-inline">
+                        <input class="form-check-input" name="role" type="checkbox" id="student" value="ROLE_STUDENT" th:field="*{roles}">
+                        <label class="form-check-label" for="student">Student</label>
+                    </div>
+                    <div class="col form-check form-check-inline">
+                        <input class="form-check-input" name="role" type="checkbox" id="reader" value="ROLE_READER" th:field="*{roles}">
+                        <label class="form-check-label" for="reader">Reader</label>
+                    </div>
+                    <div class="col form-check form-check-inline">
+                        <input class="form-check-input" name="role" type="checkbox" id="opponent" value="ROLE_OPPONENT" th:field="*{roles}">
+                        <label class="form-check-label" for="opponent">Opponent</label>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <a class="btn btn-info btn-lg col-md-2 offset-md-2 mt-5" th:href="@{'/admin/'}" role="button">
+                        Cancel
+                    </a>
+                    <button class="btn btn-info btn-lg col-md-2 offset-md-1 mt-5" type="submit">
+                        Save
+                    </button>
+                    <button type="button" th:if="${#bools.isTrue(user.accountIsActive)}" class="btn btn-info btn-lg col-md-2 offset-md-1 mt-5" data-toggle="modal" data-target="#deleteConfirmation">
+                        Inactivate
+                    </button>
+                    <button type="button" th:if="${#bools.isFalse(user.accountIsActive)}" class="btn btn-info btn-lg col-md-2 offset-md-1 mt-5" data-toggle="modal" data-target="#deleteConfirmation">
+                        Activate
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4 th:if="${#bools.isTrue(user.accountIsActive)}">Do you want to inactivate user account?</h4>
+                    <h4 th:if="${#bools.isFalse(user.accountIsActive)}">Do you want to activate user account?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" th:href="@{'/admin/' + ${user.id} + '/inactivate/'}" th:if="${#bools.isTrue(user.accountIsActive)}" role="button">
+                        Inactivate
+                    </a>
+                    <a class="btn btn-danger" th:href="@{'/admin/' + ${user.id} + '/activate/'}" th:if="${#bools.isFalse(user.accountIsActive)}" role="button">
+                        Activate
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -27,7 +27,7 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
     @Override
     public Thesis assignOpponent(User student, Set<User> opponent) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.STUDENT))
+        if(!student.getRoles().contains(Role.ROLE_STUDENT))
             throw new MissingRoleException("Could not assign opponent; User is not a student");
 
         Thesis thesis = getThesisByStudent(student);
@@ -38,9 +38,9 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
     @Override
     public Thesis assignSupervisor(User student, User supervisor) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.STUDENT))
+        if(!student.getRoles().contains(Role.ROLE_STUDENT))
             throw new MissingRoleException("Could not assign supervisor; User is not a student");
-        if(!supervisor.getRoles().contains(Role.SUPERVISOR))
+        if(!supervisor.getRoles().contains(Role.ROLE_SUPERVISOR))
             throw new MissingRoleException("Could not assign supervisor; User is not a supervisor");
 
         Thesis thesis = getThesisByStudent(student);
@@ -52,7 +52,7 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
     @Override
     public Thesis evaluateProjectPlan(User student, Float grade) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.STUDENT))
+        if(!student.getRoles().contains(Role.ROLE_STUDENT))
             throw new MissingRoleException("Could not evaluate project plan; User is not a student");
 
         Thesis thesis = getThesisByStudent(student);
@@ -70,7 +70,7 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
     @Override
     public Thesis gradeFinalProject(User student, Float grade) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.STUDENT))
+        if(!student.getRoles().contains(Role.ROLE_STUDENT))
             throw new MissingRoleException("Could not grade final project; User is not a student");
 
         Thesis thesis = getThesisByStudent(student);
@@ -88,7 +88,7 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
     @Override
     public Thesis initiateThesis(User student) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.STUDENT))
+        if(!student.getRoles().contains(Role.ROLE_STUDENT))
             throw new MissingRoleException("Could not initiate thesis; User is not a student");
 
         Thesis thesis = new Thesis();
@@ -116,7 +116,7 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
 
     private Thesis getThesisByStudent(User student) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.STUDENT))
+        if(!student.getRoles().contains(Role.ROLE_STUDENT))
             throw new MissingRoleException("Could not get thesis by student; User is not a student");
 
         this.thesisList = getThesis();
