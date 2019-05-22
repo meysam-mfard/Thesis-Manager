@@ -4,6 +4,7 @@ import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -31,12 +32,14 @@ public class OpponentServiceImplTest {
     FeedbackRepository feedbackRepository;
     @Mock
     SubmissionRepository submissionRepository;
+    @Mock
+    UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
 
         MockitoAnnotations.initMocks(this);
-        opponentService = new OpponentServiceImpl(thesisRepository, feedbackRepository, submissionRepository);
+        opponentService = new OpponentServiceImpl(thesisRepository, feedbackRepository, submissionRepository, userRepository);
         User user1= new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         User user2 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         User user3 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
@@ -45,7 +48,7 @@ public class OpponentServiceImplTest {
 
         Set<User> bidders = new HashSet<>();
 
-        Set<User> opponent = new HashSet<>();
+        User opponent = new User();
 
         List<Submission> submissions = new LinkedList<>();
 

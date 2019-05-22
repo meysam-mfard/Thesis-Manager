@@ -8,6 +8,7 @@ import e.group.thesismanager.model.User;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,8 @@ public class SupervisorServiceImpl extends AbstractService implements Supervisor
 
     @Autowired
     public SupervisorServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                         SubmissionRepository submissionRepository) {
-        super(thesisRepository, feedbackRepository, submissionRepository);
+                         SubmissionRepository submissionRepository, UserRepository userRepository) {
+        super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
     }
 
     @Override

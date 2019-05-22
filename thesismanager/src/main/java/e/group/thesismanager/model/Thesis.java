@@ -12,6 +12,9 @@ public class Thesis extends BaseEntity {
     @OneToOne
     private User student;
 
+    @OneToOne
+    private User opponent;
+
     @ManyToOne
     private Semester semester;
 
@@ -26,9 +29,6 @@ public class Thesis extends BaseEntity {
 
     @ManyToMany
     private Set<User> bidders = new HashSet<>();
-
-    @ManyToMany
-    private Set<User> opponent = new HashSet<>();
 
     @OneToMany(mappedBy = "thesis", cascade = CascadeType.ALL)
     private List<Submission> submissions = new LinkedList<>();

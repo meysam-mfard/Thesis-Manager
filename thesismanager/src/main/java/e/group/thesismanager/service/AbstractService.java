@@ -5,6 +5,7 @@ import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +18,15 @@ public abstract class AbstractService {
     protected ThesisRepository thesisRepository;
     protected FeedbackRepository feedbackRepository;
     protected SubmissionRepository submissionRepository;
+    protected UserRepository userRepository;
 
     public AbstractService(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                                 SubmissionRepository submissionRepository) {
+                                 SubmissionRepository submissionRepository, UserRepository userRepository) {
 
         this.thesisRepository = thesisRepository;
         this.feedbackRepository = feedbackRepository;
         this.submissionRepository = submissionRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Thesis> getThesis() {
@@ -38,6 +41,12 @@ public abstract class AbstractService {
         */
 
         return thesisRepository.findAll();
+    }
+
+    public User getUserByUsername(String username) {
+
+        return userRepository.findByUsername(username).orElseThrow(() ->
+                new NotFoundException("User does not exist. Username: " + username));
     }
 
     public Thesis getThesisById(Long id) {

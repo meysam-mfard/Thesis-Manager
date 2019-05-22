@@ -6,6 +6,7 @@ import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +20,13 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
 
     @Autowired
     public CoordinatorServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                           SubmissionRepository submissionRepository) {
+                           SubmissionRepository submissionRepository, UserRepository userRepository) {
 
-        super(thesisRepository, feedbackRepository, submissionRepository);
+        super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
     }
 
     @Override
-    public Thesis assignOpponent(User student, Set<User> opponent) throws MissingRoleException {
+    public Thesis assignOpponent(User student, User opponent) throws MissingRoleException {
 
         if(!student.getRoles().contains(Role.ROLE_STUDENT))
             throw new MissingRoleException("Could not assign opponent; User is not a student");
