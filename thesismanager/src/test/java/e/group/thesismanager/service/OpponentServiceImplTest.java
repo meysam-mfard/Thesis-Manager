@@ -84,12 +84,14 @@ public class OpponentServiceImplTest {
 
         Feedback feedback = new Feedback();
         String comment="good";
-        Byte[] file = new Byte[0];
+        byte[] file = new byte[0];
         User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         Role authorRole = Role.ROLE_STUDENT;
         LocalDateTime submissionTime= LocalDateTime.now();
         feedback.setComment(comment);
         feedback.setFile(file);
+        feedback.setFileName("fileName");
+        feedback.setFileType("pdf");
         feedback.setAuthor(author);
         feedback.setAuthorRole(authorRole);
         feedback.setSubmissionTime(submissionTime);
@@ -102,7 +104,8 @@ public class OpponentServiceImplTest {
         when(feedbackRepository.save(any())).thenReturn(feedback);
         when(submissionRepository.save(any())).thenReturn(submission);
         when(submissionRepository.findById(any())).thenReturn(Optional.of(submission));
-        assertEquals(submission, opponentService.feedbackOnSubmission(THESIS_LIST.get(0).getId(),comment,file,author,submissionTime,authorRole));
+        assertEquals(submission, opponentService.feedbackOnSubmission(THESIS_LIST.get(0).getId(),comment,file
+                , "fileName", "pdf", author,submissionTime,authorRole));
     }
 
     @Test
@@ -111,7 +114,7 @@ public class OpponentServiceImplTest {
         Submission submission = new Submission();
         Document document = new Document();
         String comment="good";
-        Byte[] file = new Byte[0];
+        byte[] file = new byte[0];
         User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         LocalDateTime submissionTime= LocalDateTime.now();
         final Float OLD_GRADE = 1F;

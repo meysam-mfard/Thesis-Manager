@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,6 +91,7 @@ public class DataBootstrap implements ApplicationRunner {
         t1.setSupervisor(sup1);
         t1.setOpponent(std2);
 
+        //////////////////////////////
         //submission
         Submission sub_prjDsc = new Submission();
         sub_prjDsc.setType(SubmissionType.PROJECT_DESCRIPTION);
@@ -99,12 +101,14 @@ public class DataBootstrap implements ApplicationRunner {
 
         //creating a Byte array file
         String str = "fake file content";
-        Byte[] file = new Byte[str.getBytes().length];
+        byte[] file = new byte[str.getBytes().length];
         int i = 0;
         for (byte b : str.getBytes()){
             file[i++] = b;
         }
         doc1.setFile(file);
+        doc1.setFileName("fileName.txt");
+        doc1.setFileType(MediaType.APPLICATION_PDF_VALUE);
         sub_prjDsc.setSubmittedDocument(doc1);
 
         //feedback
@@ -119,8 +123,86 @@ public class DataBootstrap implements ApplicationRunner {
 
         //submissionRepository.save(sub_prjDsc);
         t1.addSubmission(sub_prjDsc);
+        /////////////////////////////////////
+
+        //submission
+        Submission sub_prjPlan = new Submission();
+        sub_prjPlan.setType(SubmissionType.PROJECT_PLAN);
+        Document doc2 = new Document();
+        doc2.setAuthor(std1);
+        doc2.setComment("This is my project description");
+        doc2.setFile(file);
+        doc2.setFileName("fileName2.txt");
+        doc2.setFileType(MediaType.APPLICATION_PDF_VALUE);
+        sub_prjPlan.setSubmittedDocument(doc2);
+
+        //feedback
+        Feedback feed2 = new Feedback();
+        feed2.setAuthor(coo1);
+        feed2.setAuthorRole(Role.ROLE_COORDINATOR);
+        feed2.setComment("This is my feedback on your project description");
+
+        //feedbackRepository.save(feed1);
+        sub_prjPlan.getFeedbacks().add(feed2);
+        sub_prjPlan.setGrade(28.5F);
+
+        //submissionRepository.save(sub_prjDsc);
+        t1.addSubmission(sub_prjPlan);
+        /////////////////////////////////////
+
+        //submission
+        Submission sub_report = new Submission();
+        sub_report.setType(SubmissionType.REPORT);
+        Document doc3 = new Document();
+        doc3.setAuthor(std1);
+        doc3.setComment("This is my project description");
+        doc3.setFile(file);
+        doc3.setFileName("fileName2.txt");
+        doc3.setFileType(MediaType.APPLICATION_PDF_VALUE);
+        sub_report.setSubmittedDocument(doc3);
+
+        //feedback
+        Feedback feed3 = new Feedback();
+        feed3.setAuthor(coo1);
+        feed3.setAuthorRole(Role.ROLE_COORDINATOR);
+        feed3.setComment("This is my feedback on your project description");
+
+        //feedbackRepository.save(feed1);
+        sub_report.getFeedbacks().add(feed3);
+        sub_report.setGrade(28.5F);
+
+        //submissionRepository.save(sub_prjDsc);
+        t1.addSubmission(sub_report);
+        /////////////////////////////////////
+
+        //submission
+        Submission sub_finalReport = new Submission();
+        sub_finalReport.setType(SubmissionType.FINAL_REPORT);
+        Document doc4 = new Document();
+        doc4.setAuthor(std1);
+        doc4.setComment("This is my project description");
+        doc4.setFile(file);
+        doc4.setFileName("fileName2.txt");
+        doc4.setFileType(MediaType.APPLICATION_PDF_VALUE);
+        sub_finalReport.setSubmittedDocument(doc4);
+
+        //feedback
+        Feedback feed4 = new Feedback();
+        feed4.setAuthor(coo1);
+        feed4.setAuthorRole(Role.ROLE_COORDINATOR);
+        feed4.setComment("This is my feedback on your project description");
+
+        //feedbackRepository.save(feed1);
+        sub_finalReport.getFeedbacks().add(feed4);
+        sub_finalReport.setGrade(28.5F);
+
+        //submissionRepository.save(sub_prjDsc);
+        t1.addSubmission(sub_finalReport);
+
+
 
         log.info("Initializing thesis!");
         thesisRepository.save(t1);
+
     }
 }
