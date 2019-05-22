@@ -1,5 +1,5 @@
 <!DOCTYPE>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Thesis</title>
     <meta charset="utf-8">
@@ -17,15 +17,16 @@
 
 
         <!--PROJECT DESCRIPTION-->
-        <div class="card rounded-lg bg-light">
-            <div class="card-header rounded" id="headingProjectDescription">
+        <div class="card rounded-lg bg-light" th:each="submission : ${thesis.submissions}">
+            <div class="card-header rounded" id="headingProjectDescription" th:attr="id='heading'+${submission.id}">
                 <div class="mb-0">
-                    <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#projectDescription">
+                    <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#projectDescription"
+                            th:attr="data-target='#id'+${submission.id}" th:text="${submission.type}">
                         Project Description
                     </button>
                 </div>
             </div>
-            <div id="projectDescription" class="collapse" data-parent="#accordion">
+            <div id="projectDescription" class="collapse" data-parent="#accordion" th:id="'id'+${submission.id}">
                 <div class="card-body bg-dark rounded">
 
                     <!--PROJECT DESCRIPTION - SUBMISSION-->
@@ -64,18 +65,23 @@
                                 <tbody>
                                 <tr>
                                     <th scope="row">Comment</th>
-                                    <td>Comment text !!!!</td>
+                                    <td th:text="${submission.submittedDocument.comment}">Comment text !!!!</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Submission Time</th>
                                     <td>
-                                        <p class="card-text">2020 May 31 - 00:00:00</p>
+                                        <p class="card-text" th:text="${submission.submittedDocument.submissionTime}">2020 May 31 - 00:00:00</p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Submitted File</th>
                                     <td>
-                                        <a href="#" class="btn btn-link">Submitted_file_name.pdf</a>
+                                        <a href="#" th:href="@{'/student/' + ${studentId} + '/submission/'
+                                            + ${submission.id} + '/download'}" class="btn btn-link" th:text="${submission.submittedDocument.fileName}">
+                                            FileName.pdf</a>
+                                        <a href="#" th:href="@{/submission/download(stdId=${studentId}, subId=${submission.id})}"
+                                           class="btn btn-link" th:text="${submission.submittedDocument.fileName}">
+                                            FileName.pdf</a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -84,7 +90,7 @@
                     </div>
 
                     <!--PROJECT DESCRIPTION - FEEDBACK-->
-                    <div class="card bg-dark rounded-lg p-1">
+                    <div class="card bg-dark rounded-lg p-1" th:each="feedback : ${submission.feedbacks}">
                         <div class="card-header bg-info rounded">
                             <h4>Feedback</h4>
                         </div>
@@ -97,12 +103,14 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">Comment</th>
-                                    <td>Comment text !!!!</td>
+                                    <td th:text="${feedback.comment}">Comment text !!!!</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Submitted File</th>
                                     <td>
-                                        <a href="#" class="btn btn-link">Submitted_file_name.pdf</a>
+                                        <a href="#" th:href="@{'/student/' + ${studentId} + '/submission/'
+                                            + ${feedback.id} + '/download'}" class="btn btn-link" th:text="${feedback.fileName}">
+                                            FileName.pdf</a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -117,8 +125,9 @@
             </div>
         </div>
 
+<!--
 
-        <!--PROJECT PLAN-->
+        &lt;!&ndash;PROJECT PLAN&ndash;&gt;
         <div class="card rounded-lg bg-light">
             <div class="card-header rounded" id="headingProjectPlan">
                 <div class="mb-0">
@@ -130,7 +139,7 @@
             <div id="projectPlan" class="collapse" data-parent="#accordion">
                 <div class="card-body bg-dark rounded">
 
-                    <!--PROJECT PLAN - SUBMISSION-->
+                    &lt;!&ndash;PROJECT PLAN - SUBMISSION&ndash;&gt;
                     <div class="card bg-dark rounded-lg shadow p-1">
                         <div class="card-header bg-info rounded">
                             <h4>Submission</h4>
@@ -159,7 +168,7 @@
                         </div>
                     </div>
 
-                    <!--PROJECT PLAN - FEEDBACK-->
+                    &lt;!&ndash;PROJECT PLAN - FEEDBACK&ndash;&gt;
                     <div class="card bg-dark rounded-lg p-1">
                         <div class="card-header bg-info rounded">
                             <h4>Feedback</h4>
@@ -194,7 +203,7 @@
         </div>
 
 
-        <!--REPORT-->
+        &lt;!&ndash;REPORT&ndash;&gt;
         <div class="card rounded-lg bg-light">
             <div class="card-header rounded" id="headingReport">
                 <div class="mb-0">
@@ -206,7 +215,7 @@
             <div id="report" class="collapse" data-parent="#accordion">
                 <div class="card-body bg-dark rounded">
 
-                    <!--REPORT - SUBMISSION-->
+                    &lt;!&ndash;REPORT - SUBMISSION&ndash;&gt;
                     <div class="card bg-dark rounded-lg p-1">
                         <div class="card-header bg-info rounded">
                             <h4>Submission</h4>
@@ -235,7 +244,7 @@
                         </div>
                     </div>
 
-                    <!--REPORT - FEEDBACK-->
+                    &lt;!&ndash;REPORT - FEEDBACK&ndash;&gt;
                     <div class="card bg-dark rounded-lg p-1">
                         <div class="card-header bg-info rounded">
                             <h4>Feedback</h4>
@@ -270,7 +279,7 @@
         </div>
 
 
-        <!--FINAL REPORT-->
+        &lt;!&ndash;FINAL REPORT&ndash;&gt;
         <div class="card rounded-lg bg-light">
             <div class="card-header rounded" id="HeadingFinalReport">
                 <div class="mb-0">
@@ -282,7 +291,7 @@
             <div id="finalReport" class="collapse" data-parent="#accordion">
                 <div class="card-body bg-dark rounded">
 
-                    <!--FINAL REPORT - SUBMISSION-->
+                    &lt;!&ndash;FINAL REPORT - SUBMISSION&ndash;&gt;
                     <div class="card bg-dark rounded-lg p-1">
                         <div class="card-header bg-info rounded">
                             <h4>Submission</h4>
@@ -311,7 +320,7 @@
                         </div>
                     </div>
 
-                    <!--FINAL REPORT - FEEDBACK-->
+                    &lt;!&ndash;FINAL REPORT - FEEDBACK&ndash;&gt;
                     <div class="card bg-dark rounded-lg p-1">
                         <div class="card-header bg-info rounded">
                             <h4>Feedback</h4>
@@ -345,6 +354,7 @@
             </div>
         </div>
 
+-->
 
 
     </div>
