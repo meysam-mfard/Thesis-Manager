@@ -66,6 +66,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Thesis> getTheses(User student) {
+        return thesisRepository.findThesesByStudent(student);
+    }
+
+    @Override
     public List<Semester> getSemesters() {
         return semesterRepository.findAll();
     }
