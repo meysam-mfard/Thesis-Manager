@@ -2,10 +2,7 @@ package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
-import e.group.thesismanager.repository.FeedbackRepository;
-import e.group.thesismanager.repository.SubmissionRepository;
-import e.group.thesismanager.repository.ThesisRepository;
-import e.group.thesismanager.repository.UserRepository;
+import e.group.thesismanager.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -30,6 +27,8 @@ public class CoordinatorServiceImplTest {
     SubmissionRepository submissionRepository;
     @Mock
     UserRepository userRepository;
+    @Mock
+    SemesterRepository semesterRepository;
 
     @BeforeEach
     void setUp(){
@@ -49,7 +48,7 @@ public class CoordinatorServiceImplTest {
         thesis.addSubmission(s2);
 
         THESIS_LIST.add(thesis);
-        coordinatorService = new CoordinatorServiceImpl(thesisRepository, feedbackRepository, submissionRepository, userRepository);
+        coordinatorService = new CoordinatorServiceImpl(thesisRepository, feedbackRepository, submissionRepository, userRepository, semesterRepository);
         coordinatorService.setThesis(THESIS_LIST);
     }
 
