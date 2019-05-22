@@ -4,8 +4,8 @@ import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
-import java.util.Set;
 
 public interface CoordinatorService {
 
@@ -28,4 +28,8 @@ public interface CoordinatorService {
     Thesis initiateThesis(User student) throws MissingRoleException;
 
     void setThesis(List<Thesis> thesisList);
+
+    Semester initSemester(Year Year, SemesterPeriod semesterPeriod);
+
+    void setDeadline(SubmissionType type, LocalDateTime dateTime);
 }

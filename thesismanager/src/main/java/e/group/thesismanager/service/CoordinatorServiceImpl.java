@@ -3,26 +3,27 @@ package e.group.thesismanager.service;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
-import e.group.thesismanager.repository.FeedbackRepository;
-import e.group.thesismanager.repository.SubmissionRepository;
-import e.group.thesismanager.repository.ThesisRepository;
-import e.group.thesismanager.repository.UserRepository;
+import e.group.thesismanager.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class CoordinatorServiceImpl extends AbstractService implements CoordinatorService {
 
+    private SemesterRepository semesterRepository;
     private List<Thesis> thesisList;
 
     @Autowired
     public CoordinatorServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                           SubmissionRepository submissionRepository, UserRepository userRepository) {
+                                  SubmissionRepository submissionRepository, UserRepository userRepository,
+                                  SemesterRepository semesterRepository) {
 
         super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
+        this.semesterRepository = semesterRepository;
     }
 
     @Override
@@ -126,5 +127,43 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
                 .filter(x -> x.getStudent().equals(student))
                 .findFirst()
                 .orElseThrow( ()-> new NotFoundException("User does not exist." + student.getFirstName() + student.getLastName()));
+    }
+
+    @Override
+    public Semester initSemester(Year Year, SemesterPeriod semesterPeriod) {
+        // Set all other semesters to not active
+        List<Semester> previousSemesters = semesterRepository.findAll();
+        for (Semester s : previousSemesters) {
+            s.setActive(false);
+        }
+
+        // Create new semester and set it to active
+        Semester semester = new Semester();
+        semester.setYear(Year);
+        semester.setSemesterPeriod(semesterPeriod);
+        semester.setActive(true);
+        semesterRepository.save(semester);
+
+        return semester;
+    }
+
+    @Override
+    public void setDeadline(SubmissionType type, LocalDateTime dateTime) {
+        Semester semester = semesterRepository.findByActiveIsTrue();
+
+        switch (type) {
+            case PROJECT_DESCRIPTION:
+                semester.setProjectDescriptionDeadline(dateTime);
+                break;
+            case PROJECT_PLAN:
+                semester.setProjectPlanDeadline(dateTime);
+                break;
+            case REPORT:
+                semester.setReportDeadline(dateTime);
+                break;
+            case FINAL_REPORT:
+                semester.setFinalReportDeadline(dateTime);
+                break;
+        }
     }
 }
