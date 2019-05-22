@@ -13,7 +13,7 @@ public interface CoordinatorService {
 
     Submission feedbackOnSubmission(Long submissionId, Feedback feedback);
 
-    Submission feedbackOnSubmission(Long submissionId, String comment, Byte[] file, User author, LocalDateTime submissionTime, Role authorRole);
+    Submission feedbackOnSubmission(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author, LocalDateTime submissionTime, Role authorRole);
 
     Submission assessSubmission(Long submissionId, Float grade);
 

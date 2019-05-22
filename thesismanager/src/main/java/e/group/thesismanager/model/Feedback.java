@@ -15,9 +15,9 @@ public class Feedback extends Document {
     private Role authorRole;
 
     @Builder
-    public Feedback(String comment, Byte[] file, User author, LocalDateTime submissionTime, Role authorRole) {
+    public Feedback(String comment, byte[] file, String fileName, String fileType, User author, LocalDateTime submissionTime, Role authorRole) {
 
-        super(comment, file, author, submissionTime);
+        super(comment, file, fileName, fileType, author, submissionTime);
         this.authorRole = authorRole;
     }
 }

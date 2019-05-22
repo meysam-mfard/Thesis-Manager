@@ -85,7 +85,7 @@ public class AdminController {
 
     @GetMapping("admin/{id}/edit")
     public String editUser(Model model, @PathVariable Long id) {
-        User user = adminService.findUserById(Long.valueOf(id));
+        User user = adminService.findUserById(id);
         model.addAttribute("user", user);
         return "pages/editUser";
     }

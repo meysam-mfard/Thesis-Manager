@@ -36,11 +36,11 @@ public class SupervisorController {
     }
 
     @PostMapping("supervisor/newFeedback")
-    public String newFeedback(Long submissionId, String comment, Byte[] file, User author) {
+    public String newFeedback(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author) {
 
         try {
 
-            supervisorService.feedbackOnSubmission(submissionId, comment, file, author, LocalDateTime.now(), Role.ROLE_SUPERVISOR);
+            supervisorService.feedbackOnSubmission(submissionId, comment, file, fileName, fileType, author, LocalDateTime.now(), Role.ROLE_SUPERVISOR);
         } catch (Exception e) {
 
             //todo: replace with validator
@@ -52,11 +52,11 @@ public class SupervisorController {
     }
 
     @PostMapping("supervisor/editFeedback")
-    public String editFeedback(Long submissionId, Long feedbackId,String comment, Byte[] file, User author) {
+    public String editFeedback(Long submissionId, Long feedbackId,String comment, byte[] file, String fileName, String fileType, User author) {
 
         try {
 
-            supervisorService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, author, LocalDateTime.now(), Role.ROLE_SUPERVISOR);
+            supervisorService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, fileName, fileType, author, LocalDateTime.now(), Role.ROLE_SUPERVISOR);
         } catch (Exception e) {
 
             //todo: replace with validator

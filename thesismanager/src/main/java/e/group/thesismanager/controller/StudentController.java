@@ -36,7 +36,9 @@ public class StudentController {
 
     @PostMapping("/submit")
     public String postSubmit(@ModelAttribute User student,
-                             @ModelAttribute Byte[] file,
+                             @ModelAttribute byte[] file,
+                             @ModelAttribute String fileName,
+                             @ModelAttribute String fileType,
                              @ModelAttribute Semester semester,
                              @ModelAttribute SubmissionType type) {
 
@@ -49,6 +51,8 @@ public class StudentController {
 
             Document document = new Document();
             document.setFile(file);
+            document.setFileName(fileName);
+            document.setFileType(fileType);
             document.setAuthor(student);
 
             Submission submission = new Submission();

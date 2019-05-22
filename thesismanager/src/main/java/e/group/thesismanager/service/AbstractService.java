@@ -57,20 +57,20 @@ public abstract class AbstractService {
     }
 
     @Transactional
-    public Submission feedbackOnSubmission(Long submissionId, String comment, Byte[] file, User author,
+    public Submission feedbackOnSubmission(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author,
                                            LocalDateTime submissionTime, Role authorRole) {
 
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new NotFoundException("Submission does not exist. Id: " + submissionId));
 
-        Feedback feedback = new Feedback(comment, file, author, submissionTime, authorRole);
+        Feedback feedback = new Feedback(comment, file, fileName, fileType, author, submissionTime, authorRole);
         Feedback savedFeedback = feedbackRepository.save(feedback);
         submission.addFeedback(savedFeedback);
         return submissionRepository.save(submission);
     }
 
     @Transactional
-    public Submission editFeedbackOnSubmission(Long submissionId, Long feedbackId, String updatedComment, Byte[] updatedFile, User updatedAuthor,
+    public Submission editFeedbackOnSubmission(Long submissionId, Long feedbackId, String updatedComment, byte[] updatedFile, String fileName, String fileType, User updatedAuthor,
                                                LocalDateTime updatedSubmissionTime, Role updatedAuthorRole) {
 
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
@@ -89,6 +89,8 @@ public abstract class AbstractService {
 
         feedback.setComment(updatedComment);
         feedback.setFile(updatedFile);
+        feedback.setFileName(fileName);
+        feedback.setFileType(fileType);
         feedback.setAuthor(updatedAuthor);
         feedback.setSubmissionTime(updatedSubmissionTime);
         feedback.setAuthorRole(updatedAuthorRole);

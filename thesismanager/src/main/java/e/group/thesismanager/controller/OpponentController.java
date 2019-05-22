@@ -35,11 +35,11 @@ public class OpponentController {
     }
 
     @PostMapping("opponent/newFeedback")
-    public String newFeedback(Long submissionId, String comment, Byte[] file, User author) {
+    public String newFeedback(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author) {
 
         try {
 
-            opponentService.feedbackOnSubmission(submissionId, comment, file, author, LocalDateTime.now(), Role.ROLE_OPPONENT);
+            opponentService.feedbackOnSubmission(submissionId, comment, file, fileName, fileType, author, LocalDateTime.now(), Role.ROLE_OPPONENT);
         } catch (Exception e) {
 
             //todo: replace with validator
@@ -51,11 +51,11 @@ public class OpponentController {
     }
 
     @PostMapping("opponent/editFeedback")
-    public String editFeedback(Long submissionId, Long feedbackId,String comment, Byte[] file, User author) {
+    public String editFeedback(Long submissionId, Long feedbackId,String comment, byte[] file, String fileName, String fileType, User author) {
 
         try {
 
-            opponentService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, author, LocalDateTime.now(), Role.ROLE_OPPONENT);
+            opponentService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, fileName, fileType, author, LocalDateTime.now(), Role.ROLE_OPPONENT);
         } catch (Exception e) {
 
             //todo: replace with validator
