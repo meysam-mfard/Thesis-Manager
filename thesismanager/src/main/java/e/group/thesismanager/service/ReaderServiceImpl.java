@@ -8,6 +8,7 @@ import e.group.thesismanager.model.User;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,9 @@ public class ReaderServiceImpl extends AbstractService implements ReaderService 
 
     @Autowired
     public ReaderServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                         SubmissionRepository submissionRepository) {
+                         SubmissionRepository submissionRepository, UserRepository userRepository) {
 
-        super(thesisRepository, feedbackRepository, submissionRepository);
+        super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class ReaderServiceImpl extends AbstractService implements ReaderService 
         Thesis thesis = thesisRepository.findById(thesisId).orElseThrow(() ->
                 new NotFoundException("Thesis does not exist. Id: " + thesisId));
 
-        if(!reader.getRoles().contains(Role.READER))
+        if(!reader.getRoles().contains(Role.ROLE_READER))
             throw new MissingRoleException("Could not bid on thesis; User is not a reader");
 
         thesis.getBidders().add(reader);

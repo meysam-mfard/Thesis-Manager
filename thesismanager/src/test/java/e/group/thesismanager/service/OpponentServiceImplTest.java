@@ -4,12 +4,12 @@ import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -32,21 +32,23 @@ public class OpponentServiceImplTest {
     FeedbackRepository feedbackRepository;
     @Mock
     SubmissionRepository submissionRepository;
+    @Mock
+    UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
 
         MockitoAnnotations.initMocks(this);
-        opponentService = new OpponentServiceImpl(thesisRepository, feedbackRepository, submissionRepository);
-        User user1= new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
-        User user2 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
-        User user3 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        opponentService = new OpponentServiceImpl(thesisRepository, feedbackRepository, submissionRepository, userRepository);
+        User user1= new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
+        User user2 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
+        User user3 = new User(FN_1, LN_1, UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         Semester semester = new Semester();
         Set<User> readers = new HashSet<>();
 
         Set<User> bidders = new HashSet<>();
 
-        Set<User> opponent = new HashSet<>();
+        User opponent = new User();
 
         List<Submission> submissions = new LinkedList<>();
 
@@ -82,9 +84,9 @@ public class OpponentServiceImplTest {
 
         Feedback feedback = new Feedback();
         String comment="good";
-        File file = new File("");
-        User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
-        Role authorRole = Role.STUDENT;
+        Byte[] file = new Byte[0];
+        User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
+        Role authorRole = Role.ROLE_STUDENT;
         LocalDateTime submissionTime= LocalDateTime.now();
         feedback.setComment(comment);
         feedback.setFile(file);
@@ -109,8 +111,8 @@ public class OpponentServiceImplTest {
         Submission submission = new Submission();
         Document document = new Document();
         String comment="good";
-        File file = new File("");
-        User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.STUDENT)));
+        Byte[] file = new Byte[0];
+        User author = new User(FN_1, "K", UN_1, PW_1, new HashSet<>(Arrays.asList(Role.ROLE_STUDENT)));
         LocalDateTime submissionTime= LocalDateTime.now();
         final Float OLD_GRADE = 1F;
         final Float NEW_GRADE = 2F;
