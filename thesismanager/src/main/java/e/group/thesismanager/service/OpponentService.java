@@ -9,7 +9,9 @@ public interface OpponentService {
 
     List<Thesis> getThesis();
 
-    List<Thesis> getThesis(User user);
+    Thesis getThesis(User user);
+
+    User getUserByUsername(String username);
 
     Thesis getThesisById(Long id);
 

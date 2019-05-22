@@ -17,7 +17,7 @@ public interface CoordinatorService {
 
     Submission assessSubmission(Long submissionId, Float grade);
 
-    Thesis assignOpponent(User student, Set<User> opponent) throws MissingRoleException;
+    Thesis assignOpponent(User student, User opponent) throws MissingRoleException;
 
     Thesis assignSupervisor(User student, User supervisor) throws MissingRoleException;
 

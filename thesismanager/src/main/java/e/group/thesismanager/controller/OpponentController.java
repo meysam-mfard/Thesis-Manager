@@ -5,6 +5,8 @@ import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
 import e.group.thesismanager.service.OpponentService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,10 +29,19 @@ public class OpponentController {
         this.opponentService = opponentService;
     }
 
-    @GetMapping("opponent")
-    public String getOpponentHome(Model model, User user) {
+    /*
+    @ModelAttribute("thesis")
+    public Thesis emptyThesis(Model model) {
 
-        model.addAttribute("thesisList", opponentService.getThesis(user));
+        return new Thesis();
+    }
+    */
+
+    @GetMapping("opponent")
+    public String getOpponentHome(Model model) {
+
+        User opponent = opponentService.getUserByUsername(getCurrentUsername());
+        model.addAttribute("thesis", opponentService.getThesis(opponent));
         return "pages/opponent";
     }
 
@@ -72,5 +83,17 @@ public class OpponentController {
         Thesis thesis = opponentService.getThesisById(Long.valueOf(id));
         model.addAttribute("thesis", thesis);
         return "pages/editFeedback";
+    }
+
+    private String getCurrentUsername() {
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            return username = ((UserDetails)principal).getUsername();
+        } else {
+            return username = principal.toString();
+        }
     }
 }

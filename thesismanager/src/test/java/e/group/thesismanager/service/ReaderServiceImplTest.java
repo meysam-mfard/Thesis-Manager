@@ -9,6 +9,7 @@ import e.group.thesismanager.model.User;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -32,12 +33,14 @@ public class ReaderServiceImplTest {
     FeedbackRepository feedbackRepository;
     @Mock
     SubmissionRepository submissionRepository;
+    @Mock
+    UserRepository userRepository;
 
     @BeforeEach
     void setUp(){
 
         MockitoAnnotations.initMocks(this);
-        readerService = new ReaderServiceImpl(thesisRepository, feedbackRepository, submissionRepository);
+        readerService = new ReaderServiceImpl(thesisRepository, feedbackRepository, submissionRepository, userRepository);
         User reader = new User("U1", "U11", "U111", "U1111", new HashSet<>(Arrays.asList(Role.ROLE_READER)));
         Thesis thesis = new Thesis();
         thesis.setStudent(new User());

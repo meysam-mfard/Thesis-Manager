@@ -5,6 +5,7 @@ import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,6 +28,8 @@ public class CoordinatorServiceImplTest {
     FeedbackRepository feedbackRepository;
     @Mock
     SubmissionRepository submissionRepository;
+    @Mock
+    UserRepository userRepository;
 
     @BeforeEach
     void setUp(){
@@ -46,7 +49,7 @@ public class CoordinatorServiceImplTest {
         thesis.addSubmission(s2);
 
         THESIS_LIST.add(thesis);
-        coordinatorService = new CoordinatorServiceImpl(thesisRepository, feedbackRepository, submissionRepository);
+        coordinatorService = new CoordinatorServiceImpl(thesisRepository, feedbackRepository, submissionRepository, userRepository);
         coordinatorService.setThesis(THESIS_LIST);
     }
 
@@ -106,9 +109,7 @@ public class CoordinatorServiceImplTest {
     void assignOpponentTest() throws MissingRoleException {
 
         when(coordinatorService.getThesis()).thenReturn(THESIS_LIST);
-        Set<User> mockedOpponent = new HashSet<>();
-        User opponent1 = new User("01", "011", "0111", "01111", new HashSet<>(Arrays.asList(Role.ROLE_SUPERVISOR)));
-        mockedOpponent.add(opponent1);
+        User mockedOpponent = new User("01", "011", "0111", "01111", new HashSet<>(Arrays.asList(Role.ROLE_SUPERVISOR)));
 
         Thesis testOpponent = coordinatorService.assignOpponent(mockedStudent,mockedOpponent);
         assertEquals(mockedOpponent, testOpponent.getOpponent());

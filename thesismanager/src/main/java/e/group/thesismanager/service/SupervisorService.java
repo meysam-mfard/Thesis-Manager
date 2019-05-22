@@ -12,6 +12,8 @@ public interface SupervisorService {
 
     List<Thesis> getThesis(User user);
 
+    User getUserByUsername(String username);
+
     List<Thesis> getRequests(User user);
 
     Thesis getThesisById(Long id);
