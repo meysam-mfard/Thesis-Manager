@@ -1,5 +1,5 @@
 <!DOCTYPE>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Feedback</title>
     <meta charset="utf-8">
@@ -11,6 +11,8 @@
     <head>
 
 <body>
+<!--/*@thymesVar id="feedback" type="e.group.thesismanager.model.Feedback"*/-->
+
 <div class="container" style="margin-top: 100px">
 
     <div class="card rounded-lg bg-light shadow p-2">
@@ -21,28 +23,35 @@
         </div>
         <div class="card-body bg-dark rounded">
 
+            <!--FEEDBACK-->
             <div class="card bg-dark rounded-lg shadow p-1">
                 <div class="card-header bg-info rounded">
                     <h4>Feedback</h4>
                 </div>
                 <div class="card-body bg-light rounded">
-                    <form class="form">
+                    <!--<form class="form" th:object="${feedback}" th:action="@{'/submission/feedback'}" method="post">
                         <div class="form-group">
                             <label for="feedbackComment"><h4>Comment</h4></label>
-                            <textarea class="form-control col-md-7" id="feedbackComment" rows="3"></textarea>
+                            <textarea class="form-control col-md-7" id="feedbackComment" rows="3"
+                                      th:field="*{comment}"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="feedbackFile"><h4>Upload File</h4></label>
-                            <input type="file" class="form-control-file" id="feedbackFile">
+                            <input type="file" class="form-control-file" id="feedbackFile" th:field="*{file}">
+                        </div>
+                        <div class="form-group row justify-content-center">
+                            <button type="submit" class="btn btn-lg btn-info col-md-3">Submit</button>
+                        </div>
+                    </form>-->
+                    <form class="form" th:object="${feedback}" th:action="@{'/submission/feedback'}" method="post">
+                        <div class="form-group">
+                            <label for="feedbackComment"><h4>Comment</h4></label>
+                            <textarea class="form-control col-md-7" id="feedbackComment" rows="3"
+                                      th:field="*{comment}"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="grade"><h4>Grade</h4></label>
-                            <input class="form-control form-control-lg col-md-1" id="grade" type="text">
-                            <select class="form-control col-md-2 form-control-lg">
-                                <option></option>
-                                <option>Pass</option>
-                                <option>Fail</option>
-                            </select>
+                            <label for="feedbackFile"><h4>Upload File</h4></label>
+                            <input type="file" class="form-control-file" id="feedbackFile" th:field="*{file}">
                         </div>
                         <div class="form-group row justify-content-center">
                             <button type="submit" class="btn btn-lg btn-info col-md-3">Submit</button>
@@ -51,7 +60,32 @@
                 </div>
             </div>
 
+
+            <!--GRADE-->
+            <div class="card bg-dark rounded-lg shadow p-1">
+                <div class="card-header bg-info rounded">
+                    <h4>Assessment</h4>
+                </div>
+                <div class="card-body bg-light rounded">
+                    <form class="form" th:object="${grade}" th:action="@{'/submission/grade'}" method="post">
+                        <div class="form-group">
+                            <label for="grade"><h4>Grade</h4></label>
+                            <input class="form-control form-control-lg col-md-1" id="grade" type="text" th:field="grade">
+                            <select class="form-control col-md-2 form-control-lg" th:field="grade">
+                                <option></option>
+                                <option th:value="1">Pass</option>
+                                <option th:value="0">Fail</option>
+                            </select>
+                        </div>
+                        <div class="form-group row justify-content-center">
+                            <button type="submit" class="btn btn-lg btn-info col-md-3">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
+
     </div>
 
 </div>

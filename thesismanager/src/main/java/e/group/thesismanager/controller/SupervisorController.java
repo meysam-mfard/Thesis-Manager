@@ -1,5 +1,6 @@
 package e.group.thesismanager.controller;
 
+import e.group.thesismanager.model.Feedback;
 import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
@@ -9,10 +10,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -52,6 +53,28 @@ public class SupervisorController {
         }
 
         return "redirect:/supervisor?" + SAVE_SUBMSSION_SUCCESS;
+    }
+
+    @PostMapping("supervisor/submission/comment")
+    public void giveFeedbackComment(Model model, @RequestParam(name = "authId") Long authorId
+            , @RequestParam(name = "subId") Long submissionId
+            , @ModelAttribute String comment) {
+        supervisorService.feedbackCommentOnSubmission(submissionId, comment, authorId, Role.ROLE_SUPERVISOR);
+    }
+
+    @PostMapping("supervisor/submission/sendFile")
+    public void giveFeedbackFile(Model model, @RequestParam(name = "authId") Long authorId
+            , @RequestParam(name = "subId") Long submissionId
+            , @ModelAttribute Feedback feedback
+            , @ModelAttribute MultipartFile file) throws IOException {
+        supervisorService.feedbackFileOnSubmission(submissionId, file, authorId, Role.ROLE_SUPERVISOR);
+    }
+
+    @PostMapping("supervisor/submission/assess")
+    public void giveFeedbackAssessment(Model model, @RequestParam(name = "authId") Long authorId
+            , @RequestParam(name = "subId") Long submissionId
+            , @ModelAttribute Float grade) {
+        supervisorService.assessSubmission(submissionId, grade);
     }
 
     @PostMapping("supervisor/editFeedback")
