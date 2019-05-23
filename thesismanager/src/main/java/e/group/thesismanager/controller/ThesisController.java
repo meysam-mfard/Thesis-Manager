@@ -44,7 +44,7 @@ public class ThesisController {
     }
 
     @GetMapping("/submission/download")
-    public ResponseEntity<Resource> downloadSubmission1(Model model, @RequestParam(name = "stdId") Long studentId
+    public ResponseEntity<Resource> downloadSubmission(Model model, @RequestParam(name = "stdId") Long studentId
             , @RequestParam(name = "subId") Long submissionId) {
         Submission submission = studentService.getThesisById(studentId).getSubmissions().stream()
                 .filter(tempSub -> tempSub.getId().equals(submissionId)).findFirst().orElseThrow(() ->
@@ -56,4 +56,30 @@ public class ThesisController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getFileName() + "\"")
                 .body(new ByteArrayResource(document.getFile()));
     }
+/*
+    @PostMapping("submission/comment")
+    public void giveFeedback(Model model, @RequestParam(name = "authId") Long authorId
+            , @RequestParam(name = "subId") Long submissionId
+            , @ModelAttribute String comment) {
+        supervisorService.feedbackOnSubmission(submissionId, comment, feedback.getFile(), feedback.)
+
+    }
+
+    @PostMapping("supervisor/submission/sendFile")
+    public void giveFeedback(Model model, @RequestParam(name = "authId") Long authorId
+            , @RequestParam(name = "subId") Long submissionId
+            , @ModelAttribute Feedback feedback
+            , @ModelAttribute MultipartFile file) {
+        supervisorService.feedbackOnSubmission(submissionId, feedback.getComment(), feedback.getFile(), feedback.)
+
+    }
+
+    @PostMapping("supervisor/submission/assess")
+    public void giveFeedback(Model model, @RequestParam(name = "authId") Long authorId
+            , @RequestParam(name = "subId") Long submissionId
+            , @ModelAttribute Feedback feedback
+            , @ModelAttribute MultipartFile file) {
+        supervisorService.feedbackOnSubmission(submissionId, feedback.getComment(), feedback.getFile(), feedback.)
+
+    }*/
 }

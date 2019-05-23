@@ -57,12 +57,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Thesis getThesis(User student, Semester semester) {
 
-        List<Thesis> theses = thesisRepository.findThesesByStudentAndSemester(student, semester);
-
-        if(theses.size() == 0)
-            throw new NotFoundException("Thesis not found. Student Id: " + student.getId() + " Semester Id: " + semester.getId());
-
-        return theses.get(0);
+        return thesisRepository.findThesisByStudentAndSemester(student, semester).orElseThrow(() ->
+                new NotFoundException("Thesis not found. Student Id: " + student.getId() + " Semester Id: " + semester.getId()));
     }
 
     @Override
