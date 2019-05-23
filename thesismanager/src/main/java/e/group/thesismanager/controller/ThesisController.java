@@ -4,6 +4,8 @@ import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.Document;
 import e.group.thesismanager.model.Submission;
+import e.group.thesismanager.repository.UserRepository;
+import e.group.thesismanager.service.FeedbackService;
 import e.group.thesismanager.service.StudentService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -20,9 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ThesisController {
 
     private final StudentService studentService;
+    private final UserRepository userRepository;
+    private final FeedbackService feedbackService;
 
-    public ThesisController(StudentService studentService) {
+    public ThesisController(StudentService studentService, UserRepository userRepository, FeedbackService feedbackService) {
         this.studentService = studentService;
+        this.userRepository = userRepository;
+        this.feedbackService = feedbackService;
     }
 
     @GetMapping("student/{studentId}/thesis")
@@ -57,29 +63,40 @@ public class ThesisController {
                 .body(new ByteArrayResource(document.getFile()));
     }
 /*
+    @GetMapping("submission/feedback")
+    public String viewSubmissionFeedbackPage(Model model, @RequestParam(name = "userId") Long userId
+            , @RequestParam(name = "subId") Long submissionId
+            , @ModelAttribute Role authorRole) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User does not exist. ID: "+userId));
+        Submission submission = studentService.getThesisById(studentId).getSubmissions().stream()
+                .filter(tempSub -> tempSub.getId().equals(submissionId)).findFirst().orElseThrow(() ->
+                        new NotFoundException("Submission does not exist. ID: " + submissionId));
+
+        model.addAttribute("user", user);
+        model.addAttribute("submission", submission);
+        model.addAttribute("role", authorRole);
+        return "pages/feedbackSubmissionForm";
+    }
+
     @PostMapping("submission/comment")
-    public void giveFeedback(Model model, @RequestParam(name = "authId") Long authorId
+    public void giveFeedbackComment(Model model, @RequestParam(name = "authId") Long authorId
             , @RequestParam(name = "subId") Long submissionId
             , @ModelAttribute String comment) {
-        supervisorService.feedbackOnSubmission(submissionId, comment, feedback.getFile(), feedback.)
-
+        supervisorService.feedbackCommentOnSubmission(submissionId, comment, authorId, Role.ROLE_SUPERVISOR);
     }
 
-    @PostMapping("supervisor/submission/sendFile")
-    public void giveFeedback(Model model, @RequestParam(name = "authId") Long authorId
+    @PostMapping("submission/sendFile")
+    public void giveFeedbackFile(Model model, @RequestParam(name = "authId") Long authorId
             , @RequestParam(name = "subId") Long submissionId
             , @ModelAttribute Feedback feedback
-            , @ModelAttribute MultipartFile file) {
-        supervisorService.feedbackOnSubmission(submissionId, feedback.getComment(), feedback.getFile(), feedback.)
-
+            , @ModelAttribute MultipartFile file) throws IOException {
+        supervisorService.feedbackFileOnSubmission(submissionId, file, authorId, Role.ROLE_SUPERVISOR);
     }
 
-    @PostMapping("supervisor/submission/assess")
-    public void giveFeedback(Model model, @RequestParam(name = "authId") Long authorId
+    @PostMapping("submission/assess")
+    public void giveFeedbackAssessment(Model model, @RequestParam(name = "authId") Long authorId
             , @RequestParam(name = "subId") Long submissionId
-            , @ModelAttribute Feedback feedback
-            , @ModelAttribute MultipartFile file) {
-        supervisorService.feedbackOnSubmission(submissionId, feedback.getComment(), feedback.getFile(), feedback.)
-
+            , @ModelAttribute Float grade) {
+        supervisorService.assessSubmission(submissionId, grade);
     }*/
 }

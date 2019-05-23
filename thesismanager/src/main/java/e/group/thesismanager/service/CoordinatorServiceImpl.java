@@ -12,7 +12,7 @@ import java.time.Year;
 import java.util.List;
 
 @Service
-public class CoordinatorServiceImpl extends AbstractService implements CoordinatorService {
+public class CoordinatorServiceImpl extends FeedbackService implements CoordinatorService {
 
     private SemesterRepository semesterRepository;
     private List<Thesis> thesisList;

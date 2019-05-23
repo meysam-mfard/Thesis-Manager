@@ -7,6 +7,7 @@ import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
 import e.group.thesismanager.repository.UserRepository;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,15 +17,16 @@ import java.util.List;
 import java.util.Optional;
 
 @NoArgsConstructor
-public abstract class AbstractService {
+@Service
+public class FeedbackService {
 
     protected ThesisRepository thesisRepository;
     protected FeedbackRepository feedbackRepository;
     protected SubmissionRepository submissionRepository;
     protected UserRepository userRepository;
 
-    public AbstractService(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                                 SubmissionRepository submissionRepository, UserRepository userRepository) {
+    public FeedbackService(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
+                           SubmissionRepository submissionRepository, UserRepository userRepository) {
 
         this.thesisRepository = thesisRepository;
         this.feedbackRepository = feedbackRepository;
