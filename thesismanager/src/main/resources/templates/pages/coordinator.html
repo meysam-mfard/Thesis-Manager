@@ -28,11 +28,10 @@
                         <th scope="col">Thesis</th>
                         <th scope="col">Opponent</th>
                         <th scope="col">Reader</th>
-                        <th scope="col">Status</th>
                     </thead>
                     <tbody>
                     <tr class="thead-light">
-                        <td>Thesis 1</td>
+                        <td><button type="button" class="btn btn-link">Thesis</button></td>
                         <td>
                             <div class="form-group">
                                 <select class="custom-select">
@@ -44,23 +43,22 @@
                             </div>
                         </td>
                         <td>
-                            <div class="form-group">
-                                <select class="custom-select">
-                                    <option selected>Choose Reader..</option>
+                            <div class="col-md-12">
+                                <select class="custom-select" multiple>
+                                    <option value="" disabled selected>Choose reader...</option>
                                     <option value="1">Reader 1</option>
                                     <option value="2">Reader 2</option>
                                     <option value="3">Reader 3</option>
                                 </select>
                             </div>
                         </td>
-                        <td><button type="button" class="btn btn-link">Info</button></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
 
             <h1>Semester settings</h1>
-            <h3>Deadline Management</h3>
+            <h3>Create a new semester</h3>
             <div class="row">
                 <div class="col-md-3 form-group">
                     <select class="custom-select">
@@ -68,6 +66,28 @@
                         <option value="1">Thesis 1</option>
                         <option value="2">Thesis 2</option>
                         <option value="3">Thesis 3</option>
+                    </select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <select class="custom-select">
+                        <option selected>Choose season ...</option>
+                        <option value="1">Winter</option>
+                        <option value="2">Spring</option>
+                        <option value="3">Summer</option>
+                    </select>
+                </div>
+                <div class="col-md-2 form-group offset-md-3">
+                    <button class="btn btn-primary" type="submit">Create</button>
+                </div>
+            </div>
+            <h3>Deadline Management</h3>
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <select class="custom-select">
+                        <option selected>Choose semester ...</option>
+                        <option value="1">Semester 1</option>
+                        <option value="2">Semester 2</option>
+                        <option value="3">Semester 3</option>
                     </select>
                 </div>
                 <div class="col-md-4 form-group">
@@ -122,36 +142,6 @@
                         <option value="7">D</option>
                         <option value="8">E</option>
                         <option value="9">F</option>
-                    </select>
-                </div>
-                <div class="col-md-2 form-group">
-                    <button class="btn btn-primary" type="submit">Assign</button>
-                </div>
-            </div>
-            <h3>Report</h3>
-            <div class="row">
-                <div class="col-md-3 form-group">
-                    <select class="custom-select">
-                        <option selected>Choose thesis...</option>
-                        <option value="1">Thesis 1</option>
-                        <option value="2">Thesis 2</option>
-                        <option value="3">Thesis 3</option>
-                    </select>
-                </div>
-                <div class="col-md-4 form-group">
-                    <select class="custom-select">
-                        <option selected>Choose reader or opponent ...</option>
-                        <option value="1">Reader 1</option>
-                        <option value="2">Reader 2</option>
-                        <option value="3">Opponent 1</option>
-                    </select>
-                </div>
-                <div class="col-md-3 form-group">
-                    <select class="custom-select">
-                        <option selected>Choose report...</option>
-                        <option value="1">Report 1</option>
-                        <option value="2">Report 2</option>
-                        <option value="3">Report 3</option>
                     </select>
                 </div>
                 <div class="col-md-2 form-group">
