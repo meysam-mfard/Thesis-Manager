@@ -1,5 +1,6 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
 import e.group.thesismanager.repository.FeedbackRepository;
@@ -22,6 +23,6 @@ public class OpponentServiceImpl extends AbstractService implements OpponentServ
     @Override
     public Thesis getThesis(User user) {
 
-        return thesisRepository.findThesisByOpponent(user);
+        return thesisRepository.findThesisByOpponent(user).orElseThrow(() -> new NotFoundException("User not found."));
     }
 }

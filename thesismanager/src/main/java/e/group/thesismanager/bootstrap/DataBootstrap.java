@@ -75,6 +75,7 @@ public class DataBootstrap implements ApplicationRunner {
 
         /*Adding Semester*/
         Semester semester = new Semester();
+        semester.setActive(true);
         semester.setSemesterPeriod(SemesterPeriod.SPRING);
         semester.setYear(Year.of(2019));
         semester.setProjectDescriptionDeadline(LocalDateTime.of(2020, 1, 1, 23, 59));

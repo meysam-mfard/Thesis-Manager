@@ -8,9 +8,12 @@ import e.group.thesismanager.repository.ThesisRepository;
 import e.group.thesismanager.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @NoArgsConstructor
 public abstract class AbstractService {
@@ -73,6 +76,58 @@ public abstract class AbstractService {
                 new NotFoundException("Submission does not exist. Id: " + submissionId));
 
         Feedback feedback = new Feedback(comment, file, fileName, fileType, author, submissionTime, authorRole);
+        Feedback savedFeedback = feedbackRepository.save(feedback);
+        submission.addFeedback(savedFeedback);
+        return submissionRepository.save(submission);
+    }
+
+    public Submission feedbackCommentOnSubmission(Long submissionId, String comment, Long authorId, Role authorRole) {
+
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new NotFoundException("Submission does not exist. Id: " + submissionId));
+
+        User author = userRepository.findById(authorId).orElseThrow(() -> new NotFoundException("User not found. ID: "+authorId));
+        Optional<Feedback> feedbackOptional = submission.getFeedbacks().stream().filter(feedback -> feedback.getAuthor().equals(author))
+                .findFirst();
+        Feedback feedback;
+        if (!feedbackOptional.isPresent())
+            feedback = new Feedback(comment, null, null, null, author, null, authorRole);
+        else {
+            feedback = feedbackOptional.get();
+            feedback.setComment(comment);
+        }
+
+        Feedback savedFeedback = feedbackRepository.save(feedback);
+        submission.addFeedback(savedFeedback);
+        return submissionRepository.save(submission);
+    }
+
+    public Submission feedbackFileOnSubmission(Long submissionId, MultipartFile multipartFile, Long authorId, Role authorRole) throws IOException {
+
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new NotFoundException("Submission does not exist. Id: " + submissionId));
+
+        User author = userRepository.findById(authorId).orElseThrow(() -> new NotFoundException("User not found. ID: "+authorId));
+        Optional<Feedback> feedbackOptional = submission.getFeedbacks().stream().filter(feedback -> feedback.getAuthor().equals(author))
+                .findFirst();
+
+        byte[] file = new byte[multipartFile.getBytes().length];
+        int i = 0;
+        for (byte b : multipartFile.getBytes()){
+            file[i++] = b;
+        }
+
+        Feedback feedback;
+        if (!feedbackOptional.isPresent())
+            feedback = new Feedback(null, file, multipartFile.getName(), multipartFile.getContentType()
+                    , author, null, authorRole);
+        else {
+            feedback = feedbackOptional.get();
+            feedback.setFile(file);
+            feedback.setFileName(multipartFile.getName());
+            feedback.setFileType(multipartFile.getContentType());
+        }
+
         Feedback savedFeedback = feedbackRepository.save(feedback);
         submission.addFeedback(savedFeedback);
         return submissionRepository.save(submission);

@@ -2,7 +2,9 @@ package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,6 +23,10 @@ public interface SupervisorService {
     Submission feedbackOnSubmission(Long submissionId, Feedback feedback);
 
     Submission feedbackOnSubmission(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author, LocalDateTime submissionTime, Role authorRole);
+
+    Submission feedbackCommentOnSubmission(Long submissionId, String comment, Long authorId, Role authorRole);
+
+    Submission feedbackFileOnSubmission(Long submissionId, MultipartFile multipartFile, Long authorId, Role authorRole) throws IOException;
 
     Submission editFeedbackOnSubmission(Long submissionId, Long feedbackId, String updatedComment, byte[] file, String fileName, String fileType, User updatedAuthor,
                                         LocalDateTime updatedSubmissionTime, Role updatedAuthorRole);
