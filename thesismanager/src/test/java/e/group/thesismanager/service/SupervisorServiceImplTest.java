@@ -47,7 +47,7 @@ public class SupervisorServiceImplTest {
         thesis.setSemester(new Semester());
 
         thesis.setSupervisor(supervisor);
-        thesis.setSupervisorAccept(true);
+        //thesis.setSupervisorAccept(true); todo:fix
 
         THESIS_LIST.add(thesis);
     }

@@ -1,5 +1,6 @@
 package e.group.thesismanager.controller;
 
+import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
 import e.group.thesismanager.service.StudentService;
@@ -90,7 +91,7 @@ public class StudentController {
 
         try {
             studentService.proposeSupervisor(thesis, supervisor);
-        } catch (MissingRoleException e) {
+        } catch (MissingRoleException | InvalidSupervisorRequestException e) {
             return "request-supervisor?fail";
         }
 
