@@ -48,7 +48,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Thesis getThesis(Long id) {
+    public Thesis getThesisById(Long id) {
 
         return thesisRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("User does not exist. Id: " + id));
@@ -66,8 +66,20 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Thesis getThesisForActiveSemesterByStudentId(Long studentId) {
+        return thesisRepository.findThesesByStudentId(studentId).stream()
+                .filter(thesis1 -> thesis1.getSemester().isActive()).findFirst()
+                .orElseThrow(() -> new NotFoundException("No active thesis for student Id: "+studentId));
+    }
+
+    @Override
     public List<Thesis> getTheses(User student) {
         return thesisRepository.findThesesByStudent(student);
+    }
+
+    @Override
+    public List<Thesis> getThesesByStudentId(Long studentId) {
+        return thesisRepository.findThesesByStudentId(studentId);
     }
 
     @Override

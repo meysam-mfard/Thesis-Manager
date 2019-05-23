@@ -1,5 +1,6 @@
 package e.group.thesismanager.controller;
 
+import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.Document;
 import e.group.thesismanager.model.Submission;
@@ -25,16 +26,16 @@ public class ThesisController {
     }
 
     @GetMapping("student/{studentId}/thesis")
-    public String getThesis(Model model, @PathVariable Long studentId) {
-        model.addAttribute("thesis", studentService.getThesis(studentId));
+    public String getThesis(Model model, @PathVariable Long studentId) throws MissingRoleException {
+        model.addAttribute("thesis", studentService.getThesisForActiveSemesterByStudentId(studentId));
         model.addAttribute("studentId", studentId);
         return "pages/thesis";
     }
 
     @GetMapping("/submission/view")
     public String viewSubmission(Model model, @RequestParam(name = "stdId") Long studentId
-            , @RequestParam(name = "subId") Long submissionId) {
-        Submission submission = studentService.getThesis(studentId).getSubmissions().stream()
+            , @RequestParam(name = "subId") Long submissionId) throws MissingRoleException {
+        Submission submission = studentService.getThesisForActiveSemesterByStudentId(studentId).getSubmissions().stream()
                 .filter(tempSub -> tempSub.getId().equals(submissionId)).findFirst().orElseThrow(() ->
                         new NotFoundException("Submission does not exist. Id: " + submissionId));
         model.addAttribute("submission", submission);
@@ -42,24 +43,10 @@ public class ThesisController {
         return "pages/viewSubmission";
     }
 
-    @GetMapping("student/{studentId}/submission/{submissionId}/download")
-    public ResponseEntity<Resource> downloadSubmission(Model model, @PathVariable Long studentId, @PathVariable Long submissionId) {
-        Submission submission = studentService.getThesis(studentId).getSubmissions().stream()
-                .filter(tempSub -> tempSub.getId().equals(submissionId)).findFirst().orElseThrow(() ->
-                        new NotFoundException("Submission does not exist. Id: " + submissionId));
-        Document document = submission.getSubmittedDocument();
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(document.getFileType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getFileName() + "\"")
-                .body(new ByteArrayResource(document.getFile()));
-    }
-
-    //Same functionality as downloadSubmission (Just for demonstration)
     @GetMapping("/submission/download")
     public ResponseEntity<Resource> downloadSubmission1(Model model, @RequestParam(name = "stdId") Long studentId
             , @RequestParam(name = "subId") Long submissionId) {
-        Submission submission = studentService.getThesis(studentId).getSubmissions().stream()
+        Submission submission = studentService.getThesisById(studentId).getSubmissions().stream()
                 .filter(tempSub -> tempSub.getId().equals(submissionId)).findFirst().orElseThrow(() ->
                         new NotFoundException("Submission does not exist. Id: " + submissionId));
         Document document = submission.getSubmittedDocument();
