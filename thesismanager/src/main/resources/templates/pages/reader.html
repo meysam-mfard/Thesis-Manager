@@ -12,7 +12,7 @@
     <head>
             <header>
 
-                    <h1><br><br>Admin Page</h1>
+                    <h1><br><br>Reader Page</h1>
             </header>
             <body>
                     <div class="accordion" id="accordionExample">
@@ -24,37 +24,24 @@
                                   </button>
                                 </h2>
                               </div>
-                          
+
                               <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                 <div class="card-body">
                                         <table class="table">
                                                 <thead>
                                                   <tr>
                                                     <th scope="col">Student</th>
-                                                    <th scope="col">Theris</th>
                                                     <th scope="col">Bidding</th>
-                                                    
+
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                  <tr>
-                                                    <th scope="row">S1</th>
-                                                    <td><a href="#" class="stretched-link">link</a></td>
-                                                    <td><button class="btn btn-primary" type="submit">Bidding</button></td>
-                                                   
-                                                  </tr>
-                                                  <tr>
-                                                    <th scope="row">S2</th>
-                                                    <td><a href="#" class="stretched-link">link</a></td>
-                                                    <td><button class="btn btn-primary" type="submit">Bidding</button></td>
-                                                    
-                                                  </tr>
-                                                  <tr>
-                                                    <th scope="row">S3</th>
-                                                    <td><a href="#" class="stretched-link">link</a></td>
-                                                    <td><button class="btn btn-primary" type="submit">Bidding</button></td>
-                                                    
-                                                  </tr>
+
+                                              <tr class="form" th:each="thesis : ${theses}" th:href="@{'reader/' +${thesis.id}+ '/bid'}" method="post">
+                                                <th scope="row" th:text="${thesis.student.firstName}+' '+${thesis.student.lastName}">Dave Gilbert</th>
+                                                    <td> <button  class="btn btn-success" role="button" aria-pressed="true"  th:href="@{'reader/' +${thesis.id}+ '/bid'}" type="submit">Bid</button>
+                                                    </td>
+                                              </tr>
                                                 </tbody>
                                               </table>
                                 </div>
@@ -73,38 +60,23 @@
                                         <table class="table">
                                                 <thead>
                                                   <tr>
-                                                    <th scope="col">Info</th>
                                                     <th scope="col">Student</th>
-                                                    <th scope="col">Stats</th>
-                                                    
+                                                    <th scope="col">Feedback</th>
+
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                  <tr>
-                                                    <th scope="row">1</th>
-                                                    <td>S1</td>
-                                                    <td><a href="#" class="stretched-link">link</a></td>
-                                                   
-                                                  </tr>
-                                                  <tr>
-                                                    <th scope="row">2</th>
-                                                    <td>S2</td>
-                                                    <td><a href="#" class="stretched-link">link</a></td>
-                                                    
-                                                  </tr>
-                                                  <tr>
-                                                    <th scope="row">3</th>
-                                                    <td>S3</td>
-                                                    <td><a href="#" class="stretched-link">link</a></td>
-                                                    
-                                                  </tr>
+                                                <tr class="table-primary" th:each="thesis : ${theses}">
+                                                    <td><a th:href="@{'/thesis/' + ${thesis.id}}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">StudentName</span></a></td>
+                                                    <td><a th:href="@{'/thesis/' + ${thesis.id} + '/feedback/'}">Give Feedback</a></td>
+                                                </tr>
                                                 </tbody>
                                               </table>
                                 </div>
                               </div>
                             </div>
-                            
+
                           </div>
 
-                          
+
             </body>
