@@ -1,6 +1,7 @@
 package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
+import e.group.thesismanager.model.SupervisorRequestStatus;
 import e.group.thesismanager.repository.ThesisRepository;
 import e.group.thesismanager.repository.UserRepository;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class SupervisorServiceIT {
     @Test
     public void replyOnSupervisionPropositionTest() throws MissingRoleException {
 
-        supervisorService.replyOnSupervisionProposition(thesisRepository.findById(1L).get().getId(), userRepository.findById(3L).get(), true);
+        supervisorService.replyOnSupervisionProposition(thesisRepository.findById(1L).get().getId(), userRepository.findById(3L).get(), SupervisorRequestStatus.ACCEPTED);
 
         assertEquals(userRepository.findById(3L).get(), supervisorService.getThesis().get(0).getSupervisor());
     }
