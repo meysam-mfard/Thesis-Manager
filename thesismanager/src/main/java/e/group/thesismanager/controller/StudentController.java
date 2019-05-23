@@ -4,6 +4,7 @@ import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
 import e.group.thesismanager.service.StudentService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +32,12 @@ public class StudentController {
         return "pages/student";
     }
 
-    @GetMapping("/submit")
-    public String getSubmit(Model model) {
+    @GetMapping("submission")
+    public String getSubmissionFrom(Model model, Authentication authentication) {
         model.addAttribute("semesters", studentService.getSemesters()); // todo: filter by "active" semesters?
         model.addAttribute("submissionTypes", Arrays.asList(SubmissionType.values()));
 
-        return "pages/student-submit";
+        return "pages/studentSubmissionForm";
     }
 
     @PostMapping("/submit")
