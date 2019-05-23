@@ -1,5 +1,6 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.Document;
 import e.group.thesismanager.model.Semester;
@@ -22,7 +23,7 @@ public interface StudentService {
 
     List<User> getSupervisors();
 
-    void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException;
+    void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException, InvalidSupervisorRequestException;
 
     void submitProjectDescription(Thesis thesis, Document projectDescription);
 

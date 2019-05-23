@@ -33,19 +33,21 @@ public class SupervisorServiceImpl extends AbstractService implements Supervisor
             throw new MissingRoleException("Could not reply on supervision proposition; User is not a supervisor");
 
         thesis.setSupervisor(supervisor);
-        thesis.setSupervisorAccept(answer);
+        //thesis.setSupervisorAccept(answer); todo:fix
         return thesisRepository.save(thesis);
     }
 
     @Override
     public List<Thesis> getThesis(User user) {
 
-        return thesisRepository.findThesesBySupervisorAndSupervisorAccept(user, true);
+        return null; //todo:fix
+        //return thesisRepository.findThesesBySupervisorAndSupervisorAccept(user, true);
     }
 
     @Override
     public List<Thesis> getRequests(User user) {
 
-        return thesisRepository.findThesesBySupervisorAndSupervisorAccept(user, false);
+        return null; //todo:fix
+        //return thesisRepository.findThesesBySupervisorAndSupervisorAccept(user, false);
     }
 }

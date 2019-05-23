@@ -31,5 +31,7 @@ public interface CoordinatorService {
 
     Semester initSemester(Year Year, SemesterPeriod semesterPeriod);
 
+    List<Semester> getSemesters();
+
     void setDeadline(SubmissionType type, LocalDateTime dateTime);
 }

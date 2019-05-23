@@ -148,6 +148,11 @@ public class CoordinatorServiceImpl extends AbstractService implements Coordinat
     }
 
     @Override
+    public List<Semester> getSemesters() {
+        return semesterRepository.findAll();
+    }
+
+    @Override
     public void setDeadline(SubmissionType type, LocalDateTime dateTime) {
         Semester semester = semesterRepository.findByActiveIsTrue();
 
