@@ -89,6 +89,7 @@ public class DataBootstrap implements ApplicationRunner {
         t1.setStudent(std1);
         t1.setCoordinator(coo1);
         t1.setSupervisor(sup1);
+        t1.setSupervisorRequestStatus(SupervisorRequestStatus.REQUEST_SENT);
         t1.setOpponent(std2);
 
         //////////////////////////////

@@ -1,6 +1,7 @@
 package e.group.thesismanager.controller;
 
 import e.group.thesismanager.model.Role;
+import e.group.thesismanager.model.SupervisorRequestStatus;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
 import e.group.thesismanager.service.SupervisorService;
@@ -9,9 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -32,7 +31,7 @@ public class SupervisorController {
     @GetMapping("supervisor")
     public String getSupervisorHome(Model model) {
 
-        User supervisor = supervisorService.getUserByUsername(getCurrentUsername());
+        User supervisor = getCurrentUser();
         model.addAttribute("thesisList", supervisorService.getThesis(supervisor));
         model.addAttribute("supervisionRequestsList", supervisorService.getRequests(supervisor));
         return "pages/supervisor";
@@ -118,12 +117,12 @@ public class SupervisorController {
         return "pages/editAssessment";
     }
 
-    @PostMapping("supervisor/replyToSupervisionRequest")
-    public String replyToSupervisionRequest(Long thesisId, User supervisor, boolean answer) {
+    @PostMapping("supervisor/replyToSupervisionRequest/{thesisId}/{answerNumber}")
+    public String replyToSupervisionRequest(@PathVariable Long thesisId, @PathVariable int answerNumber) {
 
         try {
 
-            supervisorService.replyOnSupervisionProposition(thesisId, supervisor, answer);
+            supervisorService.replyOnSupervisionProposition(thesisId, getCurrentUser(), SupervisorRequestStatus.values()[answerNumber]);
         } catch (Exception e) {
 
             //todo: replace with validator
@@ -136,13 +135,17 @@ public class SupervisorController {
 
     private String getCurrentUsername() {
 
-        String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails) {
-            return username = ((UserDetails)principal).getUsername();
+            return ((UserDetails)principal).getUsername();
         } else {
-            return username = principal.toString();
+            return principal.toString();
         }
+    }
+
+    private User getCurrentUser() {
+
+        return supervisorService.getUserByUsername(getCurrentUsername());
     }
 }

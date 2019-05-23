@@ -1,5 +1,6 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
@@ -86,13 +87,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException {
+    public void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException, InvalidSupervisorRequestException {
 
         if(!supervisor.getRoles().contains(Role.ROLE_SUPERVISOR))
             throw new MissingRoleException("Could not propose supervisor; Proposed user is not a supervisor");
 
+        if(thesis.getSupervisorRequestStatus() == SupervisorRequestStatus.ACCEPTED)
+            throw new InvalidSupervisorRequestException("Could not propose supervisor; A supervisor has already accepted");
+
         thesis.setSupervisor(supervisor);
-        thesis.setSupervisorAccept(false);
+        thesis.setSupervisorRequestStatus(SupervisorRequestStatus.REQUEST_SENT);
     }
 
     @Override

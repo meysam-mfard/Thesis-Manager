@@ -40,7 +40,7 @@ public class OpponentController {
     @GetMapping("opponent")
     public String getOpponentHome(Model model) {
 
-        User opponent = opponentService.getUserByUsername(getCurrentUsername());
+        User opponent = getCurrentUser();
         model.addAttribute("thesis", opponentService.getThesis(opponent));
         return "pages/opponent";
     }
@@ -87,13 +87,17 @@ public class OpponentController {
 
     private String getCurrentUsername() {
 
-        String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails) {
-            return username = ((UserDetails)principal).getUsername();
+            return ((UserDetails)principal).getUsername();
         } else {
-            return username = principal.toString();
+            return principal.toString();
         }
+    }
+
+    private User getCurrentUser() {
+
+        return opponentService.getUserByUsername(getCurrentUsername());
     }
 }

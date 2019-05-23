@@ -1,7 +1,7 @@
 <!DOCTYPE>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin page</title>
+    <title>Supervisor page</title>
     <meta charset="utf-8">
     <meta property="og:title" content="Start page" />
     <meta property="og:type" content="website" />
@@ -30,7 +30,7 @@
             </thead>
             <tbody>
             <tr class="table-primary" th:each="thesis : ${thesisList}">
-                <td><a th:href="@{'/thesis/' + ${thesis.id}}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">StudentName</span></a></td>
+                <td><a th:href="@{'student/' + ${thesis.id} + '/thesis'}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">StudentName</span></a></td>
                 <td><a th:href="@{'/thesis/' + ${thesis.id} + '/feedback/'}">Give Feedback</a></td>
                 <td><a th:href="@{'/thesis/' + ${thesis.id} + '/assessment/'}">Give Assessment</a></td>
             </tr>
@@ -52,8 +52,15 @@
             </thead>
             <tbody>
             <tr class="table-primary" th:each="request : ${supervisionRequestsList}">
-                <td><a th:href="@{'/thesis/' + ${request.id}}"><span th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">StudentName</span></a></td>
-                <td><a th:href="@{'/thesis/' + ${request.id} + '/replyToSupervisionRequest/'}">Reply to Supervision Request</a></td>
+                <td><a th:href="@{'student/' + ${request.id} + '/thesis'}"><span th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">StudentName</span></a></td>
+                <td>
+                    <form class="form" th:object="${request}" th:action="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/' + 3}" method="post">
+                        <button class="col-md-5 offset-md-2 btn btn-success" th:href="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/' + 3}" type="submit">Accept Supervision Request</button>
+                    </form>
+                    <form class="form" th:object="${request}" th:action="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/' + 2}" method="post">
+                        <button class="col-md-5 offset-md-2 btn btn-danger" th:href="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/' + 2}" type="submit">Reject Supervision Request</button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
