@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coordinator</title>
+    <meta property="og:title" content="Start page" />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/coordinator.css"/>
+</head>
+<body>
+<div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="accordion" id="accordionExample">
+                <nav aria-label="...">
+                    <ul class="pagination pagination-sm">
+                        <h1>Thesis list</h1><div class="offset-md-6"><a class="page-link" href="http://www.google.com">Search Thesis</a></div><div class="offset-md-1"><a class="page-link" href="http://www.google.com">New Thesis</a></div>
+                    </ul>
+                </nav>
+                <div class="card">
+                    <table class="table table-striped hover-square">
+                        <thead>
+                        <tr class="table-primary">
+                            <th scope="col">Thesis</th>
+                            <th scope="col">Opponent</th>
+                            <th scope="col">Reader</th>
+                            <th scope="col">Status</th>
+                        </thead>
+                        <tbody>
+                        <tr class="thead-light">
+                            <td>Thesis 1</td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="custom-select">
+                                        <option selected>Choose Opponent...</option>
+                                        <option value="1">Opponent 1</option>
+                                        <option value="2">Opponent 2</option>
+                                        <option value="3">Opponent 3</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <select class="custom-select">
+                                        <option selected>Choose Reader..</option>
+                                        <option value="1">Reader 1</option>
+                                        <option value="2">Reader 2</option>
+                                        <option value="3">Reader 3</option>
+                                    </select>
+                                </div>
+                            </td>
+                            <td><button type="button" class="btn btn-link">Info</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h1>Semester settings</h1>
+                <h3>Deadline Management</h3>
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <select class="custom-select">
+                            <option selected>Choose thesis...</option>
+                            <option value="1">Thesis 1</option>
+                            <option value="2">Thesis 2</option>
+                            <option value="3">Thesis 3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <select class="custom-select">
+                            <option selected>Choose project files...</option>
+                            <option value="1">Project description</option>
+                            <option value="2">Project plan</option>
+                            <option value="3">Report</option>
+                            <option value="4">Final report</option>
+                            <option value="5">Bidding for reports</option>
+                            <option value="6">Feedback for reports by readers</option>
+                            <option value="7">Final evaluation for final reports</option>
+                            <option value="8">Feedback for project plan</option>
+                            <option value="9">Confirmation of supervision</option>
+                            <option value="10">Project report assessment</option>
+                            <option value="11">Feedback for reports by opponents</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <input type="date" placeholder="date" class="form-control">
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <button class="btn btn-primary" type="submit">Set Deadline</button>
+                    </div>
+                </div>
+                <h3>Grade</h3>
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <select class="custom-select">
+                            <option selected>Choose thesis...</option>
+                            <option value="1">Thesis 1</option>
+                            <option value="2">Thesis 2</option>
+                            <option value="3">Thesis 3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <select class="custom-select">
+                            <option selected>Choose project files...</option>
+                            <option value="1">Project description</option>
+                            <option value="2">Project plan</option>
+                            <option value="3">Final report</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <select class="custom-select">
+                            <option selected>Assign evaluation...</option>
+                            <option value="1">Pass</option>
+                            <option value="2">Fail</option>
+                            <option value="4">A</option>
+                            <option value="5">B</option>
+                            <option value="6">C</option>
+                            <option value="7">D</option>
+                            <option value="8">E</option>
+                            <option value="9">F</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <button class="btn btn-primary" type="submit">Assign</button>
+                    </div>
+                </div>
+                <h3>Report</h3>
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <select class="custom-select">
+                            <option selected>Choose thesis...</option>
+                            <option value="1">Thesis 1</option>
+                            <option value="2">Thesis 2</option>
+                            <option value="3">Thesis 3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <select class="custom-select">
+                            <option selected>Choose reader or opponent ...</option>
+                            <option value="1">Reader 1</option>
+                            <option value="2">Reader 2</option>
+                            <option value="3">Opponent 1</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <select class="custom-select">
+                            <option selected>Choose report...</option>
+                            <option value="1">Report 1</option>
+                            <option value="2">Report 2</option>
+                            <option value="3">Report 3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <button class="btn btn-primary" type="submit">Assign</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
