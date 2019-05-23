@@ -2,10 +2,7 @@ package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
-import e.group.thesismanager.model.Role;
-import e.group.thesismanager.model.Semester;
-import e.group.thesismanager.model.Thesis;
-import e.group.thesismanager.model.User;
+import e.group.thesismanager.model.*;
 import e.group.thesismanager.repository.FeedbackRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
@@ -47,7 +44,7 @@ public class SupervisorServiceImplTest {
         thesis.setSemester(new Semester());
 
         thesis.setSupervisor(supervisor);
-        thesis.setSupervisorAccept(true);
+        thesis.setSupervisorRequestStatus(SupervisorRequestStatus.ACCEPTED);
 
         THESIS_LIST.add(thesis);
     }
@@ -55,7 +52,7 @@ public class SupervisorServiceImplTest {
     @Test
     void replyOnSupervisionPropositionErrorTest() {
 
-        assertThrows(NotFoundException.class, () -> supervisorService.replyOnSupervisionProposition(THESIS_LIST.get(0).getId(), mockedSupervisor, true));
+        assertThrows(NotFoundException.class, () -> supervisorService.replyOnSupervisionProposition(THESIS_LIST.get(0).getId(), mockedSupervisor, SupervisorRequestStatus.ACCEPTED));
     }
 
     @Test
@@ -63,7 +60,7 @@ public class SupervisorServiceImplTest {
 
         Thesis result = new Thesis();
         when(thesisRepository.findById(result.getId())).thenReturn(Optional.of(result));
-        supervisorService.replyOnSupervisionProposition(result.getId(), mockedSupervisor, true);
+        supervisorService.replyOnSupervisionProposition(result.getId(), mockedSupervisor, SupervisorRequestStatus.ACCEPTED);
         result.setStudent(THESIS_LIST.get(0).getStudent());
         result.setSemester(THESIS_LIST.get(0).getSemester());
 

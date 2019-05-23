@@ -35,5 +35,5 @@ public interface SupervisorService {
 
     Submission editAssessmentSubmission(Long submissionId, Float updatedGrade);
 
-    Thesis replyOnSupervisionProposition (Long thesisId, User supervisor, boolean answer) throws MissingRoleException;
+    Thesis replyOnSupervisionProposition(Long thesisId, User supervisor, SupervisorRequestStatus answer)throws MissingRoleException;
 }

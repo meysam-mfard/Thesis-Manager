@@ -35,7 +35,7 @@ public class Thesis extends BaseEntity {
 
     private Float finalGrade;
 
-    private boolean supervisorAccept;
+    private SupervisorRequestStatus supervisorRequestStatus = SupervisorRequestStatus.NOT_ASSIGNED;
 
     public void addSubmission(Submission submission) {
         submissions.add(submission);
