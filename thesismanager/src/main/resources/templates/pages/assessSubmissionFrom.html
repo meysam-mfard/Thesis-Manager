@@ -1,7 +1,7 @@
 <!DOCTYPE>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Submission</title>
+    <title>Assessment</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -16,27 +16,28 @@
 
     <div class="card rounded-lg bg-light shadow p-2">
         <div class="card-header rounded bg-info">
-            <h3 class="bg-info  text-white" th:text="${submission.type}">
+            <h3 class="bg-info  text-white" th:text="${subType} + ' By ' + ${studentName}">
                 Project Plan
             </h3>
         </div>
         <div class="card-body bg-dark rounded">
 
+            <!--GRADE-->
             <div class="card bg-dark rounded-lg shadow p-1">
                 <div class="card-header bg-info rounded">
-                    <h4>Submission</h4>
+                    <h4>Assessment</h4>
                 </div>
                 <div class="card-body bg-light rounded">
-                    <form class="form" th:action="@{/submission/student(studentId=${author.id}, subId=${submission.id})}"
-                          method="post" enctype="multipart/form-data">
+                    <form class="form" th:action="@{/submission/assess(subId=${subId})}"
+                          method="post">
                         <div class="form-group">
-                            <label for="feedbackComment"><h4>Comment</h4></label>
-                            <textarea class="form-control col-md-7" id="feedbackComment" rows="3"
-                                      name="comment"></textarea> <!--th:field="${comment}"-->
-                        </div>
-                        <div class="form-group">
-                            <label for="feedbackFile"><h4>Upload File</h4></label>
-                            <input type="file" class="form-control-file" id="feedbackFile" name="file"><!--th:field="*{file}">-->
+                            <label for="grade"><h4>Grade</h4></label>
+                            <input th:if="${isGradeFloat}" name="grade" class="form-control form-control-lg col-md-1" id="grade" type="text">
+                            <select th:if="not ${isGradeFloat}" name="grade" class="form-control col-md-2 form-control-lg">
+                                <option></option>
+                                <option th:value="1">Pass</option>
+                                <option th:value="0">Fail</option>
+                            </select>
                         </div>
                         <div class="form-group row justify-content-center">
                             <button type="submit" class="btn btn-lg btn-info col-md-3">Submit</button>
@@ -46,6 +47,8 @@
             </div>
 
         </div>
+
+
     </div>
 
 </div>

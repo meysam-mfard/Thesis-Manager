@@ -1,11 +1,10 @@
 package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
-import e.group.thesismanager.model.*;
-import org.springframework.web.multipart.MultipartFile;
+import e.group.thesismanager.model.SupervisorRequestStatus;
+import e.group.thesismanager.model.Thesis;
+import e.group.thesismanager.model.User;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SupervisorService {
@@ -20,7 +19,7 @@ public interface SupervisorService {
 
     Thesis getThesisById(Long id);
 
-    Submission feedbackOnSubmission(Long submissionId, Feedback feedback);
+    /*Submission feedbackOnSubmission(Long submissionId, Feedback feedback);
 
     Submission feedbackOnSubmission(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author, LocalDateTime submissionTime, Role authorRole);
 
@@ -33,7 +32,7 @@ public interface SupervisorService {
 
     Submission assessSubmission(Long submissionId, Float grade);
 
-    Submission editAssessmentSubmission(Long submissionId, Float updatedGrade);
+    Submission editAssessmentSubmission(Long submissionId, Float updatedGrade);*/
 
     Thesis replyOnSupervisionProposition(Long thesisId, User supervisor, SupervisorRequestStatus answer)throws MissingRoleException;
 }

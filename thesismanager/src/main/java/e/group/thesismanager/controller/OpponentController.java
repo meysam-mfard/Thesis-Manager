@@ -1,6 +1,5 @@
 package e.group.thesismanager.controller;
 
-import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
 import e.group.thesismanager.service.OpponentService;
@@ -12,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @Controller
@@ -45,7 +42,7 @@ public class OpponentController {
         return "pages/opponent";
     }
 
-    @PostMapping("opponent/newFeedback")
+    /*@PostMapping("opponent/newFeedback")
     public String newFeedback(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author) {
 
         try {
@@ -59,14 +56,14 @@ public class OpponentController {
         }
 
         return "redirect:/opponent?" + SAVE_SUBMSSION_SUCCESS;
-    }
+    }*/
 
     @PostMapping("opponent/editFeedback")
     public String editFeedback(Long submissionId, Long feedbackId,String comment, byte[] file, String fileName, String fileType, User author) {
 
         try {
 
-            opponentService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, fileName, fileType, author, LocalDateTime.now(), Role.ROLE_OPPONENT);
+            //opponentService.editFeedbackOnSubmission(submissionId, feedbackId, comment, file, fileName, fileType, author, LocalDateTime.now(), Role.ROLE_OPPONENT);
         } catch (Exception e) {
 
             //todo: replace with validator

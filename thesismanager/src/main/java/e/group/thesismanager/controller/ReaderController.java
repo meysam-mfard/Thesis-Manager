@@ -29,7 +29,7 @@ public class ReaderController {
     @PostMapping("reader/feedback/{feedbackId}")
     public String giveFeedback(Model model, @PathVariable Long feedbackId, @ModelAttribute("feedback")Feedback feedback){
         try {
-            readerService.feedbackOnSubmission(feedbackId, feedback);
+            //readerService.feedbackOnSubmission(feedbackId, feedback);
             model.addAttribute("feedback",feedback);
         } catch (Exception e) {
             //todo: replace with validator

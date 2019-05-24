@@ -73,7 +73,7 @@ public class CoordinatorController {
     public String postAssignGrade(@ModelAttribute Submission submission,
                                   @ModelAttribute Float grade) {
 
-        coordinatorService.assessSubmission(submission.getId(), grade);
+        //coordinatorService.assessSubmission(submission.getId(), grade);
 
         return "?assignGradeSuccess";
     }
