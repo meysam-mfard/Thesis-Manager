@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SupervisorServiceImpl extends AbstractService implements SupervisorService {
+public class SupervisorServiceImpl extends FeedbackService implements SupervisorService {
 
     @Autowired
     public SupervisorServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,

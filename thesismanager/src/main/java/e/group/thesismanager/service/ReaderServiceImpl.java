@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ReaderServiceImpl extends AbstractService implements ReaderService {
+public class ReaderServiceImpl extends FeedbackService implements ReaderService {
 
     @Override
     public List<Thesis> getTheses() {

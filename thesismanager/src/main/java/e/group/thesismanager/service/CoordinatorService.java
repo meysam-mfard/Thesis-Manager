@@ -30,6 +30,6 @@ public interface CoordinatorService {
 
     void assignOpponent(Thesis thesis, User opponent) throws MissingRoleException;
 
-    Submission assessSubmission(Long submissionId, Float grade);
+    //Submission assessSubmission(Long submissionId, Float grade);
 
 }

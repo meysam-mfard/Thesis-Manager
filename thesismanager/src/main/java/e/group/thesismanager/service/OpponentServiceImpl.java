@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpponentServiceImpl extends AbstractService implements OpponentService {
+public class OpponentServiceImpl extends FeedbackService implements OpponentService {
 
     @Autowired
     public OpponentServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,

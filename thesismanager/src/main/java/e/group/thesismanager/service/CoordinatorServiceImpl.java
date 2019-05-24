@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class CoordinatorServiceImpl extends AbstractService implements CoordinatorService {
+public class CoordinatorServiceImpl extends FeedbackService implements CoordinatorService {
 
     private SemesterRepository semesterRepository;
 

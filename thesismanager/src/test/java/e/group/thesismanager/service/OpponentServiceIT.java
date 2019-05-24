@@ -1,16 +1,9 @@
 package e.group.thesismanager.service;
 
-import e.group.thesismanager.model.Feedback;
-import e.group.thesismanager.model.Submission;
-import e.group.thesismanager.model.Thesis;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,7 +12,7 @@ class OpponentServiceIT {
     @Autowired
     OpponentService opponentService;
 
-    @Transactional
+    /*@Transactional
     @Test
     void feedbackOnSubmissionTest() {
 
@@ -41,5 +34,5 @@ class OpponentServiceIT {
         assertEquals(feedbacksCount+1, newSubmission.getFeedbacks().size());
         assertEquals(1, newSubmission.getFeedbacks().stream().filter(filter ->
                 filter.getComment().equals(COMMENT)).count());
-    }
+    }*/
 }

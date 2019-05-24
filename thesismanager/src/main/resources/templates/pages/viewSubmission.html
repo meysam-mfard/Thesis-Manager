@@ -51,10 +51,30 @@
                                 <tr>
                                     <th scope="row">Submitted File</th>
                                     <td>
-                                        <a href="#" th:href="@{/submission/download(stdId=${studentId}, subId=${submission.id})}"
-                                           class="btn btn-link" th:text="${submission.submittedDocument.fileName}">
-                                            FileName.pdf</a>
+                                        <a th:if="${submission.submittedDocument} != null" th:href="@{/submission/download(stdId=${studentId}
+                                            , docId=${submission.submittedDocument.id})}" class="btn btn-link"
+                                            th:text="${submission.submittedDocument.fileName}">
+                                            DummyFileName.pdf
+                                        </a>
                                     </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!--GRADE-->
+                    <div class="card bg-dark rounded-lg p-1">
+                        <div class="card-header bg-info rounded">
+                            <h4>Grade</h4>
+                        </div>
+
+                        <div class="card-body bg-light rounded">
+                            <table class="table table-striped table-bordered table-hover">
+                                <tbody>
+                                <tr>
+                                    <th scope="row">Grade</th>
+                                    <td th:text="${submission.grade}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -71,7 +91,8 @@
                                 <tbody>
                                 <tr>
                                     <th scope="row">Given by</th>
-                                    <td>Professor</td>
+                                    <td th:text="${feedback.author.firstName}+' ' +${feedback.author.lastName}
+                                    +' ('+${feedback.authorRole}+')'">Professor</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Comment</th>
@@ -80,14 +101,12 @@
                                 <tr>
                                     <th scope="row">Submitted File</th>
                                     <td>
-                                        <a href="#" th:href="@{'/student/' + ${studentId} + '/submission/'
-                                            + ${feedback.id} + '/download'}" class="btn btn-link" th:text="${feedback.fileName}">
-                                            FileName.pdf</a>
+                                        <a th:if="${feedback.file} != null" th:href="@{/submission/download(stdId=${studentId}
+                                            , docId=${feedback.id})}" class="btn btn-link"
+                                            th:text="${feedback.fileName}">
+                                            DummyFileName.pdf
+                                        </a>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Grade</th>
-                                    <td>98 / Pass</td>
                                 </tr>
                                 </tbody>
                             </table>

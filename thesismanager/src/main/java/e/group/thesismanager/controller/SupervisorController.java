@@ -1,7 +1,5 @@
 package e.group.thesismanager.controller;
 
-import e.group.thesismanager.model.Feedback;
-import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.SupervisorRequestStatus;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
@@ -11,11 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @Controller
@@ -40,7 +36,7 @@ public class SupervisorController {
         return "pages/supervisor";
     }
 
-    @PostMapping("supervisor/newFeedback")
+    /*@PostMapping("supervisor/newFeedback")
     public String newFeedback(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author) {
 
         try {
@@ -92,7 +88,7 @@ public class SupervisorController {
         }
 
         return "redirect:/supervisor?" + SAVE_SUBMSSION_SUCCESS;
-    }
+    }*/
 
     @GetMapping("supervisor/feedback/{id}/edit")
     public String editFeedback(Model model, @PathVariable Long id) {
@@ -102,7 +98,7 @@ public class SupervisorController {
         return "pages/editFeedback";
     }
 
-    @PostMapping("supervisor/newAssessment")
+   /* @PostMapping("supervisor/newAssessment")
     public String newAssessment(Long submissionId, Float grade) {
 
         try {
@@ -132,7 +128,7 @@ public class SupervisorController {
         }
 
         return "redirect:/supervisor?" + SAVE_SUBMSSION_SUCCESS;
-    }
+    }*/
 
     @GetMapping("supervisor/assessment/{id}/edit")
     public String editAssessment(Model model, @PathVariable Long id) {

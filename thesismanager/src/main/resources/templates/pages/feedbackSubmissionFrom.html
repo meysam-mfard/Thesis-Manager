@@ -11,13 +11,13 @@
     <head>
 
 <body>
-<!--/*@thymesVar id="feedback" type="e.group.thesismanager.model.Feedback"*/-->
 
 <div class="container" style="margin-top: 100px">
 
     <div class="card rounded-lg bg-light shadow p-2">
         <div class="card-header rounded bg-info">
-            <h3 class="bg-info  text-white">
+            <h3 class="bg-info  text-white" th:text="${submission.type} + ' By '
+            + ${submission.submittedDocument.author.firstName} + ' ' + ${submission.submittedDocument.author.lastName}">
                 Project Plan
             </h3>
         </div>
@@ -29,29 +29,16 @@
                     <h4>Feedback</h4>
                 </div>
                 <div class="card-body bg-light rounded">
-                    <!--<form class="form" th:object="${feedback}" th:action="@{'/submission/feedback'}" method="post">
+                    <form class="form" th:action="@{/submission/feedback(authorId=${author.id}, subId=${submission.id}, role=${role})}"
+                          method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="feedbackComment"><h4>Comment</h4></label>
                             <textarea class="form-control col-md-7" id="feedbackComment" rows="3"
-                                      th:field="*{comment}"></textarea>
+                                      name="comment"></textarea> <!--th:field="${comment}"-->
                         </div>
                         <div class="form-group">
                             <label for="feedbackFile"><h4>Upload File</h4></label>
-                            <input type="file" class="form-control-file" id="feedbackFile" th:field="*{file}">
-                        </div>
-                        <div class="form-group row justify-content-center">
-                            <button type="submit" class="btn btn-lg btn-info col-md-3">Submit</button>
-                        </div>
-                    </form>-->
-                    <form class="form" th:object="${feedback}" th:action="@{'/submission/feedback'}" method="post">
-                        <div class="form-group">
-                            <label for="feedbackComment"><h4>Comment</h4></label>
-                            <textarea class="form-control col-md-7" id="feedbackComment" rows="3"
-                                      th:field="*{comment}"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="feedbackFile"><h4>Upload File</h4></label>
-                            <input type="file" class="form-control-file" id="feedbackFile" th:field="*{file}">
+                            <input type="file" class="form-control-file" id="feedbackFile" name="file"><!--th:field="*{file}">-->
                         </div>
                         <div class="form-group row justify-content-center">
                             <button type="submit" class="btn btn-lg btn-info col-md-3">Submit</button>
@@ -60,31 +47,7 @@
                 </div>
             </div>
 
-
-            <!--GRADE-->
-            <div class="card bg-dark rounded-lg shadow p-1">
-                <div class="card-header bg-info rounded">
-                    <h4>Assessment</h4>
-                </div>
-                <div class="card-body bg-light rounded">
-                    <form class="form" th:object="${grade}" th:action="@{'/submission/grade'}" method="post">
-                        <div class="form-group">
-                            <label for="grade"><h4>Grade</h4></label>
-                            <input class="form-control form-control-lg col-md-1" id="grade" type="text" th:field="grade">
-                            <select class="form-control col-md-2 form-control-lg" th:field="grade">
-                                <option></option>
-                                <option th:value="1">Pass</option>
-                                <option th:value="0">Fail</option>
-                            </select>
-                        </div>
-                        <div class="form-group row justify-content-center">
-                            <button type="submit" class="btn btn-lg btn-info col-md-3">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
-
 
     </div>
 
