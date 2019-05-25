@@ -1,9 +1,8 @@
 package e.group.thesismanager.controller;
 
-import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
-import e.group.thesismanager.security.CustomUserDetailsService;
 import e.group.thesismanager.service.ReaderService;
+import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,24 +20,24 @@ public class ReaderController {
     private final static String SAVE_SUBMISSION_FAIL = "fail";
 
     private final ReaderService readerService;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserService userService;
 
-    public ReaderController(ReaderService readerService, CustomUserDetailsService customUserDetailsService) {
+    public ReaderController(ReaderService readerService, UserService userService) {
 
         this.readerService = readerService;
-        this.customUserDetailsService = customUserDetailsService;
+        this.userService = userService;
     }
 
     @ModelAttribute("user")
     public User loggedInUser(Model model) {
 
-        return customUserDetailsService.getCurrentUser();
+        return userService.getCurrentUser();
     }
 
     @GetMapping("reader")
     public String getReaderHome(Model model) {
 
-        User reader = customUserDetailsService.getCurrentUser();
+        User reader = userService.getCurrentUser();
 
         model.addAttribute("possibleTheses", readerService.getPossibleTheses(reader));
         model.addAttribute("assignedTheses", readerService.getAssignedTheses(reader));
@@ -50,7 +49,7 @@ public class ReaderController {
 
         try {
 
-            readerService.bidOnThesis(thesisId, customUserDetailsService.getCurrentUser());
+            readerService.bidOnThesis(thesisId, userService.getCurrentUser());
         } catch (Exception e) {
             //todo: replace with validator
             e.printStackTrace();
