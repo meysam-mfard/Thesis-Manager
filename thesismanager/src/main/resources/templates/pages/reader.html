@@ -15,6 +15,7 @@
                     <h1><br><br>Reader Page</h1>
             </header>
             <body>
+            <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
                     <div class="accordion" id="accordionExample">
                             <div class="card">
                               <div class="card-header" id="headingOne">
