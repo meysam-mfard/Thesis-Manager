@@ -13,9 +13,10 @@
 </head>
 <body>
 <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
-<div>
+<div class="container" style="margin-top: 100px">
+
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-12">
             <div class="accordion" id="accordionExample">
                 <nav aria-label="...">
                     <ul class="pagination pagination-sm">
@@ -165,3 +166,10 @@
 </div>
 </body>
 </html>
+
+<style>
+    .card {margin-top: 5px}
+    body{
+        background-color:#EEEEEE;
+    }
+</style>

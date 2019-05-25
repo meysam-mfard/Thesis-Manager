@@ -8,10 +8,7 @@ import e.group.thesismanager.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 
@@ -38,6 +35,16 @@ public class StudentController {
         model.addAttribute("theses", studentService.getTheses(student));
 
         return "pages/student";
+    }
+
+    @GetMapping("thesis")
+    public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) throws MissingRoleException {
+        /*if (!userService.getCurrentUser().getId().equals(studentId))
+            //todo:
+            return "403error";*/
+        model.addAttribute("thesis", studentService.getThesisForActiveSemesterByStudentId(studentId));
+        model.addAttribute("studentId", studentId);
+        return "pages/thesis";
     }
 
     @GetMapping("submission")
