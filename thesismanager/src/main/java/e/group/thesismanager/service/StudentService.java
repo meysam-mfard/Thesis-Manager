@@ -6,13 +6,25 @@ import e.group.thesismanager.model.Semester;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
 
+import java.util.List;
+
 public interface StudentService {
 
     Thesis initThesis(User student, Semester semester) throws MissingRoleException;
 
-    Thesis getThesis(Long id);
+    Thesis getThesisById(Long id);
 
     Thesis getThesis(User student, Semester semester);
+
+    Thesis getThesisForActiveSemesterByStudentId(Long studentId) throws MissingRoleException;
+
+    List<Thesis> getTheses(User student);
+
+    List<Thesis> getThesesByStudentId(Long studentId);
+
+    List<Semester> getSemesters();
+
+    List<User> getSupervisors();
 
     void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException;
 

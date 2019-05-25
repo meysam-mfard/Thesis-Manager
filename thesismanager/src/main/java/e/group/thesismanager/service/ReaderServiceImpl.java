@@ -11,8 +11,15 @@ import e.group.thesismanager.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReaderServiceImpl extends AbstractService implements ReaderService {
+
+    @Override
+    public List<Thesis> getTheses() {
+        return thesisRepository.findAll();
+    }
 
     @Autowired
     public ReaderServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,

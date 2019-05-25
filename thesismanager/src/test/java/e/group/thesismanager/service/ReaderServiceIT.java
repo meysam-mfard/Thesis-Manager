@@ -31,6 +31,6 @@ public class ReaderServiceIT {
 
         readerService.bidOnThesis(thesisRepository.findById(1L).get().getId(), userRepository.findById(5L).get());
 
-        assertEquals(1, readerService.getThesis().get(0).getBidders().size());
+        assertEquals(1, readerService.getTheses().get(0).getBidders().size());
     }
 }

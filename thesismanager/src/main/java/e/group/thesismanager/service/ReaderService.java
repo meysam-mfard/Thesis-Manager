@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReaderService {
 
-    List<Thesis> getThesis();
+    List<Thesis> getTheses();
 
     Submission feedbackOnSubmission(Long submissionId, Feedback feedback);
 
@@ -17,4 +17,6 @@ public interface ReaderService {
     Submission assessSubmission(Long submissionId, Float grade);
 
     Thesis bidOnThesis(Long thesisId, User reader) throws MissingRoleException;
+
+    User getUserByUsername(String username);
 }
