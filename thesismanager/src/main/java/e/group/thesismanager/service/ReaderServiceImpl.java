@@ -15,18 +15,30 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ReaderServiceImpl extends FeedbackService implements ReaderService {
-
-    @Override
-    public List<Thesis> getTheses() {
-        return thesisRepository.findAll();
-    }
+public class ReaderServiceImpl  extends FeedbackService implements ReaderService {
 
     @Autowired
     public ReaderServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
                          SubmissionRepository submissionRepository, UserRepository userRepository) {
 
         super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
+    }
+
+    @Override
+    public List<Thesis> getPossibleTheses(User user) {
+
+        if (thesisRepository.findThesesByReaders(user).isEmpty() && thesisRepository.findThesesByBidders(user).isEmpty()) {
+
+            return thesisRepository.findAll();
+        }
+
+        return null;
+    }
+
+    @Override
+    public  List<Thesis> getAssignedTheses(User user) {
+
+        return thesisRepository.findThesesByReaders(user);
     }
 
     @Override

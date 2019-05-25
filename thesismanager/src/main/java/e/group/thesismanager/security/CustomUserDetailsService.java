@@ -1,10 +1,12 @@
 package e.group.thesismanager.security;
 
+import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.User;
 import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +27,23 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new UsernameNotFoundException("User not found. Username: " + username));
 
         return new CustomUserDetails(user);
+    }
+
+    public User getCurrentUser() {
+
+        return userRepository.findByUsername(getCurrentUsername()).orElseThrow(() ->
+                new NotFoundException("User does not exist. Username: " + getCurrentUsername()));
+    }
+
+    private String getCurrentUsername() {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            return ((UserDetails)principal).getUsername();
+        } else {
+            return principal.toString();
+        }
     }
 
     private class CustomUserDetails implements UserDetails {
@@ -74,4 +93,3 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
     }
 }
-

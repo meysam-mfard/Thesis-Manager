@@ -1,6 +1,7 @@
 package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
+import e.group.thesismanager.model.Feedback;
 import e.group.thesismanager.repository.ThesisRepository;
 import e.group.thesismanager.repository.UserRepository;
 import org.junit.Test;
@@ -20,6 +21,9 @@ public class ReaderServiceIT {
     ReaderService readerService;
 
     @Autowired
+    FeedbackService feedbackService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -29,8 +33,8 @@ public class ReaderServiceIT {
     @Test
     public void bidOnThesisTest() throws MissingRoleException {
 
-        readerService.bidOnThesis(thesisRepository.findById(1L).get().getId(), userRepository.findById(5L).get());
+        readerService.bidOnThesis(thesisRepository.findById(1L).get().getId(), userRepository.findUsersByLastName("last-sup1").get(0));
 
-        assertEquals(1, readerService.getTheses().get(0).getBidders().size());
+        assertEquals(1, feedbackService.getThesis().get(0).getBidders().size());
     }
 }

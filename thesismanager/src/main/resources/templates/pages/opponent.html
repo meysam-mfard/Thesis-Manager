@@ -24,13 +24,35 @@
             <thead>
             <tr class="bg-warning">
                 <th scope="col">Author</th>
+                <th scope="col">Submission</th>
                 <th scope="col">Feedback</th>
             </tr>
             </thead>
             <tbody>
             <tr class="table-primary">
-                <td><a th:href="@{'student/' + ${thesis.id} + '/thesis'}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">StudentName</span></a></td>
-                <td><a th:href="@{'/thesis/' + ${thesis.id} + '/feedback/'}">Give Feedback</a></td>
+                <td>
+                    <a th:href="@{'student/thesis?stdId=' + ${thesis.id}}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
+                        StudentName</span>
+                    </a>
+                </td>
+
+                <td>
+                    <a th:each="submission : ${thesis.submissions}" th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                        <div th:text="${submission.type}">SubmissionType
+                        </div>
+                        <hr>
+                    </a>
+                </td>
+
+                <td>
+                    <a th:each="submission : ${thesis.submissions}">
+                        <a th:if="${submission.type.toString() == 'Report'}" th:href="@{'/submission/feedback?authorId=' + ${thesis.supervisor.id} + '&subId=' + ${submission.id} + '&role=ROLE_OPPONENT'}">
+                            Give Feedback</a>
+                        <span th:unless="${submission.type.toString() == 'Report'}">
+                            Not authorized to feedback this submission</span>
+                        <hr>
+                    </a>
+                </td>
             </tr>
             </tbody>
         </table>
