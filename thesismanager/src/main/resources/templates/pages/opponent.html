@@ -46,7 +46,7 @@
 
                 <td>
                     <a th:each="submission : ${thesis.submissions}">
-                        <a th:if="${submission.type.toString() == 'Report'}" th:href="@{'/submission/feedback?authorId=' + ${thesis.supervisor.id} + '&subId=' + ${submission.id} + '&role=ROLE_OPPONENT'}">
+                        <a th:if="${submission.type.toString() == 'Report'}" th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_OPPONENT'}">
                             Give Feedback</a>
                         <span th:unless="${submission.type.toString() == 'Report'}">
                             Not authorized to feedback this submission</span>

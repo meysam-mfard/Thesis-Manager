@@ -49,7 +49,7 @@
 
                 <td>
                     <a th:each="submission : ${thesis.submissions}">
-                        <a th:if="${submission.type.toString() == 'Project Plan'} or ${submission.type.toString() == 'Report'}" th:href="@{'/submission/feedback?authorId=' + ${thesis.supervisor.id} + '&subId=' + ${submission.id} + '&role=ROLE_SUPERVISOR'}">
+                        <a th:if="${submission.type.toString() == 'Project Plan'} or ${submission.type.toString() == 'Report'}" th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_SUPERVISOR'}">
                             Give Feedback</a>
                         <span th:unless="${submission.type.toString() == 'Project Plan'} or ${submission.type.toString() == 'Report'}">
                             Not authorized to feedback this submission</span>
@@ -59,7 +59,7 @@
 
                 <td>
                     <a th:each="submission : ${thesis.submissions}">
-                        <a th:if="${submission.type.toString() == 'Report'}" th:href="@{'/submission/assess?authorId=' + ${thesis.supervisor.id} + '&subId=' + ${submission.id} + '&decGr=true'}">
+                        <a th:if="${submission.type.toString() == 'Report'}" th:href="@{'/submission/assess?subId=' + ${submission.id} + '&decGr=true'}">
                             Give Assessment</a>
                         <a th:unless="${submission.type.toString() == 'Report'}">
                             Not authorized to assess this submission</a>

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -28,6 +27,12 @@ public class ReaderController {
 
         this.readerService = readerService;
         this.customUserDetailsService = customUserDetailsService;
+    }
+
+    @ModelAttribute("user")
+    public User loggedInUser(Model model) {
+
+        return customUserDetailsService.getCurrentUser();
     }
 
     @GetMapping("reader")
