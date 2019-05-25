@@ -15,8 +15,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,20 +42,7 @@ public class SubmissionController {
 
     @ModelAttribute("user")
     public User loggedInUser(Model model) {
-        return getCurrentUser();
-    }
-
-    private User getCurrentUser() {
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String user = null;
-        if (principal instanceof UserDetails)
-            user =  ((UserDetails)principal).getUsername();
-        else
-            user = principal.toString();
-
-        return userService.getUserByUsername(user);
+        return userService.getCurrentUser();
     }
 
     @GetMapping("student/thesis")
@@ -109,7 +94,7 @@ public class SubmissionController {
             , @RequestParam String comment
             , @RequestParam MultipartFile file) throws IOException, MissingRoleException {
 
-        feedbackService.feedbackOnSubmission(submissionId, comment, file, getCurrentUser().getId(), userRole);
+        feedbackService.feedbackOnSubmission(submissionId, comment, file, userService.getCurrentUser().getId(), userRole);
         Submission submission = feedbackService.getSubmissionById(submissionId);
 
         model.addAttribute("submission", submission);

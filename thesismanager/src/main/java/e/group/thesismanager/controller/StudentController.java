@@ -6,8 +6,6 @@ import e.group.thesismanager.model.*;
 import e.group.thesismanager.service.StudentService;
 import e.group.thesismanager.service.UserService;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,20 +28,7 @@ public class StudentController {
 
     @ModelAttribute("user")
     public User loggedInUser(Model model) {
-        return getCurrentUser();
-    }
-
-    private User getCurrentUser() {
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String user = null;
-        if (principal instanceof UserDetails)
-            user =  ((UserDetails)principal).getUsername();
-        else
-            user = principal.toString();
-
-        return userService.getUserByUsername(user);
+        return userService.getCurrentUser();
     }
 
     @RequestMapping("")

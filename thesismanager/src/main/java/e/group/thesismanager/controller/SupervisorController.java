@@ -2,8 +2,8 @@ package e.group.thesismanager.controller;
 
 import e.group.thesismanager.model.SupervisorRequestStatus;
 import e.group.thesismanager.model.User;
-import e.group.thesismanager.security.CustomUserDetailsService;
 import e.group.thesismanager.service.SupervisorService;
+import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,24 +20,24 @@ public class SupervisorController {
     private final static String SAVE_SUBMISSION_FAIL = "fail";
 
     private final SupervisorService supervisorService;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserService userService;
 
-    public SupervisorController(SupervisorService supervisorService, CustomUserDetailsService customUserDetailsService) {
+    public SupervisorController(SupervisorService supervisorService, UserService userService) {
 
         this.supervisorService = supervisorService;
-        this.customUserDetailsService = customUserDetailsService;
+        this.userService = userService;
     }
 
     @ModelAttribute("user")
     public User loggedInUser(Model model) {
 
-        return customUserDetailsService.getCurrentUser();
+        return userService.getCurrentUser();
     }
 
     @GetMapping("supervisor")
     public String getSupervisorHome(Model model) {
 
-        User supervisor = customUserDetailsService.getCurrentUser();
+        User supervisor = userService.getCurrentUser();
         model.addAttribute("thesisList", supervisorService.getThesis(supervisor));
         model.addAttribute("supervisionRequestsList", supervisorService.getRequests(supervisor));
         return "pages/supervisor";
@@ -48,7 +48,7 @@ public class SupervisorController {
 
         try {
 
-            supervisorService.replyOnSupervisionProposition(thesisId, customUserDetailsService.getCurrentUser(), SupervisorRequestStatus.fromString(answer));
+            supervisorService.replyOnSupervisionProposition(thesisId, userService.getCurrentUser(), SupervisorRequestStatus.fromString(answer));
         } catch (Exception e) {
 
             //todo: replace with validator

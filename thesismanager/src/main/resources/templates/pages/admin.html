@@ -33,16 +33,19 @@
             <div class="card">
                 <div class="card-header" id="headingOne">
                     <div class="mb-0">
-                        <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseOne">
                             Search User
                         </button>
                         <a class="btn btn-info btn-lg" th:href="@{'/admin/'}" role="button">
                             Show All Users
                         </a>
+                        <a href="/logout" class="btn btn-secondary btn-lg offset-md-7" role="button">
+                            Logout
+                        </a>
                     </div>
                 </div>
 
-                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div id="collapseOne" class="collapse" data-parent="#accordion">
                     <div class="card-body" style="background-color: #e3f2fd;">
                         <form class="form" th:object="${user}" th:action="@{'/admin/search'}" method="post">
                             <div class="row">
@@ -72,13 +75,13 @@
             <div class="card">
                 <div class="card-header" id="headingTwo">
                     <h5 class="mb-0">
-                            <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                            <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseTwo">
                             Create a New User
                         </button>
                     </h5>
                 </div>
 
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div id="collapseTwo" class="collapse" data-parent="#accordion">
                     <div class="card-body" style="background-color: #e3f2fd;">
                         <form class="form" th:object="${user}" th:action="@{'/admin/newUser'}" method="post">
                             <div class="row my-3">
