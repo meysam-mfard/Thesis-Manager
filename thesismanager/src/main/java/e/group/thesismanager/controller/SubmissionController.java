@@ -15,9 +15,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +40,24 @@ public class SubmissionController {
         this.userService = userService;
         this.feedbackService = feedbackService;
         this.documentRepository = documentRepository;
+    }
+
+    @ModelAttribute("user")
+    public User loggedInUser(Model model) {
+        return getCurrentUser();
+    }
+
+    private User getCurrentUser() {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String user = null;
+        if (principal instanceof UserDetails)
+            user =  ((UserDetails)principal).getUsername();
+        else
+            user = principal.toString();
+
+        return userService.getUserByUsername(user);
     }
 
     @GetMapping("student/thesis")
@@ -72,27 +93,23 @@ public class SubmissionController {
     }
 
     @GetMapping("submission/feedback")
-    public String viewFeedbackSubmissionPage(Model model, @RequestParam(name = "authorId") Long authorId
-            , @RequestParam(name = "subId") Long submissionId
+    public String viewFeedbackSubmissionPage(Model model, @RequestParam(name = "subId") Long submissionId
             , @RequestParam(name = "role") Role userRole) {
 
-        User author = userService.getUserById(authorId);
         Submission submission = feedbackService.getSubmissionById(submissionId);
 
-        model.addAttribute("author", author);
         model.addAttribute("submission", submission);
         model.addAttribute("role", userRole);
         return "pages/feedbackSubmissionFrom";
     }
 
     @PostMapping("submission/feedback")
-    public String giveFeedback(Model model, @RequestParam(name = "authorId") Long authorId
-            , @RequestParam(name = "subId") Long submissionId
+    public String giveFeedback(Model model, @RequestParam(name = "subId") Long submissionId
             , @RequestParam(name = "role") Role userRole
             , @RequestParam String comment
             , @RequestParam MultipartFile file) throws IOException, MissingRoleException {
 
-        feedbackService.feedbackOnSubmission(submissionId, comment, file, authorId, userRole);
+        feedbackService.feedbackOnSubmission(submissionId, comment, file, getCurrentUser().getId(), userRole);
         Submission submission = feedbackService.getSubmissionById(submissionId);
 
         model.addAttribute("submission", submission);
