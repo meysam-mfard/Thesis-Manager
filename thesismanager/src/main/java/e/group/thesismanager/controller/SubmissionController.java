@@ -47,7 +47,7 @@ public class SubmissionController {
         return userService.getCurrentUser();
     }
 
-    @GetMapping("student/thesis")
+    @GetMapping("thesis")
     public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) throws MissingRoleException {
 
         model.addAttribute("thesis", studentService.getThesisForActiveSemesterByStudentId(studentId));

@@ -26,11 +26,11 @@
                         Go to
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_STUDENT')" th:href="@{thesis/(stdId=${user.id})}">Student Page</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_COORDINATOR')" th:href="@{coordinator}">Coordinator Page</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_SUPERVISOR')" th:href="@{suppervisor}">Supervisor Page</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_READER')" th:href="@{reader}">Reader Page</a>
-                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_OPPONENT')" th:href="@{opponent}">Opponent Page</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_STUDENT')" th:href="@{/student/thesis/(stdId=${user.id})}">Student Page</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_COORDINATOR')" th:href="@{/coordinator}">Coordinator Page</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_SUPERVISOR')" th:href="@{/suppervisor}">Supervisor Page</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_READER')" th:href="@{/reader}">Reader Page</a>
+                        <a class="dropdown-item" sec:authorize="hasRole('ROLE_OPPONENT')" th:href="@{/opponent}">Opponent Page</a>
                     </div>
                 </li>
             </ul>
@@ -47,7 +47,3 @@
 
 </body>
 </html>
-
-<style>
-
-</style>
