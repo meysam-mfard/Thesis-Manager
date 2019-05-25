@@ -19,4 +19,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("User does not exist. ID: " + id));
     }
+
+    @Override
+    public User getUserByUsername(String useName) {
+        return userRepository.findByUsername(useName).orElseThrow(() ->
+                new NotFoundException("User does not exist. Username: "+useName));
+    }
 }
