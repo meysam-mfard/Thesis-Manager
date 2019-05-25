@@ -2,15 +2,30 @@ package e.group.thesismanager.model;
 
 public enum SupervisorRequestStatus {
 
-    NOT_ASSIGNED(0),
-    REQUEST_SENT(1),
-    REJECTED(2),
-    ACCEPTED(3);
+    NOT_ASSIGNED("Not Assigned"),
+    REQUEST_SENT("Request Sent"),
+    REJECTED("Rejected"),
+    ACCEPTED("Accepted");
 
-    private int code;
+    private final String text;
 
-    SupervisorRequestStatus(int code) {
+    SupervisorRequestStatus(String text) {
 
-        this.code = code;
+        this.text = text;
+    }
+
+    public String getText() {
+        return this.text;
+    }
+
+    public static SupervisorRequestStatus fromString(String text) {
+
+        for (SupervisorRequestStatus supervisorRequestStatus : SupervisorRequestStatus.values()) {
+
+            if (supervisorRequestStatus.text.equalsIgnoreCase(text)) {
+                return supervisorRequestStatus;
+            }
+        }
+        return null;
     }
 }

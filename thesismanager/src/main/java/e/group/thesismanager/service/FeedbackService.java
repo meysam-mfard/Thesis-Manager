@@ -47,12 +47,6 @@ public class FeedbackService {
                 new NotFoundException("User does not exist. Username: " + username));
     }
 
-    public Thesis getThesisById(Long id) {
-
-        return thesisRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Thesis does not exist. Id: " + id));
-    }
-
     @Transactional
     public Submission feedbackOnSubmission(Long submissionId, String comment, MultipartFile multipartFile
             , Long authorId, Role authorRole) throws IOException, MissingRoleException {

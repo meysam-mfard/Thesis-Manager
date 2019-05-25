@@ -9,12 +9,14 @@ public enum SubmissionType {
 
     private final String text;
 
-    private SubmissionType(String s) {
+    SubmissionType(String s) {
+
         text = s;
     }
 
     @Override
     public String toString() {
+
         return text;
     }
 }

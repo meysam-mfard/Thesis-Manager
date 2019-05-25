@@ -92,6 +92,8 @@ public class DataBootstrap implements ApplicationRunner {
         t1.setSupervisor(sup1);
         t1.setSupervisorRequestStatus(SupervisorRequestStatus.REQUEST_SENT);
         t1.setOpponent(std2);
+        //t1.getReaders().add(sup1);
+        //t1.getBidders().add(sup1);
 
         //////////////////////////////
         //submission

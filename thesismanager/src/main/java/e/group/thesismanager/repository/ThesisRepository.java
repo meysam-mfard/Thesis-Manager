@@ -16,4 +16,6 @@ public interface ThesisRepository extends JpaRepository<Thesis, Long> {
     Optional<Thesis> findThesisByStudentAndSemester(User user, Semester semester);
     Optional<Thesis> findThesisByOpponent(User user);
     List<Thesis> findThesesBySupervisorAndSupervisorRequestStatus(User user, SupervisorRequestStatus status);
+    List<Thesis> findThesesByReaders(User user);
+    List<Thesis> findThesesByBidders(User user);
 }

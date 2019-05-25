@@ -24,15 +24,49 @@
             <thead>
             <tr class="bg-warning">
                 <th scope="col">Author</th>
+                <th scope="col">Submissions</th>
                 <th scope="col">Feedback</th>
                 <th scope="col">Assess</th>
             </tr>
             </thead>
             <tbody>
             <tr class="table-primary" th:each="thesis : ${thesisList}">
-                <td><a th:href="@{'student/' + ${thesis.id} + '/thesis'}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">StudentName</span></a></td>
-                <td><a th:href="@{'/thesis/' + ${thesis.id} + '/feedback/'}">Give Feedback</a></td>
-                <td><a th:href="@{'/thesis/' + ${thesis.id} + '/assessment/'}">Give Assessment</a></td>
+
+                <td>
+                    <a th:href="@{'student/thesis?stdId=' + ${thesis.id}}">
+                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">StudentName
+                        </span>
+                    </a>
+                </td>
+
+                <td>
+                    <a th:each="submission : ${thesis.submissions}" th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                        <div th:text="${submission.type}">SubmissionType
+                        </div>
+                        <hr>
+                    </a>
+                </td>
+
+                <td>
+                    <a th:each="submission : ${thesis.submissions}">
+                        <a th:if="${submission.type.toString() == 'Project Plan'} or ${submission.type.toString() == 'Report'}" th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_SUPERVISOR'}">
+                            Give Feedback</a>
+                        <span th:unless="${submission.type.toString() == 'Project Plan'} or ${submission.type.toString() == 'Report'}">
+                            Not authorized to feedback this submission</span>
+                        <hr>
+                    </a>
+                </td>
+
+                <td>
+                    <a th:each="submission : ${thesis.submissions}">
+                        <a th:if="${submission.type.toString() == 'Report'}" th:href="@{'/submission/assess?subId=' + ${submission.id} + '&decGr=true'}">
+                            Give Assessment</a>
+                        <a th:unless="${submission.type.toString() == 'Report'}">
+                            Not authorized to assess this submission</a>
+                        <hr>
+                    </a>
+                </td>
+
             </tr>
             </tbody>
         </table>
@@ -52,13 +86,13 @@
             </thead>
             <tbody>
             <tr class="table-primary" th:each="request : ${supervisionRequestsList}">
-                <td><a th:href="@{'student/' + ${request.id} + '/thesis'}"><span th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">StudentName</span></a></td>
+                <td><a th:href="@{'student/thesis?stdId=' + ${request.id}}"><span th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">StudentName</span></a></td>
                 <td>
-                    <form class="form" th:object="${request}" th:action="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/' + 3}" method="post">
-                        <button class="col-md-5 offset-md-2 btn btn-success" th:href="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/' + 3}" type="submit">Accept Supervision Request</button>
+                    <form class="form" th:object="${request}" th:action="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/Accepted'}" method="post">
+                        <button class="col-md-5 offset-md-2 btn btn-success" th:href="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/Accepted'}" type="submit">Accept Supervision Request</button>
                     </form>
-                    <form class="form" th:object="${request}" th:action="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/' + 2}" method="post">
-                        <button class="col-md-5 offset-md-2 btn btn-danger" th:href="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/' + 2}" type="submit">Reject Supervision Request</button>
+                    <form class="form" th:object="${request}" th:action="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/Rejected'}" method="post">
+                        <button class="col-md-5 offset-md-2 btn btn-danger" th:href="@{'supervisor/replyToSupervisionRequest/' + ${request.id} + '/Rejected'}" type="submit">Reject Supervision Request</button>
                     </form>
                 </td>
             </tr>

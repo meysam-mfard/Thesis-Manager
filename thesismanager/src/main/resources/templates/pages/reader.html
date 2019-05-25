@@ -1,83 +1,97 @@
+<!DOCTYPE>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reader page</title>
+    <meta charset="utf-8">
+    <meta property="og:title" content="Start page" />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/admin.css"/>
     <head>
-        <title>Reader Admin page</title>
-        <meta charset="utf-8">
-        <meta property="og:title" content="Start page" />
-        <meta property="og:type" content="website" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <link rel="stylesheet" type="text/css" href="/css/admin.css"/>
-    <head>
-            <header>
 
-                    <h1><br><br>Reader Page</h1>
-            </header>
-            <body>
-            <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
-                    <div class="accordion" id="accordionExample">
-                            <div class="card">
-                              <div class="card-header" id="headingOne">
-                                <h2 class="mb-0">
-                                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Bidding
-                                  </button>
-                                </h2>
-                              </div>
+        <header>
+            <h1><br><br>Reader Page</h1>
+        </header>
 
-                              <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                <div class="card-body">
-                                        <table class="table">
-                                                <thead>
-                                                  <tr>
-                                                    <th scope="col">Student</th>
-                                                    <th scope="col">Bidding</th>
+<body>
 
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
+    <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
 
-                                              <tr class="form" th:each="thesis : ${theses}" th:href="@{'reader/' +${thesis.id}+ '/bid'}" method="post">
-                                                <th scope="row" th:text="${thesis.student.firstName}+' '+${thesis.student.lastName}">Dave Gilbert</th>
-                                                    <td> <button  class="btn btn-success" role="button" aria-pressed="true"  th:href="@{'reader/' +${thesis.id}+ '/bid'}" type="submit">Bid</button>
-                                                    </td>
-                                              </tr>
-                                                </tbody>
-                                              </table>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="card">
-                              <div class="card-header" id="headingTwo">
-                                <h2 class="mb-0">
-                                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Feedback
-                                  </button>
-                                </h2>
-                              </div>
-                              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                <div class="card-body">
-                                        <table class="table">
-                                                <thead>
-                                                  <tr>
-                                                    <th scope="col">Student</th>
-                                                    <th scope="col">Feedback</th>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr class="bg-warning">
+                <th scope="col">Author</th>
+                <th scope="col">Submission</th>
+                <th scope="col">Feedback</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="table-primary" th:each="thesis : ${assignedTheses}">
+                <td>
+                    <a th:href="@{'student/thesis?stdId=' + ${thesis.id}}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
+                        StudentName</span>
+                    </a>
+                </td>
 
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr class="table-primary" th:each="thesis : ${theses}">
-                                                    <td><a th:href="@{'/thesis/' + ${thesis.id}}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">StudentName</span></a></td>
-                                                    <td><a th:href="@{'/thesis/' + ${thesis.id} + '/feedback/'}">Give Feedback</a></td>
-                                                </tr>
-                                                </tbody>
-                                              </table>
-                                </div>
-                              </div>
-                            </div>
+                <td>
+                    <a th:each="submission : ${thesis.submissions}" th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                        <div th:text="${submission.type}">SubmissionType
+                        </div>
+                        <hr>
+                    </a>
+                </td>
 
-                          </div>
+                <td>
+                    <a th:each="submission : ${thesis.submissions}">
+                        <a th:if="${submission.type.toString() == 'Report'}" th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_READER'}">
+                            Give Feedback</a>
+                        <span th:unless="${submission.type.toString() == 'Report'}">
+                            Not authorized to feedback this submission</span>
+                        <hr>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
 
-            </body>
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr class="bg-warning">
+                <th scope="col">Author</th>
+                <th scope="col">Bid</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="table-primary" th:each="thesis : ${possibleTheses}">
+                <td>
+                    <a th:href="@{'student/thesis?stdId=' + ${thesis.id}}">
+                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
+                            StudentName</span>
+                    </a>
+                </td>
+                <td>
+                    <form class="form" th:object="${thesis}" th:action="@{'reader/' + ${thesis.id} + '/bid'}" method="post">
+                        <button class="col-md-5 offset-md-2 btn btn-success" th:href="@{'reader/' + ${thesis.id} + '/bid'}" type="submit">Bid On Thesis</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

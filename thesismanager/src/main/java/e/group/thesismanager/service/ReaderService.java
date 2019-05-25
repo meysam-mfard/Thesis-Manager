@@ -9,15 +9,9 @@ import java.util.List;
 
 public interface ReaderService {
 
-    List<Thesis> getTheses();
+    List<Thesis> getPossibleTheses(User user);
 
-    //Submission feedbackOnSubmission(Long submissionId, Feedback feedback);
-
-    //Submission feedbackOnSubmission(Long submissionId, String comment, byte[] file, String fileName, String fileType, User author, LocalDateTime submissionTime, Role authorRole);
-
-    Submission assessSubmission(Long submissionId, Float grade);
+    List<Thesis> getAssignedTheses(User user);
 
     Thesis bidOnThesis(Long thesisId, User reader) throws MissingRoleException;
-
-    User getUserByUsername(String username);
 }
