@@ -29,7 +29,4 @@ public interface CoordinatorService {
     void assignReaders(Thesis thesis, Set<User> readers) throws MissingRoleException;
 
     void assignOpponent(Thesis thesis, User opponent) throws MissingRoleException;
-
-    //Submission assessSubmission(Long submissionId, Float grade);
-
 }

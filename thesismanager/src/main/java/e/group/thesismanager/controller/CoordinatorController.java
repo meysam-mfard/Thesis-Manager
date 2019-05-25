@@ -19,21 +19,27 @@ import java.util.Set;
 @Controller
 public class CoordinatorController {
 
+    private final static String SUCCESS = "success";
+    private final static String FAIL = "fail";
+
     private final CoordinatorService coordinatorService;
     private final UserService userService;
 
     public CoordinatorController(CoordinatorService coordinatorService, UserService userService) {
+
         this.coordinatorService = coordinatorService;
         this.userService = userService;
     }
 
     @ModelAttribute("user")
     public User loggedInUser(Model model) {
+
         return userService.getCurrentUser();
     }
 
-    @GetMapping("")
+    @GetMapping("coordinator")
     public String getCoordinatorHome(Model model) {
+
         model.addAttribute("semesters", coordinatorService.getSemesters());
         model.addAttribute("students", coordinatorService.getStudents());
         model.addAttribute("readers", coordinatorService.getReaders());
@@ -44,45 +50,55 @@ public class CoordinatorController {
         return "pages/coordinator";
     }
 
-    @PostMapping("/updateDeadline")
+    @PostMapping("coordinator/updateDeadline")
     public String postUpdateDeadline(@ModelAttribute SubmissionType type,
                                      @ModelAttribute LocalDateTime dateTime) {
 
+        try {
+
         coordinatorService.setDeadline(type, dateTime);
 
-        return "?updateDeadlineSuccess";
+         } catch (Exception e) {
+        //todo: replace with validator
+        e.printStackTrace();
+        return "redirect:/coordinator?" + FAIL;
+          }
+
+        return "redirect:/coordinator?" + SUCCESS;
     }
 
-    @PostMapping("/initializeSemester")
+    @PostMapping("coordinator/initializeSemester")
     public String postInitializeSemester(@ModelAttribute SemesterPeriod period,
                                          @ModelAttribute Year year) {
+        try {
 
         coordinatorService.initSemester(year, period);
 
-        return "?initializeSemesterSuccess";
+         } catch (Exception e) {
+        //todo: replace with validator
+        e.printStackTrace();
+        return "redirect:/coordinator?" + FAIL;
+          }
+
+        return "redirect:/coordinator?" + SUCCESS;
     }
 
-    @PostMapping("/assignReadersAndOpponent")
+    @PostMapping("coordinator/assignReadersAndOpponent")
     public String postAssignReadersAndOpponent(@ModelAttribute Thesis thesis,
                                                @ModelAttribute Set<User> readers,
                                                @ModelAttribute User opponent) {
 
         try {
+
             coordinatorService.assignReaders(thesis, readers);
             coordinatorService.assignOpponent(thesis, opponent);
         } catch (MissingRoleException e) {
-            return "?assignReadersAndOpponentSuccess";
+            //todo: replace with validator
+            return "redirect:/coordinator?" + FAIL;
         }
 
-        return "?assignReadersAndOpponentSuccess";
+        return "redirect:/coordinator?" + SUCCESS;
     }
 
-    @PostMapping
-    public String postAssignGrade(@ModelAttribute Submission submission,
-                                  @ModelAttribute Float grade) {
 
-        //coordinatorService.assessSubmission(submission.getId(), grade);
-
-        return "?assignGradeSuccess";
-    }
 }

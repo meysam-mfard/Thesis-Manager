@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface SupervisorService {
 
-    List<Thesis> getThesis();
-
     List<Thesis> getThesis(User user);
 
     List<Thesis> getRequests(User user);

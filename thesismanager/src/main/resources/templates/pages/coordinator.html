@@ -11,17 +11,32 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="/css/coordinator.css"/>
 </head>
+
+<header>
+    <h1><br><br>Coordinator Page</h1>
+</header>
+
 <body>
+
 <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
+
 <div>
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="accordion" id="accordionExample">
+
                 <nav aria-label="...">
                     <ul class="pagination pagination-sm">
-                        <h1>Thesis list</h1><div class="offset-md-6"><a class="page-link" href="http://www.google.com">Search Thesis</a></div><div class="offset-md-1"><a class="page-link" href="http://www.google.com">New Thesis</a></div>
+                        <h1>Thesis list</h1>
+                        <div class="offset-md-6">
+                            <a class="page-link" href="http://www.google.com">Search Thesis</a>
+                        </div>
+                        <div class="offset-md-1">
+                            <a class="page-link" href="http://www.google.com">New Thesis</a>
+                        </div>
                     </ul>
                 </nav>
+
                 <div class="card">
                     <table class="table table-striped hover-square">
                         <thead>

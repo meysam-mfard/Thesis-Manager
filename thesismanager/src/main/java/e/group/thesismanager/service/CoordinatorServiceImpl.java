@@ -13,17 +13,24 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class CoordinatorServiceImpl extends FeedbackService implements CoordinatorService {
+public class CoordinatorServiceImpl implements CoordinatorService {
 
     private SemesterRepository semesterRepository;
+    private UserRepository userRepository;
+    private ThesisRepository thesisRepository;
 
     @Autowired
-    public CoordinatorServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                                  SubmissionRepository submissionRepository, UserRepository userRepository,
-                                  SemesterRepository semesterRepository) {
+    public CoordinatorServiceImpl(ThesisRepository thesisRepository, UserRepository userRepository, SemesterRepository semesterRepository) {
 
-        super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
         this.semesterRepository = semesterRepository;
+        this.userRepository = userRepository;
+        this.thesisRepository = thesisRepository;
+    }
+
+    @Override
+    public List<Thesis> getThesis() {
+
+        return thesisRepository.findAll();
     }
 
     @Override
@@ -44,14 +51,17 @@ public class CoordinatorServiceImpl extends FeedbackService implements Coordinat
 
     @Override
     public List<Semester> getSemesters() {
+
         return semesterRepository.findAll();
     }
 
     @Override
     public void setDeadline(SubmissionType type, LocalDateTime dateTime) {
+
         Semester semester = semesterRepository.findByActiveIsTrue();
 
         switch (type) {
+
             case PROJECT_DESCRIPTION:
                 semester.setProjectDescriptionDeadline(dateTime);
                 break;
@@ -67,24 +77,21 @@ public class CoordinatorServiceImpl extends FeedbackService implements Coordinat
         }
     }
 
-    private List<User> getUserByRole(Role role) {
-        return userRepository.findAll().stream().filter(
-                (u) -> u.getRoles().contains(role)).
-                collect(Collectors.toList());
-    }
-
     @Override
     public List<User> getStudents() {
+
         return getUserByRole(Role.ROLE_STUDENT);
     }
 
     @Override
     public List<User> getReaders() {
+
         return getUserByRole(Role.ROLE_READER);
     }
 
     @Override
     public List<User> getOpponents() {
+
         return getUserByRole(Role.ROLE_OPPONENT);
     }
 
@@ -115,5 +122,12 @@ public class CoordinatorServiceImpl extends FeedbackService implements Coordinat
             throw new MissingRoleException("Could not assign opponent; User is not an opponent");
 
         thesis.setOpponent(opponent);
+    }
+
+    private List<User> getUserByRole(Role role) {
+
+        return userRepository.findAll().stream().filter(
+                (u) -> u.getRoles().contains(role)).
+                collect(Collectors.toList());
     }
 }
