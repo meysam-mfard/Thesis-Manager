@@ -4,18 +4,17 @@ import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
 import e.group.thesismanager.service.CoordinatorService;
 import e.group.thesismanager.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
-@RequestMapping("coordinator")
+@Slf4j
 @Controller
 public class CoordinatorController {
 
@@ -37,26 +36,44 @@ public class CoordinatorController {
         return userService.getCurrentUser();
     }
 
+    @ModelAttribute("thesis")
+    public Thesis emptyThesis(Model model) {
+
+        return new Thesis();
+    }
+
+    @ModelAttribute("semester")
+    public Semester emptySemester(Model model) {
+
+        return new Semester();
+    }
+
     @GetMapping("coordinator")
     public String getCoordinatorHome(Model model) {
 
-        model.addAttribute("semesters", coordinatorService.getSemesters());
+        model.addAttribute("currentSemester", coordinatorService.getCurrentSemester());
         model.addAttribute("students", coordinatorService.getStudents());
         model.addAttribute("readers", coordinatorService.getReaders());
         model.addAttribute("opponents", coordinatorService.getOpponents());
+        model.addAttribute("supervisors", coordinatorService.getSupervisors());
         model.addAttribute("theses", coordinatorService.getThesis());
         model.addAttribute("submissionTypes", SubmissionType.values());
+        model.addAttribute("semesterPeriods", SemesterPeriod.values());
 
         return "pages/coordinator";
     }
 
     @PostMapping("coordinator/updateDeadline")
-    public String postUpdateDeadline(@ModelAttribute SubmissionType type,
-                                     @ModelAttribute LocalDateTime dateTime) {
+    public String postUpdateDeadline(@RequestParam(value = "projectDescriptionDeadline") String projectDescriptionDeadline,
+                                     @RequestParam(value = "projectPlanDeadline") String projectPlanDeadline,
+                                     @RequestParam(value = "reportDeadline") String reportDeadline,
+                                     @RequestParam(value = "finalReportDeadline") String finalReportDeadline) {
 
         try {
 
-        coordinatorService.setDeadline(type, dateTime);
+        coordinatorService.setDeadline(parseDateTimeString(projectDescriptionDeadline),
+                parseDateTimeString(projectPlanDeadline), parseDateTimeString(reportDeadline),
+                        parseDateTimeString(finalReportDeadline));
 
          } catch (Exception e) {
         //todo: replace with validator
@@ -68,11 +85,11 @@ public class CoordinatorController {
     }
 
     @PostMapping("coordinator/initializeSemester")
-    public String postInitializeSemester(@ModelAttribute SemesterPeriod period,
+    public String postInitializeSemester(@ModelAttribute("semesterPeriod") String semesterPeriod,
                                          @ModelAttribute Year year) {
         try {
 
-        coordinatorService.initSemester(year, period);
+        coordinatorService.initSemester(year, SemesterPeriod.fromString(semesterPeriod));
 
          } catch (Exception e) {
         //todo: replace with validator
@@ -83,15 +100,12 @@ public class CoordinatorController {
         return "redirect:/coordinator?" + SUCCESS;
     }
 
-    @PostMapping("coordinator/assignReadersAndOpponent")
-    public String postAssignReadersAndOpponent(@ModelAttribute Thesis thesis,
-                                               @ModelAttribute Set<User> readers,
-                                               @ModelAttribute User opponent) {
+    @PostMapping("coordinator/assignOpponent/{thesisId}")
+    public String postAssignOpponent(@ModelAttribute("thesis") Thesis thesis, @PathVariable Long thesisId) {
 
         try {
 
-            coordinatorService.assignReaders(thesis, readers);
-            coordinatorService.assignOpponent(thesis, opponent);
+            coordinatorService.assignOpponent(thesis.getOpponent().getUsername(), thesisId);
         } catch (MissingRoleException e) {
             //todo: replace with validator
             return "redirect:/coordinator?" + FAIL;
@@ -100,5 +114,50 @@ public class CoordinatorController {
         return "redirect:/coordinator?" + SUCCESS;
     }
 
+    @PostMapping("coordinator/assignReaders/{thesisId}")
+    public String postAssignReaders(@ModelAttribute("thesis") Thesis thesis, @PathVariable Long thesisId) {
 
+        try {
+
+            List<String> readersUsername = new ArrayList<String>();
+
+            for(User reader : thesis.getReaders()) {
+
+                readersUsername.add(reader.getUsername());
+            }
+
+            coordinatorService.assignReaders(readersUsername, thesisId);
+        } catch (MissingRoleException e) {
+            //todo: replace with validator
+            return "redirect:/coordinator?" + FAIL;
+        }
+
+        return "redirect:/coordinator?" + SUCCESS;
+    }
+
+    @PostMapping("coordinator/assignSupervisor/{thesisId}")
+    public String postAssignSupervisor(@ModelAttribute("thesis") Thesis thesis, @PathVariable Long thesisId) {
+
+        try {
+
+            coordinatorService.assignSupervisor(thesis.getSupervisor().getUsername(), thesisId);
+        } catch (MissingRoleException e) {
+            //todo: replace with validator
+            return "redirect:/coordinator?" + FAIL;
+        }
+
+        return "redirect:/coordinator?" + SUCCESS;
+    }
+
+    private LocalDateTime parseDateTimeString(String dateTimeString) {
+
+
+        if(!dateTimeString.isEmpty()) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            return LocalDateTime.parse(dateTimeString, formatter);
+        }
+
+        return null;
+    }
 }

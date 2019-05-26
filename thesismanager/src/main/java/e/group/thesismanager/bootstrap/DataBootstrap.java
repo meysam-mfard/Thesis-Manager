@@ -57,9 +57,9 @@ public class DataBootstrap implements ApplicationRunner {
 
         User std1 = new User("first1", "last1", "user1@lnu.se", "{noop}pass1", new HashSet<Role>(Arrays.asList(Role.ROLE_STUDENT, Role.ROLE_OPPONENT)));
         userList.add(std1);
-        User std2 = new User("first2", "last2", "username2@lnu.se", "{noop}password2", new HashSet<Role>(Arrays.asList(Role.ROLE_STUDENT, Role.ROLE_OPPONENT)));
+        User std2 = new User("first2", "last2", "username2@lnu.se", "{noop}password2", new HashSet<Role>(Arrays.asList(Role.ROLE_STUDENT, Role.ROLE_OPPONENT, Role.ROLE_READER)));
         userList.add(std2);
-        User sup1 = new User("first-sup1", "last-sup1", "username-sup1@lnu.se", "{noop}password-sup1", new HashSet<Role>(Arrays.asList(Role.ROLE_SUPERVISOR, Role.ROLE_READER)));
+        User sup1 = new User("first-sup1", "last-sup1", "username-sup1@lnu.se", "{noop}password-sup1", new HashSet<Role>(Arrays.asList(Role.ROLE_SUPERVISOR, Role.ROLE_READER, Role.ROLE_OPPONENT)));
         userList.add(sup1);
         User sup2 = new User("first-sup2", "last-sup2", "username-sup2@lnu.se", "{noop}password-sup2", new HashSet<Role>(Arrays.asList(Role.ROLE_SUPERVISOR, Role.ROLE_READER)));
         userList.add(sup2);

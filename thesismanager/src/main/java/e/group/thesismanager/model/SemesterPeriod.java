@@ -1,17 +1,31 @@
 package e.group.thesismanager.model;
 
 public enum SemesterPeriod {
+
     AUTUMN("Autumn"),
     SPRING("Spring");
 
-    private String str;
+    private final String text;
 
-    private SemesterPeriod(String str) {
-        this.str = str;
+    SemesterPeriod(String text) {
+
+        this.text = text;
     }
 
     @Override
     public String toString() {
-        return str;
+
+        return text;
+    }
+
+    public static SemesterPeriod fromString(String text) {
+
+        for (SemesterPeriod semesterPeriod : SemesterPeriod.values()) {
+
+            if (semesterPeriod.text.equalsIgnoreCase(text)) {
+                return semesterPeriod;
+            }
+        }
+        return null;
     }
 }
