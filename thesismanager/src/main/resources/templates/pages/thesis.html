@@ -92,14 +92,33 @@
                                         </a>
                                     </td>
                                 </tr>
+                                <!--<tr>
+                                    <th scope="row">Grade</th>
+                                    <td th:text="${submission.grade}">dummy grade</td>
+                                </tr>-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!--GRADE-->
+                    <div class="card bg-dark rounded-lg p-1">
+                        <div class="card-header bg-info rounded">
+                            <h4>Grade</h4>
+                        </div>
+
+                        <div class="card-body bg-light rounded">
+                            <table class="table table-striped table-bordered table-hover">
+                                <tbody>
                                 <tr>
                                     <th scope="row">Grade</th>
-                                    <td>98 / Pass</td>
+                                    <td th:text="${submission.grade}"></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

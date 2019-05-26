@@ -13,12 +13,12 @@
 <body>
 <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
 <div class="container" style="margin-top: 100px">
-    <div class="card rounded-lg bg-light shadow p-2 col-md-10 offset-md-1">
-        <div class="card-header bg-light rounded">
-            <h4>403 Error</h4>
+    <div class="card rounded-lg bg-light shadow p-2 col-md-6 offset-md-3">
+        <div class="card-header bg-warning rounded d-flex justify-content-center">
+            <h3>403 Error</h3>
         </div>
-        <div class="card-body bg-dark rounded d-flex justify-content-around">
-            <h6>You are authorized to access this page</h6>
+        <div class="card-body bg-secondary rounded d-flex justify-content-around">
+            <h4 style="color: white">You are not authorized to access this page</h4>
         </div>
     </div>
 </div>

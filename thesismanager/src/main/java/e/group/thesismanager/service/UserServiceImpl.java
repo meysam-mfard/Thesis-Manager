@@ -31,8 +31,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser() {
 
-        return userRepository.findByUsername(getCurrentUsername()).orElseThrow(() ->
-                new NotFoundException("User does not exist. Username: " + getCurrentUsername()));
+        /*return userRepository.findByUsername(getCurrentUsername()).orElseThrow(() ->
+                new NotFoundException("User does not exist. Username: " + getCurrentUsername()));*/
+        return userRepository.findByUsername(getCurrentUsername()).orElse(null);
     }
 
     private String getCurrentUsername() {
