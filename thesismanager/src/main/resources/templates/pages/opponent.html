@@ -27,7 +27,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="table-primary">
+
+            <tr class="table-primary" th:each="thesis : ${thesisList}">
+
                 <td>
                     <a th:href="@{'student/thesis?stdId=' + ${thesis.id}}"><span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                         StudentName</span>

@@ -21,13 +21,15 @@ public class CoordinatorServiceImpl implements CoordinatorService {
     private SemesterRepository semesterRepository;
     private UserRepository userRepository;
     private ThesisRepository thesisRepository;
+    private SemesterService semesterService;
 
     @Autowired
-    public CoordinatorServiceImpl(ThesisRepository thesisRepository, UserRepository userRepository, SemesterRepository semesterRepository) {
+    public CoordinatorServiceImpl(ThesisRepository thesisRepository, UserRepository userRepository, SemesterRepository semesterRepository, SemesterService semesterService) {
 
         this.semesterRepository = semesterRepository;
         this.userRepository = userRepository;
         this.thesisRepository = thesisRepository;
+        this.semesterService = semesterService;
     }
 
     @Override
@@ -39,7 +41,7 @@ public class CoordinatorServiceImpl implements CoordinatorService {
     @Override
     public void initSemester(Year Year, SemesterPeriod semesterPeriod) {
         // Set all other semesters to not active
-        List<Semester> previousSemesters = semesterRepository.findAll();
+        List<Semester> previousSemesters = semesterService.getSemesters();
 
         for (Semester s : previousSemesters) {
 
@@ -55,45 +57,45 @@ public class CoordinatorServiceImpl implements CoordinatorService {
     }
 
     @Override
-    public Semester getCurrentSemester() {
-
-        return semesterRepository.findByActiveIsTrue();
-    }
-
-    @Override
-    public Semester setDeadline(LocalDateTime projectDescriptionDeadline,
+    public Semester setAllDeadlines(LocalDateTime projectDescriptionDeadline,
                             LocalDateTime projectPlanDeadline,
                             LocalDateTime reportDeadline,
                             LocalDateTime finalReportDeadline) {
 
-        Semester semester = getCurrentSemester();
-        semester.setProjectDescriptionDeadline(projectDescriptionDeadline);
-        semester.setProjectPlanDeadline(projectPlanDeadline);
-        semester.setReportDeadline(reportDeadline);
-        semester.setFinalReportDeadline(finalReportDeadline);
-        return semesterRepository.save(semester);
-    }
+        if ((projectDescriptionDeadline != null && projectDescriptionDeadline.isBefore(LocalDateTime.now())) ||
+                (projectPlanDeadline != null && projectPlanDeadline.isBefore(LocalDateTime.now())) ||
+                (reportDeadline != null && reportDeadline.isBefore(LocalDateTime.now())) ||
+                (finalReportDeadline != null && finalReportDeadline.isBefore(LocalDateTime.now()))) {
 
-    @Override
-    public Semester setDeadline(SubmissionType type, LocalDateTime deadline) {
-        if (deadline.isBefore(LocalDateTime.now()))
-            throw new IllegalArgumentException("The given deadline has already passed!");
-        Semester semester = semesterRepository.findByActiveIsTrue();
-
-        switch (type) {
-            case PROJECT_DESCRIPTION:
-                semester.setProjectDescriptionDeadline(deadline);
-                break;
-            case PROJECT_PLAN:
-                semester.setProjectPlanDeadline(deadline);
-                break;
-            case REPORT:
-                semester.setReportDeadline(deadline);
-                break;
-            case FINAL_REPORT:
-                semester.setFinalReportDeadline(deadline);
-                break;
+            throw new IllegalArgumentException("One or more of the given deadlines have already passed!");
         }
+
+        Semester semester = semesterService.getCurrentSemester();
+
+        if((semester.getProjectDescriptionDeadline() == null && projectDescriptionDeadline != null) ||
+                (semester.getProjectDescriptionDeadline() != null && projectDescriptionDeadline != null)) {
+
+            semester.setProjectDescriptionDeadline(projectDescriptionDeadline);
+        }
+
+        if((semester.getProjectPlanDeadline() == null && projectPlanDeadline != null) ||
+                (semester.getProjectPlanDeadline() != null && projectPlanDeadline != null)) {
+
+            semester.setProjectPlanDeadline(projectPlanDeadline);
+        }
+
+        if((semester.getReportDeadline() == null && reportDeadline != null) ||
+                (semester.getReportDeadline() != null && reportDeadline != null)) {
+
+            semester.setReportDeadline(reportDeadline);
+        }
+
+        if((semester.getFinalReportDeadline() == null && finalReportDeadline != null) ||
+                (semester.getFinalReportDeadline() != null && finalReportDeadline != null)) {
+
+            semester.setFinalReportDeadline(finalReportDeadline);
+        }
+
         return semesterRepository.save(semester);
     }
 
@@ -136,6 +138,7 @@ public class CoordinatorServiceImpl implements CoordinatorService {
                 new NotFoundException("Thesis does not exist. Id: " + thesisId));
 
         thesis.setSupervisor(supervisor);
+        thesis.setSupervisorRequestStatus(SupervisorRequestStatus.ACCEPTED);
         return thesisRepository.save(thesis);
     }
 

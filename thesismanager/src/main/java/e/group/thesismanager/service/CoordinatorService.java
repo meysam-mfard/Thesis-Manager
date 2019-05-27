@@ -13,14 +13,10 @@ public interface CoordinatorService {
 
     void initSemester(Year Year, SemesterPeriod semesterPeriod);
 
-    Semester getCurrentSemester();
-
-    Semester setDeadline(LocalDateTime projectDescriptionDeadline,
+    Semester setAllDeadlines(LocalDateTime projectDescriptionDeadline,
                          LocalDateTime projectPlanDeadline,
                          LocalDateTime reportDeadline,
                          LocalDateTime finalReportDeadline);
-
-    Semester setDeadline(SubmissionType type, LocalDateTime deadline);
 
     List<User> getStudents();
 

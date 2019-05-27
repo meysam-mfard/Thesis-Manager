@@ -7,6 +7,8 @@ import e.group.thesismanager.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OpponentServiceImpl implements OpponentService {
 
@@ -19,8 +21,8 @@ public class OpponentServiceImpl implements OpponentService {
     }
 
     @Override
-    public Thesis getThesis(User user) {
+    public List<Thesis> getThesis(User user) {
 
-        return thesisRepository.findThesisByOpponent(user).orElseThrow(() -> new NotFoundException("User not found."));
+        return thesisRepository.findThesisByOpponent(user);
     }
 }
