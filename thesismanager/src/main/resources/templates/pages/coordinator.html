@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!DOCTYPE>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Coordinator</title>
+    <title>Coordinator page</title>
     <meta property="og:title" content="Start page" />
     <meta property="og:type" content="website" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -11,154 +11,440 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="/css/coordinator.css"/>
 </head>
+
 <body>
+
 <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
+
 <div class="container" style="margin-top: 100px">
 
     <div class="row">
         <div class="col-md-12">
             <div class="accordion" id="accordionExample">
+
                 <nav aria-label="...">
                     <ul class="pagination pagination-sm">
-                        <h1>Thesis list</h1><div class="offset-md-6"><a class="page-link" href="http://www.google.com">Search Thesis</a></div><div class="offset-md-1"><a class="page-link" href="http://www.google.com">New Thesis</a></div>
+                        <div class="offset-md-6">
+                            <a class="page-link" href="http://www.google.com">Search Thesis</a>
+                        </div>
+                        <div class="offset-md-1">
+                            <a class="page-link" href="http://www.google.com">New Thesis</a>
+                        </div>
                     </ul>
                 </nav>
+
+                <h3>Assign Opponent</h3>
+
                 <div class="card">
-                    <table class="table table-striped hover-square">
+                    <table class="table table-striped hover-square" th:each="eachThesis : ${theses}">
+
                         <thead>
                         <tr class="table-primary">
-                            <th scope="col">Thesis</th>
-                            <th scope="col">Opponent</th>
-                            <th scope="col">Reader</th>
-                            <th scope="col">Status</th>
+
+                            <th scope="col">Student</th>
+                            <th scope="col">Submissions</th>
+                            <th scope="col">Current Opponent</th>
+                            <th scope="col">Set Opponent</th>
+                            <th scope="col">Assign</th>
+
                         </thead>
+
                         <tbody>
                         <tr class="thead-light">
-                            <td>Thesis 1</td>
+
+                            <td>
+                                <a th:href="@{'student/thesis?stdId=' + ${eachThesis.id}}">
+                                 <span th:text="${eachThesis.student.firstName} + ' ' + ${eachThesis.student.lastName}">StudentName
+                                 </span>
+                                </a>
+                            </td>
+
+                            <td>
+                                <a th:each="submission : ${eachThesis.submissions}" th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                    <div th:text="${submission.type}">SubmissionType
+                                    </div>
+                                    <hr>
+                                </a>
+                            </td>
+
+                            <td>
+                                 <span th:text="${eachThesis.opponent.firstName} + ' ' + ${eachThesis.opponent.lastName}">CurrentOpponentName
+                                 </span>
+                            </td>
+
+                            <form class="form" th:object="${thesis}" th:action="@{'coordinator/assignOpponent/' + ${eachThesis.id}}" method="post">
+
+                            <td>
+
+                                <div class="form-group">
+                                    <label for="opponent"></label>
+                                    <select class="form-control" id="opponent" style="overflow: auto" th:field="*{opponent.username}">
+                                        <option th:each="opponent : ${opponents}" th:value="${opponent.username}" th:text="${opponent.firstName} + ' ' + ${opponent.lastName}">
+                                        OpponentName</option>
+                                    </select>
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <button class="col-md-12 btn btn-success" type="submit">Assign Opponent</button>
+                            </td>
+                            </form>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Assign Readers</h3>
+
+                <div class="card">
+                    <table class="table table-striped hover-square" th:each="eachThesis : ${theses}">
+
+                        <thead>
+                        <tr class="table-primary">
+
+                            <th scope="col">Student</th>
+                            <th scope="col">Submissions</th>
+                            <th scope="col">Current Readers</th>
+                            <th scope="col">Set Readers</th>
+                            <th scope="col">Assign</th>
+
+                        </thead>
+
+                        <tbody>
+                        <tr class="thead-light">
+
+                            <td>
+                                <a th:href="@{'student/thesis?stdId=' + ${eachThesis.id}}">
+                                 <span th:text="${eachThesis.student.firstName} + ' ' + ${eachThesis.student.lastName}">StudentName
+                                 </span>
+                                </a>
+                            </td>
+
+                            <td>
+                                <a th:each="submission : ${eachThesis.submissions}" th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                    <div th:text="${submission.type}">SubmissionType
+                                    </div>
+                                    <hr>
+                                </a>
+                            </td>
+
+                            <td>
+                                 <span th:each="reader : ${eachThesis.readers}">
+                                     <span th:text="${reader.firstName} + ' ' + ${reader.lastName}">CurrentReaderName
+                                 </span>
+                                     <br>
+                                 </span>
+                            </td>
+
+                            <form class="form" th:object="${thesis}" th:action="@{'coordinator/assignReaders/' + ${eachThesis.id}}" method="post">
+
                             <td>
                                 <div class="form-group">
-                                    <select class="custom-select">
-                                        <option selected>Choose Opponent...</option>
-                                        <option value="1">Opponent 1</option>
-                                        <option value="2">Opponent 2</option>
-                                        <option value="3">Opponent 3</option>
+                                    <label for="readers"></label>
+                                    <select class="custom-select" id="readers" multiple="multiple" size="3" style="overflow: auto" th:field="*{readers}">
+                                        <option th:each="bidder : ${eachThesis.bidders}" th:value="${{bidder}}" th:text="${bidder.firstName} + ' ' + ${bidder.lastName} + ' (bidder)'">
+                                            BidderName</option>
+                                        <option th:each="reader : ${readers}" th:value="${{reader}}" th:text="${reader.firstName} + ' ' + ${reader.lastName}">
+                                            ReaderName</option>
                                     </select>
                                 </div>
                             </td>
+
+                                <td>
+                                    <button class="col-md-12 btn btn-success" type="submit">Assign Readers</button>
+                                </td>
+                            </form>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Assign Supervisor</h3>
+
+                <div class="card">
+                    <table class="table table-striped hover-square" th:each="eachThesis : ${theses}">
+
+                        <thead>
+                        <tr class="table-primary">
+
+                            <th scope="col">Student</th>
+                            <th scope="col">Submissions</th>
+                            <th scope="col">Current Supervisor</th>
+                            <th scope="col">Set Supervisor</th>
+                            <th scope="col">Assign</th>
+
+                        </thead>
+
+                        <tbody>
+                        <tr class="thead-light">
+
                             <td>
-                                <div class="form-group">
-                                    <select class="custom-select">
-                                        <option selected>Choose Reader..</option>
-                                        <option value="1">Reader 1</option>
-                                        <option value="2">Reader 2</option>
-                                        <option value="3">Reader 3</option>
-                                    </select>
-                                </div>
+                                <a th:href="@{'student/thesis?stdId=' + ${eachThesis.id}}">
+                                 <span th:text="${eachThesis.student.firstName} + ' ' + ${eachThesis.student.lastName}">StudentName
+                                 </span>
+                                </a>
                             </td>
-                            <td><button type="button" class="btn btn-link">Info</button></td>
+
+                            <td>
+                                <a th:each="submission : ${eachThesis.submissions}" th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                    <div th:text="${submission.type}">SubmissionType
+                                    </div>
+                                    <hr>
+                                </a>
+                            </td>
+
+                            <td>
+                                 <span th:text="${eachThesis.supervisor.firstName} + ' ' + ${eachThesis.supervisor.lastName}">CurrentSupervisorName
+                                 </span>
+                            </td>
+
+                            <form class="form" th:object="${thesis}" th:action="@{'coordinator/assignSupervisor/' + ${eachThesis.id}}" method="post">
+
+                                <td>
+
+                                    <div class="form-group">
+                                        <label for="supervisor"></label>
+                                        <select class="form-control" id="supervisor" style="overflow: auto" th:field="*{supervisor.username}">
+                                            <option th:each="supervisor : ${supervisors}" th:value="${supervisor.username}" th:text="${supervisor.firstName} + ' ' + ${supervisor.lastName}">
+                                                SupervisorName</option>
+                                        </select>
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <button class="col-md-12 btn btn-success" type="submit">Assign Supervisor</button>
+                                </td>
+                            </form>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Assess Thesis</h3>
+
+                <div class="card">
+                    <table class="table table-striped hover-square" th:each="thesis : ${theses}">
+
+                        <thead>
+                        <tr class="table-primary">
+
+                            <th scope="col">Student</th>
+                            <th scope="col">Submissions</th>
+                            <th scope="col">Assess</th>
+
+                        </thead>
+
+                        <tbody>
+                        <tr class="thead-light">
+
+                            <td>
+                                <a th:href="@{'student/thesis?stdId=' + ${thesis.id}}">
+                                 <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">StudentName
+                                 </span>
+                                </a>
+                            </td>
+
+                            <td>
+                                <a th:each="submission : ${thesis.submissions}" th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                    <div th:text="${submission.type}">SubmissionType
+                                    </div>
+                                    <hr>
+                                </a>
+                            </td>
+
+                            <td>
+                                <a th:each="submission : ${thesis.submissions}">
+                                    <a th:if="${submission.type.toString() == 'Project Description'} or ${submission.type.toString() == 'Project Plan'}" th:href="@{'/submission/assess?subId=' + ${submission.id} + '&decGr=false'}">
+                                        Give Assessment</a>
+                                    <a th:if="${submission.type.toString() == 'Final Report'}" th:href="@{'/submission/assess?subId=' + ${submission.id} + '&decGr=true'}">
+                                        Give Assessment</a>
+                                    <a th:unless="${submission.type.toString() == 'Project Description'} or ${submission.type.toString() == 'Project Plan'} or ${submission.type.toString() == 'Final Report'}">
+                                        Not authorized to assess this submission</a>
+                                    <hr>
+                                </a>
+                            </td>
+
                         </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <h1>Semester settings</h1>
-                <h3>Deadline Management</h3>
-                <div class="row">
-                    <div class="col-md-3 form-group">
-                        <select class="custom-select">
-                            <option selected>Choose thesis...</option>
-                            <option value="1">Thesis 1</option>
-                            <option value="2">Thesis 2</option>
-                            <option value="3">Thesis 3</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <select class="custom-select">
-                            <option selected>Choose project files...</option>
-                            <option value="1">Project description</option>
-                            <option value="2">Project plan</option>
-                            <option value="3">Report</option>
-                            <option value="4">Final report</option>
-                            <option value="5">Bidding for reports</option>
-                            <option value="6">Feedback for reports by readers</option>
-                            <option value="7">Final evaluation for final reports</option>
-                            <option value="8">Feedback for project plan</option>
-                            <option value="9">Confirmation of supervision</option>
-                            <option value="10">Project report assessment</option>
-                            <option value="11">Feedback for reports by opponents</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <input type="date" placeholder="date" class="form-control">
-                    </div>
-                    <div class="col-md-2 form-group">
-                        <button class="btn btn-primary" type="submit">Set Deadline</button>
-                    </div>
+                <h3>Initialize Semester</h3>
+
+                <div class="card">
+                    <table class="table table-striped hover-square">
+
+                        <thead>
+                        <tr class="table-primary">
+
+                            <th scope="col">Current Semester</th>
+                            <th scope="col">Semester Period</th>
+                            <th scope="col">Year</th>
+                            <th scope="col">Initialize</th>
+
+                        </thead>
+
+                        <tbody>
+                        <tr class="thead-light">
+
+                            <td>
+                                 <span th:text="${currentSemester.semesterPeriod} + ' of ' + ${currentSemester.year}">CurrentSemester
+                                 </span>
+                            </td>
+
+                            <form class="form" th:object="${semester}" th:action="@{'coordinator/initializeSemester'}" method="post">
+
+                                <td>
+
+                                    <div class="form-group">
+                                        <label for="semesterPeriod"></label>
+                                        <select class="form-control" id="semesterPeriod" th:field="*{semesterPeriod}">
+                                            <option th:each="semesterPeriod : ${semesterPeriods}" th:value="${semesterPeriod}" th:text="${semesterPeriod}">
+                                                SemesterPeriod</option>
+                                        </select>
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="form-group">
+                                        <label for="year"></label>
+                                        <select class="form-control" id="year" th:field="*{year}">
+                                            <option th:each="year : ${#numbers.sequence(#dates.year(#dates.createNow()), #dates.year(#dates.createNow())+5)}" th:value="${year}" th:text="${year}">
+                                                Year</option>
+                                        </select>
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <button class="col-md-12 btn btn-success" type="submit">Initialize</button>
+                                </td>
+                            </form>
+
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <h3>Grade</h3>
-                <div class="row">
-                    <div class="col-md-3 form-group">
-                        <select class="custom-select">
-                            <option selected>Choose thesis...</option>
-                            <option value="1">Thesis 1</option>
-                            <option value="2">Thesis 2</option>
-                            <option value="3">Thesis 3</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <select class="custom-select">
-                            <option selected>Choose project files...</option>
-                            <option value="1">Project description</option>
-                            <option value="2">Project plan</option>
-                            <option value="3">Final report</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <select class="custom-select">
-                            <option selected>Assign evaluation...</option>
-                            <option value="1">Pass</option>
-                            <option value="2">Fail</option>
-                            <option value="4">A</option>
-                            <option value="5">B</option>
-                            <option value="6">C</option>
-                            <option value="7">D</option>
-                            <option value="8">E</option>
-                            <option value="9">F</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 form-group">
-                        <button class="btn btn-primary" type="submit">Assign</button>
-                    </div>
-                </div>
-                <h3>Report</h3>
-                <div class="row">
-                    <div class="col-md-3 form-group">
-                        <select class="custom-select">
-                            <option selected>Choose thesis...</option>
-                            <option value="1">Thesis 1</option>
-                            <option value="2">Thesis 2</option>
-                            <option value="3">Thesis 3</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <select class="custom-select">
-                            <option selected>Choose reader or opponent ...</option>
-                            <option value="1">Reader 1</option>
-                            <option value="2">Reader 2</option>
-                            <option value="3">Opponent 1</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 form-group">
-                        <select class="custom-select">
-                            <option selected>Choose report...</option>
-                            <option value="1">Report 1</option>
-                            <option value="2">Report 2</option>
-                            <option value="3">Report 3</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 form-group">
-                        <button class="btn btn-primary" type="submit">Assign</button>
-                    </div>
+
+                <h3>Set Deadlines</h3>
+                <div class="card">
+
+                    <table class="table table-striped hover-square">
+
+                        <thead>
+                        <tr class="table-primary">
+
+                            <th scope="col">Current Semester</th>
+                            <th scope="col">Current Project Description Deadline</th>
+                            <th scope="col">Current Project Plan Deadline</th>
+                            <th scope="col">Current Report Deadline</th>
+                            <th scope="col">Current Final Report Deadline</th>
+
+                        </thead>
+
+                        <tbody>
+                        <tr class="thead-light">
+
+                            <td>
+                                 <span th:text="${currentSemester.semesterPeriod} + ' of ' + ${currentSemester.year}">CurrentSemester
+                                 </span>
+                            </td>
+
+                            <td>
+                                 <span th:text="${currentSemester.projectDescriptionDeadline}">CurrentProjectDescriptionDeadline
+                                 </span>
+                            </td>
+
+                            <td>
+                                 <span th:text="${currentSemester.projectPlanDeadline}">CurrentProjectPlanDeadline
+                                 </span>
+                            </td>
+
+                            <td>
+                                 <span th:text="${currentSemester.reportDeadline}">CurrentReportDeadline
+                                 </span>
+                            </td>
+
+                            <td>
+                                 <span th:text="${currentSemester.finalReportDeadline}">CurrentFinalReportDeadline
+                                 </span>
+                            </td>
+
+                            </tr>
+                         </tbody>
+                    </table>
+
+                    <table class="table table-striped hover-square table-responsive">
+
+                        <thead>
+                        <tr class="table-primary">
+
+                            <th scope="col">Set Project Description Deadline</th>
+                            <th scope="col">Set Project Plan Deadline</th>
+                            <th scope="col">Set Report Deadline</th>
+                            <th scope="col">Set Final Report Deadline</th>
+                            <th scope="col">Set</th>
+
+                        </thead>
+
+                        <tbody>
+                        <tr class="thead-light">
+
+                            <form class="form" th:object="${semester}" th:action="@{'coordinator/updateDeadline'}" method="post">
+
+                                <td>
+
+                                    <div class="form-group">
+                                        <label for="projectDescriptionDeadline"></label>
+                                        <input type="datetime-local" placeholder="date" th:name="projectDescriptionDeadline" id="projectDescriptionDeadline" class="form-control">
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="form-group">
+                                        <label for="projectPlanDeadline"></label>
+                                        <input type="datetime-local" placeholder="date" th:name="projectPlanDeadline" id="projectPlanDeadline" class="form-control">
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="form-group">
+                                        <label for="reportDeadline"></label>
+                                        <input type="datetime-local" placeholder="date" th:name="reportDeadline" id="reportDeadline" class="form-control">
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="form-group">
+                                        <label for="finalReportDeadline"></label>
+                                        <input type="datetime-local" placeholder="date" th:name="finalReportDeadline" id="finalReportDeadline" class="form-control">
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <button class="col-md-12 btn btn-success" type="submit">Set</button>
+                                </td>
+                            </form>
+
+                        </tr>
+                        </tbody>
+                    </table>
+
                 </div>
             </div>
         </div>
