@@ -34,6 +34,7 @@ public class SubmissionController {
     private final DocumentRepository documentRepository;
 
     public SubmissionController(StudentService studentService, UserService userService, FeedbackService feedbackService, DocumentRepository documentRepository) {
+
         this.studentService = studentService;
         this.userService = userService;
         this.feedbackService = feedbackService;
@@ -42,11 +43,13 @@ public class SubmissionController {
 
     @ModelAttribute("user")
     public User loggedInUser(Model model) {
+
         return userService.getCurrentUser();
     }
 
     @GetMapping("thesis")
     public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) throws MissingRoleException {
+
         model.addAttribute("thesis", studentService.getThesisForActiveSemesterByStudentId(studentId));
         model.addAttribute("studentId", studentId);
         return "pages/thesis";
@@ -54,6 +57,7 @@ public class SubmissionController {
 
     @GetMapping("/submission/view")
     public String viewSubmission(Model model, @RequestParam(name = "subId") Long submissionId) {
+
         Submission submission = feedbackService.getSubmissionById(submissionId);
         model.addAttribute("submission", submission);
         model.addAttribute("studentId", submission.getThesis().getStudent().getId());

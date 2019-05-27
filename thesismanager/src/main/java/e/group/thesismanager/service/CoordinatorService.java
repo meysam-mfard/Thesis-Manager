@@ -6,7 +6,6 @@ import e.group.thesismanager.model.*;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.List;
-import java.util.Set;
 
 public interface CoordinatorService {
 
@@ -14,9 +13,12 @@ public interface CoordinatorService {
 
     void initSemester(Year Year, SemesterPeriod semesterPeriod);
 
-    List<Semester> getSemesters();
+    Semester getCurrentSemester();
 
-    void setDeadline(SubmissionType type, LocalDateTime dateTime);
+    Semester setDeadline(LocalDateTime projectDescriptionDeadline,
+                         LocalDateTime projectPlanDeadline,
+                         LocalDateTime reportDeadline,
+                         LocalDateTime finalReportDeadline);
 
     List<User> getStudents();
 
@@ -24,12 +26,11 @@ public interface CoordinatorService {
 
     List<User> getOpponents();
 
-    void assignSupervisor(Thesis thesis, User supervisor) throws MissingRoleException;
+    List<User> getSupervisors();
 
-    void assignReaders(Thesis thesis, Set<User> readers) throws MissingRoleException;
+    Thesis assignSupervisor(String supervisorUsername, Long thesisId) throws MissingRoleException;
 
-    void assignOpponent(Thesis thesis, User opponent) throws MissingRoleException;
+    Thesis assignReaders(List<String> readersUsername, Long thesisId) throws MissingRoleException;
 
-    //Submission assessSubmission(Long submissionId, Float grade);
-
+    Thesis assignOpponent(String opponentUsername, Long thesisId) throws MissingRoleException;
 }

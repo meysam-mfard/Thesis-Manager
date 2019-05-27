@@ -5,23 +5,21 @@ import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
-import e.group.thesismanager.repository.FeedbackRepository;
-import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
-import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ReaderServiceImpl  extends FeedbackService implements ReaderService {
+public class ReaderServiceImpl implements ReaderService {
+
+    private ThesisRepository thesisRepository;
 
     @Autowired
-    public ReaderServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                         SubmissionRepository submissionRepository, UserRepository userRepository) {
+    public ReaderServiceImpl(ThesisRepository thesisRepository) {
 
-        super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
+        this.thesisRepository = thesisRepository;
     }
 
     @Override

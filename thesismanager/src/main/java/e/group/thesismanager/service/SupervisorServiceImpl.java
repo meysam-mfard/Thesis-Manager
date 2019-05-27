@@ -6,22 +6,21 @@ import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.SupervisorRequestStatus;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
-import e.group.thesismanager.repository.FeedbackRepository;
-import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
-import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class SupervisorServiceImpl extends FeedbackService implements SupervisorService {
+public class SupervisorServiceImpl implements SupervisorService {
+
+    private ThesisRepository thesisRepository;
 
     @Autowired
-    public SupervisorServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                         SubmissionRepository submissionRepository, UserRepository userRepository) {
-        super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
+    public SupervisorServiceImpl(ThesisRepository thesisRepository) {
+
+        this.thesisRepository = thesisRepository;
     }
 
     @Override

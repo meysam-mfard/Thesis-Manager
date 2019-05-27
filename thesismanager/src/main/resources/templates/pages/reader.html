@@ -22,6 +22,7 @@
                 <th scope="col">Author</th>
                 <th scope="col">Submission</th>
                 <th scope="col">Feedback</th>
+                <th scope="col">Assess</th>
             </tr>
             </thead>
             <tbody>
@@ -49,6 +50,17 @@
                         <hr>
                     </a>
                 </td>
+
+                <td>
+                    <a th:each="submission : ${thesis.submissions}">
+                        <a th:if="${submission.type.toString() == 'Final Report'}" th:href="@{'/submission/assess?subId=' + ${submission.id} + '&decGr=true'}">
+                            Give Assessment</a>
+                        <a th:unless="${submission.type.toString() == 'Final Report'}">
+                            Not authorized to assess this submission</a>
+                        <hr>
+                    </a>
+                </td>
+
             </tr>
             </tbody>
         </table>
