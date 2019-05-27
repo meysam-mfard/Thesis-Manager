@@ -32,7 +32,7 @@ public class OpponentController {
     public String getOpponentHome(Model model) {
 
         User opponent = userService.getCurrentUser();
-        model.addAttribute("thesis", opponentService.getThesis(opponent));
+        model.addAttribute("thesisList", opponentService.getThesis(opponent));
         return "pages/opponent";
     }
 }

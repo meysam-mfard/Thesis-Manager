@@ -3,6 +3,7 @@ package e.group.thesismanager.controller;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
 import e.group.thesismanager.service.CoordinatorService;
+import e.group.thesismanager.service.SemesterService;
 import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -24,11 +25,13 @@ public class CoordinatorController {
 
     private final CoordinatorService coordinatorService;
     private final UserService userService;
+    private final SemesterService semesterService;
 
-    public CoordinatorController(CoordinatorService coordinatorService, UserService userService) {
+    public CoordinatorController(CoordinatorService coordinatorService, UserService userService, SemesterService semesterService) {
 
         this.coordinatorService = coordinatorService;
         this.userService = userService;
+        this.semesterService = semesterService;
     }
 
     @ModelAttribute("user")
@@ -52,7 +55,7 @@ public class CoordinatorController {
     @GetMapping("coordinator")
     public String getCoordinatorHome(Model model) {
 
-        model.addAttribute("currentSemester", coordinatorService.getCurrentSemester());
+        model.addAttribute("currentSemester", semesterService.getCurrentSemester());
         model.addAttribute("students", coordinatorService.getStudents());
         model.addAttribute("readers", coordinatorService.getReaders());
         model.addAttribute("opponents", coordinatorService.getOpponents());
@@ -72,7 +75,7 @@ public class CoordinatorController {
 
         try {
 
-        coordinatorService.setDeadline(parseDateTimeString(projectDescriptionDeadline),
+        coordinatorService.setAllDeadlines(parseDateTimeString(projectDescriptionDeadline),
                 parseDateTimeString(projectPlanDeadline), parseDateTimeString(reportDeadline),
                         parseDateTimeString(finalReportDeadline));
 
