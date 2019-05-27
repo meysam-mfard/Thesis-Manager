@@ -3,13 +3,16 @@ package e.group.thesismanager.service;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
-import e.group.thesismanager.repository.*;
+import e.group.thesismanager.repository.SemesterRepository;
+import e.group.thesismanager.repository.ThesisRepository;
+import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,6 +71,29 @@ public class CoordinatorServiceImpl implements CoordinatorService {
         semester.setProjectPlanDeadline(projectPlanDeadline);
         semester.setReportDeadline(reportDeadline);
         semester.setFinalReportDeadline(finalReportDeadline);
+        return semesterRepository.save(semester);
+    }
+
+    @Override
+    public Semester setDeadline(SubmissionType type, LocalDateTime deadline) {
+        if (deadline.isBefore(LocalDateTime.now()))
+            throw new IllegalArgumentException("The given deadline has already passed!");
+        Semester semester = semesterRepository.findByActiveIsTrue();
+
+        switch (type) {
+            case PROJECT_DESCRIPTION:
+                semester.setProjectDescriptionDeadline(deadline);
+                break;
+            case PROJECT_PLAN:
+                semester.setProjectPlanDeadline(deadline);
+                break;
+            case REPORT:
+                semester.setReportDeadline(deadline);
+                break;
+            case FINAL_REPORT:
+                semester.setFinalReportDeadline(deadline);
+                break;
+        }
         return semesterRepository.save(semester);
     }
 

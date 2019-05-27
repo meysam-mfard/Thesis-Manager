@@ -1,7 +1,9 @@
 package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
-import e.group.thesismanager.model.*;
+import e.group.thesismanager.model.SupervisorRequestStatus;
+import e.group.thesismanager.model.Thesis;
+import e.group.thesismanager.model.User;
 
 import java.util.List;
 

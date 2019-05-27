@@ -20,20 +20,23 @@ import static org.mockito.Mockito.verify;
 class StudentServiceImplTest {
     private ThesisRepository mockThesisRepository;
     private SubmissionRepository mockSubmissionRepository;
-    private SemesterRepository mockSemesterRepository;
     private UserRepository mockUserRepository;
+    private SemesterService mockSemesterService;
 
+    private SemesterRepository semesterRepository;
     private StudentService studentService;
 
     @BeforeEach
     void setUp() {
         mockThesisRepository = Mockito.mock(ThesisRepository.class);
         mockSubmissionRepository = Mockito.mock(SubmissionRepository.class);
+        semesterRepository = Mockito.mock(SemesterRepository.class);
+        mockSemesterService = Mockito.mock(SemesterService.class);
 
         studentService = new StudentServiceImpl(mockThesisRepository,
                                                 mockSubmissionRepository,
-                                                mockSemesterRepository,
-                                                mockUserRepository);
+                                                mockUserRepository,
+                                                mockSemesterService);
     }
 
     @AfterEach
@@ -93,6 +96,8 @@ class StudentServiceImplTest {
         Thesis thesis = new Thesis();
         thesis.setId(ID);
         //thesis.addSubmission(submission);
+
+        Semester semester = semesterRepository.findByActiveIsTrue();
 
         ArgumentCaptor<Thesis> argumentCaptor = ArgumentCaptor.forClass(Thesis.class);
 

@@ -20,6 +20,8 @@ public interface CoordinatorService {
                          LocalDateTime reportDeadline,
                          LocalDateTime finalReportDeadline);
 
+    Semester setDeadline(SubmissionType type, LocalDateTime deadline);
+
     List<User> getStudents();
 
     List<User> getReaders();

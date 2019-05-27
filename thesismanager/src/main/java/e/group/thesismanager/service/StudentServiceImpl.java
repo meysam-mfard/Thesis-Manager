@@ -1,37 +1,36 @@
 package e.group.thesismanager.service;
 
+import e.group.thesismanager.exception.DeadlinePassed;
 import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
-import e.group.thesismanager.repository.SemesterRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
 import e.group.thesismanager.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class StudentServiceImpl implements StudentService {
 
     private final ThesisRepository thesisRepository;
     private final SubmissionRepository submissionRepository;
-    private final SemesterRepository semesterRepository;
     private final UserRepository userRepository;
+    private final SemesterService semesterService;
 
-    @Autowired
     public StudentServiceImpl(ThesisRepository thesisRepository,
                               SubmissionRepository submissionRepository,
-                              SemesterRepository semesterRepository,
-                              UserRepository userRepository) {
+                              UserRepository userRepository, SemesterService semesterService) {
 
         this.thesisRepository = thesisRepository;
         this.submissionRepository = submissionRepository;
-        this.semesterRepository = semesterRepository;
         this.userRepository = userRepository;
+        this.semesterService = semesterService;
     }
 
     @Override
@@ -77,11 +76,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Thesis> getThesesByStudentId(Long studentId) {
         return thesisRepository.findThesesByStudentId(studentId);
-    }
-
-    @Override
-    public List<Semester> getSemesters() {
-        return semesterRepository.findAll();
     }
 
     @Override
@@ -131,12 +125,65 @@ public class StudentServiceImpl implements StudentService {
         submitDocument(thesis, finalReport, SubmissionType.FINAL_REPORT);
     }
 
+    //Is student allowed to edit/add a Submission(considering criteria such as deadline)
+    @Override
+    public Boolean isSubmissionAllowed(Long studentId, SubmissionType submissionType) {
+
+        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+                new NotFoundException("Student does not exist. Student Id:" + studentId));
+
+        switch (submissionType) {
+            case PROJECT_DESCRIPTION:
+                return isProjectDescriptionSubmissionAllowed(student);
+            case PROJECT_PLAN:
+                return isProjectPlanSubmissionAllowed(student);
+            case REPORT:
+                return isReportSubmissionAllowed(student);
+            case FINAL_REPORT:
+                return isFinalReportSubmissionAllowed(student);
+            default:
+                log.error("No such role exists.");
+                return false;
+        }
+    }
+
+    //Get the list of Submissions that the student is allowed to edit/add
+    @Override
+    public List<Submission> getAllowedSubmission(Long studentId) {
+        //TODO: should it return new instances of submissions?
+        return null;
+    }
+
+    private Boolean isProjectDescriptionSubmissionAllowed(User student) {
+
+        return true;
+    }
+
+    private Boolean isProjectPlanSubmissionAllowed(User student) {
+
+        return true;
+    }
+
+    private Boolean isReportSubmissionAllowed(User student) {
+
+        return true;
+    }
+    private Boolean isFinalReportSubmissionAllowed(User student) {
+
+        return true;
+    }
+
     private void submitDocument(Thesis thesis, Document document, SubmissionType type){
 
-        Submission submission = new Submission();
-        submission.setType(type);
-        submission.setSubmittedDocument(document);
-        thesis.addSubmission(submission);
-        thesisRepository.save(thesis);
+        if (!semesterService.isDeadlinePassed(type)) {
+            Submission submission = new Submission();
+            submission.setType(type);
+            submission.setSubmittedDocument(document);
+            thesis.addSubmission(submission);
+            thesisRepository.save(thesis);
+        }
+        else
+            throw new DeadlinePassed("Deadline is passed.");
+
     }
 }
