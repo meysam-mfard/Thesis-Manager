@@ -1,5 +1,6 @@
 package e.group.thesismanager.repository;
 
+import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     List<User> findAllByFirstNameLikeAndLastNameLikeAndUsernameLike(String firstName, String lastName, String username);
+
+    Optional<User> findUserByIdAndRolesContaining(Long userId, Role role);
 }

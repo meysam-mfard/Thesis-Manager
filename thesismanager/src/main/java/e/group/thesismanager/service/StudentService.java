@@ -2,10 +2,7 @@ package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
-import e.group.thesismanager.model.Document;
-import e.group.thesismanager.model.Semester;
-import e.group.thesismanager.model.Thesis;
-import e.group.thesismanager.model.User;
+import e.group.thesismanager.model.*;
 
 import java.util.List;
 
@@ -23,8 +20,6 @@ public interface StudentService {
 
     List<Thesis> getThesesByStudentId(Long studentId);
 
-    List<Semester> getSemesters();
-
     List<User> getSupervisors();
 
     void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException, InvalidSupervisorRequestException;
@@ -36,4 +31,9 @@ public interface StudentService {
     void submitReport(Thesis thesis, Document report);
 
     void submitFinalReport(Thesis thesis, Document finalReport);
+
+    Boolean isSubmissionAllowed(Long studentId, SubmissionType submissionType);
+
+    //Get the list of Submissions that the student is allowed to edit/add
+    List<Submission> getAllowedSubmission(Long studentId);
 }

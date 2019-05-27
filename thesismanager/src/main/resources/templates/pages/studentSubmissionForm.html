@@ -14,7 +14,7 @@
 <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
 <div class="container" style="margin-top: 100px">
 
-    <div class="card rounded-lg bg-light shadow p-2">
+    <div class="card rounded-lg bg-light shadow p-2" th:fragment="studentSubmissionFrom-fragment (submission)">
         <div class="card-header rounded bg-info">
             <h3 class="bg-info  text-white" th:text="${submission.type}">
                 Project Plan
@@ -27,7 +27,7 @@
                     <h4>Submission</h4>
                 </div>
                 <div class="card-body bg-light rounded">
-                    <form class="form" th:action="@{/submission/student(studentId=${author.id}, subId=${submission.id})}"
+                    <form class="form" th:action="@{/submission/student(studentId=${user.id}, subId=${submission.id})}"
                           method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="feedbackComment"><h4>Comment</h4></label>

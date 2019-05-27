@@ -3,6 +3,7 @@ package e.group.thesismanager.controller;
 import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
+import e.group.thesismanager.service.SemesterService;
 import e.group.thesismanager.service.StudentService;
 import e.group.thesismanager.service.UserService;
 import org.springframework.security.core.Authentication;
@@ -17,10 +18,12 @@ import java.util.Arrays;
 public class StudentController {
     private final StudentService studentService;
     private final UserService userService;
+    private final SemesterService semesterService;
 
-    public StudentController(StudentService studentService, UserService userService) {
+    public StudentController(StudentService studentService, UserService userService, SemesterService semesterService) {
         this.studentService = studentService;
         this.userService = userService;
+        this.semesterService = semesterService;
     }
 
     @ModelAttribute("user")
@@ -28,10 +31,13 @@ public class StudentController {
         return userService.getCurrentUser();
     }
 
-    @RequestMapping("")
-    public String getStudentHome(Model model,
-                                 @ModelAttribute User student) {
+    @GetMapping("")
+    public String getStudentHome(Model model) throws MissingRoleException {
 
+        User student = userService.getCurrentUser();
+        //TODO: Add allowed submissions
+        model.addAttribute("thesis"
+                , studentService.getThesisForActiveSemesterByStudentId(student.getId()));
         model.addAttribute("theses", studentService.getTheses(student));
 
         return "pages/student";
@@ -49,7 +55,7 @@ public class StudentController {
 
     @GetMapping("submission")
     public String getSubmissionFrom(Model model, Authentication authentication) {
-        model.addAttribute("semesters", studentService.getSemesters()); // todo: filter by "active" semesters?
+        model.addAttribute("semesters", semesterService.getSemesters()); // todo: filter by "active" semesters?
         model.addAttribute("submissionTypes", Arrays.asList(SubmissionType.values()));
 
         return "pages/studentSubmissionForm";
@@ -92,7 +98,7 @@ public class StudentController {
     @GetMapping("/requestSupervisor")
     public String getRequestSupervisor(Model model) {
         model.addAttribute("supervisors", studentService.getSupervisors());
-        model.addAttribute("semesters", studentService.getSemesters()); // todo: filter by "active" semesters?
+        model.addAttribute("semesters", semesterService.getSemesters()); // todo: filter by "active" semesters?
 
         return "request-supervisor";
     }

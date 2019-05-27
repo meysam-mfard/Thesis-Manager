@@ -12,11 +12,18 @@
 
 <body>
 <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
-<div class="container" style="margin-top: 100px">
+
+<span style="display:block; height:50px;"></span>
+
+<div class="container" style="margin-top: 50px" id="thesis-container">
+
 
     <div class="accordion shadow p-2 bg-light rounded" id="accordion">
-
-
+        <div class="alert alert-dark" role="alert">
+            <h3 th:text="'Thesis activities - Student: '+ ${thesis.student.firstName} +' '+ ${thesis.student.lastName}">
+                Project Plan
+            </h3>
+        </div>
         <!--PROJECT DESCRIPTION-->
         <div class="card rounded-lg bg-light" th:each="submission : ${thesis.submissions}">
             <div class="card-header rounded" id="headingProjectDescription" th:attr="id='heading'+${submission.id}">
@@ -122,6 +129,7 @@
                 </div>
             </div>
         </div>
+
 
     </div>
 

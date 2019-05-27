@@ -49,6 +49,8 @@ public class CoordinatorServiceImpl extends FeedbackService implements Coordinat
 
     @Override
     public void setDeadline(SubmissionType type, LocalDateTime dateTime) {
+        if (dateTime.isBefore(LocalDateTime.now()))
+            throw new IllegalArgumentException("The given deadline has already passed!");
         Semester semester = semesterRepository.findByActiveIsTrue();
 
         switch (type) {
@@ -65,6 +67,7 @@ public class CoordinatorServiceImpl extends FeedbackService implements Coordinat
                 semester.setFinalReportDeadline(dateTime);
                 break;
         }
+        semesterRepository.save(semester);
     }
 
     private List<User> getUserByRole(Role role) {

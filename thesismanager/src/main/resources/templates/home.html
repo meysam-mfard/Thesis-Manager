@@ -18,7 +18,7 @@
             <h4>Welcome,  select a page please</h4>
         </div>
         <div class="card-body bg-dark rounded d-flex justify-content-around">
-            <a class="btn btn-primary btn-lg" role="button" sec:authorize="hasRole('ROLE_STUDENT')" th:href="@{/student/thesis/(stdId=${user.id})}">Student Page</a>
+            <a class="btn btn-primary btn-lg" role="button" sec:authorize="hasRole('ROLE_STUDENT')" th:href="@{/student}">Student Page</a>
             <a class="btn btn-primary btn-lg" role="button" sec:authorize="hasRole('ROLE_COORDINATOR')" th:href="@{/coordinator}">Coordinator Page</a>
             <a class="btn btn-primary btn-lg" role="button" sec:authorize="hasRole('ROLE_SUPERVISOR')" th:href="@{/supervisor}">Supervisor Page</a>
             <a class="btn btn-primary btn-lg" role="button" sec:authorize="hasRole('ROLE_READER')" th:href="@{/reader}">Reader Page</a>
