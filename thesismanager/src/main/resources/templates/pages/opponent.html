@@ -74,7 +74,7 @@
                                 <tr class="table-primary" th:each="eachThesis : ${searchedThesisList}">
 
                                     <td>
-                                        <a th:href="@{'/student/thesis?stdId=' + ${eachThesis.id}}"><span
+                                        <a th:href="@{'/opponent/thesis?stdId=' + ${eachThesis.id}}"><span
                                                 th:text="${eachThesis.student.firstName} + ' ' + ${eachThesis.student.lastName}">
                         StudentName</span>
                                         </a>
@@ -140,7 +140,7 @@
                                 <tr class="table-primary" th:each="thesis : ${thesisList}">
 
                                     <td>
-                                        <a th:href="@{'/student/thesis?stdId=' + ${thesis.id}}"><span
+                                        <a th:href="@{'/opponent/thesis?stdId=' + ${thesis.id}}"><span
                                                 th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                         StudentName</span>
                                         </a>

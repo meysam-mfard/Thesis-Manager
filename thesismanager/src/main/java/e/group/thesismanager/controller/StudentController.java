@@ -9,12 +9,14 @@ import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Controller
-@RequestMapping("student")
 public class StudentController extends AbstractDocumentSubmission{
 
     private final StudentService studentService;
@@ -32,7 +34,7 @@ public class StudentController extends AbstractDocumentSubmission{
         return userService.getCurrentUser();
     }
 
-    @GetMapping({"", "/"})
+    @GetMapping("student")
     public String getStudentHome(Model model) throws MissingRoleException {
 
         User student = userService.getCurrentUser();
@@ -51,17 +53,14 @@ public class StudentController extends AbstractDocumentSubmission{
         return "pages/student";
     }
 
-    @GetMapping("thesis")
-    public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) throws MissingRoleException {
-        /*if (!userService.getCurrentUser().getId().equals(studentId))
-            //todo:
-            return "403error";*/
+    @GetMapping({"/student/thesis", "/reader/thesis", "/opponent/thesis", "/supervisor/thesis", "/coordinator/thesis"})
+    public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) {
         model.addAttribute("thesis", studentService.getThesisByStudentId(studentId));
         model.addAttribute("studentId", studentId);
         return "pages/thesis";
     }
 
-    @PostMapping("/submit")
+    @PostMapping("/student/submit")
     public String postSubmit(Model model, @RequestParam(name = "stdId") Long studentId
             , @RequestParam(name = "subType") String submissionTypeStr
             , @RequestParam String comment
@@ -89,7 +88,7 @@ public class StudentController extends AbstractDocumentSubmission{
         return "redirect:/student";
     }
 
-    @GetMapping("/requestSupervisor")
+    @GetMapping("/student/requestSupervisor")
     public String getRequestSupervisor(Model model) {
         model.addAttribute("supervisors", studentService.getSupervisors());
         model.addAttribute("semesters", semesterService.getSemesters()); // todo: filter by "active" semesters?
@@ -97,7 +96,7 @@ public class StudentController extends AbstractDocumentSubmission{
         return "request-supervisor";
     }
 
-    @PostMapping("/requestSupervisor")
+    @PostMapping("/student/requestSupervisor")
     public String postRequestSupervisor(@ModelAttribute User student,
                                         @ModelAttribute Semester semester,
                                         @ModelAttribute User supervisor) {

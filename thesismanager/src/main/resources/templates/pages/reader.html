@@ -65,7 +65,7 @@
                                 <tbody>
                                 <tr class="table-primary" th:each="thesis : ${searchedThesisList}">
                                     <td>
-                                        <a th:href="@{'/student/thesis?stdId=' + ${thesis.id}}"><span
+                                        <a th:href="@{'/reader/thesis?stdId=' + ${thesis.id}}"><span
                                                 th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                         StudentName</span>
                                         </a>
@@ -124,7 +124,7 @@
                                 <tbody>
                                 <tr class="table-primary" th:each="thesis : ${searchedPossibleThesisList}">
                                     <td>
-                                        <a th:href="@{'/student/thesis?stdId=' + ${thesis.id}}">
+                                        <a th:href="@{'/reader/thesis?stdId=' + ${thesis.id}}">
                         <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                             StudentName</span>
                                         </a>
@@ -179,7 +179,7 @@
                             <tbody>
                             <tr class="table-primary" th:each="thesis : ${assignedTheses}">
                                 <td>
-                                    <a th:href="@{'/student/thesis?stdId=' + ${thesis.id}}"><span
+                                    <a th:href="@{'/reader/thesis?stdId=' + ${thesis.id}}"><span
                                             th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                         StudentName</span>
                                     </a>
@@ -254,7 +254,7 @@
                             <tbody>
                             <tr class="table-primary" th:each="thesis : ${possibleTheses}">
                                 <td>
-                                    <a th:href="@{'/student/thesis?stdId=' + ${thesis.id}}">
+                                    <a th:href="@{'/reader/thesis?stdId=' + ${thesis.id}}">
                         <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                             StudentName</span>
                                     </a>
