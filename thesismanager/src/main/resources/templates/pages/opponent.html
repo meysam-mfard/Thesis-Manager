@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Opponent page</title>
@@ -16,8 +16,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="/css/admin.css"/>
-    <head>
+</head>
 
 <body>
 <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
@@ -75,7 +74,7 @@
                                 <tr class="table-primary" th:each="eachThesis : ${searchedThesisList}">
 
                                     <td>
-                                        <a th:href="@{'/student/thesis?stdId=' + ${eachThesis.id}}"><span
+                                        <a th:href="@{'/opponent/thesis?stdId=' + ${eachThesis.id}}"><span
                                                 th:text="${eachThesis.student.firstName} + ' ' + ${eachThesis.student.lastName}">
                         StudentName</span>
                                         </a>
@@ -141,7 +140,7 @@
                                 <tr class="table-primary" th:each="thesis : ${thesisList}">
 
                                     <td>
-                                        <a th:href="@{'/student/thesis?stdId=' + ${thesis.id}}"><span
+                                        <a th:href="@{'/opponent/thesis?stdId=' + ${thesis.id}}"><span
                                                 th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                         StudentName</span>
                                         </a>

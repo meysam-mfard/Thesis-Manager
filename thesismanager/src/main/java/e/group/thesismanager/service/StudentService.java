@@ -3,7 +3,9 @@ package e.group.thesismanager.service;
 import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface StudentService {
@@ -14,7 +16,7 @@ public interface StudentService {
 
     Thesis getThesis(User student, Semester semester);
 
-    Thesis getThesisForActiveSemesterByStudentId(Long studentId) throws MissingRoleException;
+    Thesis getThesisByStudentId(Long studentId);
 
     List<Thesis> getTheses(User student);
 
@@ -34,6 +36,8 @@ public interface StudentService {
 
     Boolean isSubmissionAllowed(Long studentId, SubmissionType submissionType);
 
-    //Get the list of Submissions that the student is allowed to edit/add
-    List<Submission> getAllowedSubmission(Long studentId);
+    List<SubmissionType> getAllowedSubmissionTypes(Long studentId);
+
+    Submission submitDocument(Long studentId, String comment, MultipartFile multipartFile
+            , SubmissionType submissionType) throws IOException;
 }
