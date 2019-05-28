@@ -6,16 +6,17 @@ import e.group.thesismanager.model.*;
 import e.group.thesismanager.service.SemesterService;
 import e.group.thesismanager.service.StudentService;
 import e.group.thesismanager.service.UserService;
-import org.springframework.security.core.Authentication;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-
+@Slf4j
 @Controller
 @RequestMapping("student")
-public class StudentController {
+public class StudentController extends AbstractDocumentSubmission{
+
     private final StudentService studentService;
     private final UserService userService;
     private final SemesterService semesterService;
@@ -31,14 +32,21 @@ public class StudentController {
         return userService.getCurrentUser();
     }
 
-    @GetMapping("")
+    @GetMapping({"", "/"})
     public String getStudentHome(Model model) throws MissingRoleException {
 
         User student = userService.getCurrentUser();
-        //TODO: Add allowed submissions
-        model.addAttribute("thesis"
-                , studentService.getThesisForActiveSemesterByStudentId(student.getId()));
-        model.addAttribute("theses", studentService.getTheses(student));
+
+        model.addAttribute("allowedSubmissionTypes", studentService.getAllowedSubmissionTypes(student.getId()));
+
+        Thesis thesis = null;
+        try {
+            thesis = studentService.getThesisByStudentId(student.getId());
+        } catch (Exception e) {
+            thesis = null;
+        }
+        model.addAttribute("thesis", thesis);
+        //model.addAttribute("theses", studentService.getTheses(student));
 
         return "pages/student";
     }
@@ -48,51 +56,37 @@ public class StudentController {
         /*if (!userService.getCurrentUser().getId().equals(studentId))
             //todo:
             return "403error";*/
-        model.addAttribute("thesis", studentService.getThesisForActiveSemesterByStudentId(studentId));
+        model.addAttribute("thesis", studentService.getThesisByStudentId(studentId));
         model.addAttribute("studentId", studentId);
         return "pages/thesis";
     }
 
-    @GetMapping("submission")
-    public String getSubmissionFrom(Model model, Authentication authentication) {
-        model.addAttribute("semesters", semesterService.getSemesters()); // todo: filter by "active" semesters?
-        model.addAttribute("submissionTypes", Arrays.asList(SubmissionType.values()));
-
-        return "pages/studentSubmissionForm";
-    }
-
     @PostMapping("/submit")
-    public String postSubmit(@ModelAttribute User student,
-                             @ModelAttribute byte[] file,
-                             @ModelAttribute String fileName,
-                             @ModelAttribute String fileType,
-                             @ModelAttribute Semester semester,
-                             @ModelAttribute SubmissionType type) {
+    public String postSubmit(Model model, @RequestParam(name = "stdId") Long studentId
+            , @RequestParam(name = "subType") String submissionTypeStr
+            , @RequestParam String comment
+            , @RequestParam MultipartFile file) {
 
-        try {
-            Thesis thesis = studentService.getThesis(student, semester);
-
-            if(thesis == null) {
-                thesis = studentService.initThesis(student, semester);
-            }
-
-            Document document = new Document();
-            document.setFile(file);
-            document.setFileName(fileName);
-            document.setFileType(fileType);
-            document.setAuthor(student);
-
-            Submission submission = new Submission();
-            submission.setType(type);
-            submission.setSubmittedDocument(document);
-
-            thesis.addSubmission(submission);
-
-        } catch (MissingRoleException e) {
-            return "pages/student-submit?fail";
+        //Validating comment size, file type and file size
+        String errorMessage = getCommentErrorMessageIfNotAcceptable(comment);
+        if(errorMessage == null)
+            errorMessage = getFileErrorMessageIfNotAcceptable(file);
+        if( errorMessage != null) {
+            log.error(errorMessage);
+            model.addAttribute("errorMessage", errorMessage);
+            return "pages/error";
         }
 
-        return "pages/student-submit?success";
+        SubmissionType submissionType = SubmissionType.strToType(submissionTypeStr);
+        try {
+            Submission submission = studentService.submitDocument(studentId, comment, file, submissionType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", submissionType.toString() + " submission was not possible.");
+            return "pages/error";
+        }
+
+        return "redirect:/student";
     }
 
     @GetMapping("/requestSupervisor")

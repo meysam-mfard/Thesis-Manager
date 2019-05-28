@@ -1,6 +1,8 @@
 package e.group.thesismanager.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,6 +17,9 @@ public class User extends BaseEntity {
 
     @Column(unique = true)
     private String username;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)

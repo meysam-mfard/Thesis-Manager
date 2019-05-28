@@ -10,8 +10,11 @@ import e.group.thesismanager.repository.ThesisRepository;
 import e.group.thesismanager.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -61,10 +64,10 @@ public class StudentServiceImpl implements StudentService {
                 new NotFoundException("Thesis not found. Student Id: " + student.getId() + " Semester Id: " + semester.getId()));
     }
 
+    //Gets the active thesis
     @Override
-    public Thesis getThesisForActiveSemesterByStudentId(Long studentId) {
-        return thesisRepository.findThesesByStudentId(studentId).stream()
-                .filter(thesis1 -> thesis1.getSemester().isActive()).findFirst()
+    public Thesis getThesisByStudentId(Long studentId) {
+        return thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId)
                 .orElseThrow(() -> new NotFoundException("No active thesis for student Id: "+studentId));
     }
 
@@ -149,9 +152,24 @@ public class StudentServiceImpl implements StudentService {
 
     //Get the list of Submissions that the student is allowed to edit/add
     @Override
-    public List<Submission> getAllowedSubmission(Long studentId) {
-        //TODO: should it return new instances of submissions?
-        return null;
+    public List<SubmissionType> getAllowedSubmissionTypes(Long studentId) {
+        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+                new NotFoundException("Student does not exist. Student Id:" + studentId));
+
+        List<SubmissionType> result = new LinkedList<>();
+        if(!thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).isPresent())
+            return result;
+
+        if(isProjectDescriptionSubmissionAllowed(student))
+            result.add(SubmissionType.PROJECT_DESCRIPTION);
+        if(isProjectPlanSubmissionAllowed(student))
+            result.add(SubmissionType.PROJECT_PLAN);
+        if(isReportSubmissionAllowed(student))
+            result.add(SubmissionType.REPORT);
+        if(isFinalReportSubmissionAllowed(student))
+            result.add(SubmissionType.FINAL_REPORT);
+
+        return result;
     }
 
     private Boolean isProjectDescriptionSubmissionAllowed(User student) {
@@ -176,7 +194,7 @@ public class StudentServiceImpl implements StudentService {
     private void submitDocument(Thesis thesis, Document document, SubmissionType type){
 
         if (!semesterService.isDeadlinePassed(type)) {
-            Submission submission = new Submission();
+            Submission submission = new Submission(thesis, type);
             submission.setType(type);
             submission.setSubmittedDocument(document);
             thesis.addSubmission(submission);
@@ -185,5 +203,37 @@ public class StudentServiceImpl implements StudentService {
         else
             throw new DeadlinePassed("Deadline is passed.");
 
+    }
+
+    @Override
+    public Submission submitDocument(Long studentId, String comment, MultipartFile multipartFile
+            , SubmissionType submissionType) throws IOException {
+        Thesis thesis = thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).orElseThrow(() ->
+                new NotFoundException("No thesis exists for student ID : " + studentId));
+        if (!isSubmissionAllowed(studentId, submissionType))
+            throw new RuntimeException(submissionType + " submission is not allowed for Student ID " + studentId);
+
+        Submission submission = submissionRepository.findByThesisAndType(thesis, submissionType)
+                .orElse(new Submission(thesis, submissionType));
+
+        Document document = submission.getSubmittedDocument();
+
+        //adding file
+        if(!multipartFile.isEmpty()) {
+            byte[] file = new byte[multipartFile.getBytes().length];
+            int i = 0;
+            for (byte b : multipartFile.getBytes()){
+                file[i++] = b;
+            }
+
+            document.setFile(file);
+            document.setFileName(multipartFile.getOriginalFilename());
+            document.setFileType(multipartFile.getContentType());
+        }
+
+        document.setComment(comment);
+        document.setAuthor(thesis.getStudent());
+
+        return submissionRepository.save(submission);
     }
 }
