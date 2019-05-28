@@ -26,4 +26,9 @@ public class LoginController {
         model.addAttribute("user", user);
         return "home";
     }
+
+    @GetMapping("403error")
+    public String get403Error() {
+        return "/pages/403error";
+    }
 }

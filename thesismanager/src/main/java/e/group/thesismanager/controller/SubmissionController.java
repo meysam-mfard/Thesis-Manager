@@ -10,6 +10,7 @@ import e.group.thesismanager.repository.DocumentRepository;
 import e.group.thesismanager.service.FeedbackService;
 import e.group.thesismanager.service.StudentService;
 import e.group.thesismanager.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,8 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@Slf4j
 @Controller
-public class SubmissionController {
+public class SubmissionController extends AbstractDocumentSubmission {
 
     private final StudentService studentService;
     private final UserService userService;
@@ -50,7 +52,7 @@ public class SubmissionController {
     @GetMapping("thesis")
     public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) throws MissingRoleException {
 
-        model.addAttribute("thesis", studentService.getThesisForActiveSemesterByStudentId(studentId));
+        model.addAttribute("thesis", studentService.getThesisByStudentId(studentId));
         model.addAttribute("studentId", studentId);
         return "pages/thesis";
     }
@@ -97,6 +99,16 @@ public class SubmissionController {
             , @RequestParam(name = "role") Role userRole
             , @RequestParam String comment
             , @RequestParam MultipartFile file) throws IOException, MissingRoleException {
+
+        //Validating comment size, file type and file size
+        String errorMessage = getCommentErrorMessageIfNotAcceptable(comment);
+        if(errorMessage == null)
+            errorMessage = getFileErrorMessageIfNotAcceptable(file);
+        if( errorMessage != null) {
+            log.error(errorMessage);
+            model.addAttribute("errorMessage", errorMessage);
+            return "pages/error";
+        }
 
         feedbackService.feedbackOnSubmission(submissionId, comment, file, userService.getCurrentUser().getId(), userRole);
         Submission submission = feedbackService.getSubmissionById(submissionId);
