@@ -2,6 +2,7 @@ package e.group.thesismanager.controller;
 
 import e.group.thesismanager.model.SupervisorRequestStatus;
 import e.group.thesismanager.model.User;
+import e.group.thesismanager.service.SearchService;
 import e.group.thesismanager.service.SupervisorService;
 import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,17 +22,25 @@ public class SupervisorController {
 
     private final SupervisorService supervisorService;
     private final UserService userService;
+    private final SearchService searchService;
 
-    public SupervisorController(SupervisorService supervisorService, UserService userService) {
+    public SupervisorController(SupervisorService supervisorService, UserService userService, SearchService searchService) {
 
         this.supervisorService = supervisorService;
         this.userService = userService;
+        this.searchService = searchService;
     }
 
     @ModelAttribute("user")
     public User loggedInUser(Model model) {
 
         return userService.getCurrentUser();
+    }
+
+    @ModelAttribute("searchedUser")
+    public User emptyUser(Model model) {
+
+        return new User();
     }
 
     @GetMapping("supervisor")
@@ -57,5 +66,16 @@ public class SupervisorController {
         }
 
         return "redirect:/supervisor?" + SAVE_SUBMISSION_SUCCESS;
+    }
+
+    @PostMapping("supervisor/search")
+    public String searchThesis(Model model, @ModelAttribute("searchedUser") User user){
+
+        model.addAttribute("searchedThesisList", searchService.searchThesisForSupervisor("%" + user.getFirstName() + "%",
+                "%" + user.getLastName() + "%", SupervisorRequestStatus.ACCEPTED));
+        model.addAttribute("searchedRequestList", searchService.searchThesisForSupervisor("%" + user.getFirstName() + "%",
+                "%" + user.getLastName() + "%", SupervisorRequestStatus.REQUEST_SENT));
+
+        return "pages/supervisor";
     }
 }

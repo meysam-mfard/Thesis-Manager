@@ -3,6 +3,7 @@ package e.group.thesismanager.controller;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
 import e.group.thesismanager.service.CoordinatorService;
+import e.group.thesismanager.service.SearchService;
 import e.group.thesismanager.service.SemesterService;
 import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +27,14 @@ public class CoordinatorController {
     private final CoordinatorService coordinatorService;
     private final UserService userService;
     private final SemesterService semesterService;
+    private final SearchService searchService;
 
-    public CoordinatorController(CoordinatorService coordinatorService, UserService userService, SemesterService semesterService) {
+    public CoordinatorController(CoordinatorService coordinatorService, UserService userService, SemesterService semesterService, SearchService searchService) {
 
         this.coordinatorService = coordinatorService;
         this.userService = userService;
         this.semesterService = semesterService;
+        this.searchService = searchService;
     }
 
     @ModelAttribute("user")
@@ -52,16 +55,20 @@ public class CoordinatorController {
         return new Semester();
     }
 
+    @ModelAttribute("searchedUser")
+    public User emptyUser(Model model) {
+
+        return new User();
+    }
+
     @GetMapping("coordinator")
     public String getCoordinatorHome(Model model) {
 
         model.addAttribute("currentSemester", semesterService.getCurrentSemester());
-        model.addAttribute("students", coordinatorService.getStudents());
         model.addAttribute("readers", coordinatorService.getReaders());
         model.addAttribute("opponents", coordinatorService.getOpponents());
         model.addAttribute("supervisors", coordinatorService.getSupervisors());
         model.addAttribute("theses", coordinatorService.getThesis());
-        model.addAttribute("submissionTypes", SubmissionType.values());
         model.addAttribute("semesterPeriods", SemesterPeriod.values());
 
         return "pages/coordinator";
@@ -151,6 +158,18 @@ public class CoordinatorController {
         }
 
         return "redirect:/coordinator?" + SUCCESS;
+    }
+
+    @PostMapping("coordinator/search")
+    public String searchThesis(Model model, @ModelAttribute("searchedUser") User user){
+
+        model.addAttribute("searchedThesisList", searchService.searchThesisForCoordinator("%" + user.getFirstName() + "%",
+                "%" + user.getLastName() + "%"));
+        model.addAttribute("readers", coordinatorService.getReaders());
+        model.addAttribute("opponents", coordinatorService.getOpponents());
+        model.addAttribute("supervisors", coordinatorService.getSupervisors());
+
+        return "pages/coordinator";
     }
 
     private LocalDateTime parseDateTimeString(String dateTimeString) {

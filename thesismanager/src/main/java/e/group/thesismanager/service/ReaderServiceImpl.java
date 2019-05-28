@@ -9,6 +9,7 @@ import e.group.thesismanager.repository.ThesisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,12 +26,18 @@ public class ReaderServiceImpl implements ReaderService {
     @Override
     public List<Thesis> getPossibleTheses(User user) {
 
-        if (thesisRepository.findThesesByReaders(user).isEmpty() && thesisRepository.findThesesByBidders(user).isEmpty()) {
+        List<Thesis> allTheses = thesisRepository.findAll();
+        List<Thesis> possibleTheses = new ArrayList<Thesis>();
 
-            return thesisRepository.findAll();
+        for(Thesis thesis: allTheses) {
+
+            if(!thesis.getReaders().contains(user) && !thesis.getBidders().contains(user)) {
+
+                possibleTheses.add(thesis);
+            }
         }
 
-        return null;
+        return possibleTheses;
     }
 
     @Override
