@@ -54,9 +54,17 @@ public class StudentController extends AbstractDocumentSubmission{
     }
 
     @GetMapping({"/student/thesis", "/reader/thesis", "/opponent/thesis", "/supervisor/thesis", "/coordinator/thesis"})
-    public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) {
+    public String getThesisByStudentID(Model model, @RequestParam(name = "stdId") Long studentId ) {
         model.addAttribute("thesis", studentService.getThesisByStudentId(studentId));
         model.addAttribute("studentId", studentId);
+        return "pages/thesis";
+    }
+
+    @GetMapping({"/student/thesis/id", "/reader/thesis/id", "/opponent/thesis/id", "/supervisor/thesis/id", "/coordinator/thesis/id"})
+    public String getThesisByThesisId(Model model, @RequestParam(name = "thesisId") Long thesisId ) {
+        Thesis thesis = studentService.getThesisById(thesisId);
+        model.addAttribute("thesis", thesis);
+        model.addAttribute("studentId", thesis.getStudent().getId());
         return "pages/thesis";
     }
 
