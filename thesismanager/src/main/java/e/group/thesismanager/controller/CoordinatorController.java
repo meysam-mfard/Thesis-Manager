@@ -1,7 +1,10 @@
 package e.group.thesismanager.controller;
 
 import e.group.thesismanager.exception.MissingRoleException;
-import e.group.thesismanager.model.*;
+import e.group.thesismanager.model.Semester;
+import e.group.thesismanager.model.SemesterPeriod;
+import e.group.thesismanager.model.Thesis;
+import e.group.thesismanager.model.User;
 import e.group.thesismanager.service.CoordinatorService;
 import e.group.thesismanager.service.SearchService;
 import e.group.thesismanager.service.SemesterService;

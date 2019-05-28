@@ -35,4 +35,9 @@ public class LoginController {
         }
         return "home";
     }
+
+    @GetMapping("403error")
+    public String get403Error() {
+        return "/pages/403error";
+    }
 }
