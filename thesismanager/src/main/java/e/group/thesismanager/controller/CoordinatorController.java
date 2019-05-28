@@ -163,13 +163,24 @@ public class CoordinatorController {
     @PostMapping("coordinator/search")
     public String searchThesis(Model model, @ModelAttribute("searchedUser") User user){
 
-        model.addAttribute("searchedThesisList", searchService.searchThesisForCoordinator("%" + user.getFirstName() + "%",
-                "%" + user.getLastName() + "%"));
+        List<Thesis> foundList = searchService.searchThesisForCoordinator("%" + user.getFirstName() + "%",
+                "%" + user.getLastName() + "%");
+
+        if(foundList != null && !foundList.isEmpty()) {
+
+        model.addAttribute("searchedThesisList", foundList);
         model.addAttribute("readers", coordinatorService.getReaders());
         model.addAttribute("opponents", coordinatorService.getOpponents());
         model.addAttribute("supervisors", coordinatorService.getSupervisors());
 
+        model.addAttribute("currentSemester", semesterService.getCurrentSemester());
+        model.addAttribute("theses", coordinatorService.getThesis());
+        model.addAttribute("semesterPeriods", SemesterPeriod.values());
+
         return "pages/coordinator";
+        }
+
+        return "redirect:/coordinator?" + "NoThesisFound";
     }
 
     private LocalDateTime parseDateTimeString(String dateTimeString) {
