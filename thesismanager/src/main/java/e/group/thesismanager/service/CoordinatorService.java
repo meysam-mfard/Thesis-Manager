@@ -4,28 +4,31 @@ import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
-import java.util.Set;
 
 public interface CoordinatorService {
 
     List<Thesis> getThesis();
 
-    Submission feedbackOnSubmission(Long submissionId, Feedback feedback);
+    void initSemester(Year Year, SemesterPeriod semesterPeriod);
 
-    Submission feedbackOnSubmission(Long submissionId, String comment, Byte[] file, User author, LocalDateTime submissionTime, Role authorRole);
+    Semester setAllDeadlines(LocalDateTime projectDescriptionDeadline,
+                         LocalDateTime projectPlanDeadline,
+                         LocalDateTime reportDeadline,
+                         LocalDateTime finalReportDeadline);
 
-    Submission assessSubmission(Long submissionId, Float grade);
+    List<User> getStudents();
 
-    Thesis assignOpponent(User student, User opponent) throws MissingRoleException;
+    List<User> getReaders();
 
-    Thesis assignSupervisor(User student, User supervisor) throws MissingRoleException;
+    List<User> getOpponents();
 
-    Thesis evaluateProjectPlan(User student, Float grade) throws MissingRoleException;
+    List<User> getSupervisors();
 
-    Thesis gradeFinalProject(User student, Float grade) throws MissingRoleException;
+    Thesis assignSupervisor(String supervisorUsername, Long thesisId) throws MissingRoleException;
 
-    Thesis initiateThesis(User student) throws MissingRoleException;
+    Thesis assignReaders(List<String> readersUsername, Long thesisId) throws MissingRoleException;
 
-    void setThesis(List<Thesis> thesisList);
+    Thesis assignOpponent(String opponentUsername, Long thesisId) throws MissingRoleException;
 }

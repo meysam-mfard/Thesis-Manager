@@ -3,128 +3,194 @@ package e.group.thesismanager.service;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
-import e.group.thesismanager.repository.FeedbackRepository;
-import e.group.thesismanager.repository.SubmissionRepository;
+import e.group.thesismanager.repository.SemesterRepository;
 import e.group.thesismanager.repository.ThesisRepository;
 import e.group.thesismanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class CoordinatorServiceImpl extends AbstractService implements CoordinatorService {
+public class CoordinatorServiceImpl implements CoordinatorService {
 
-    private List<Thesis> thesisList;
+    private SemesterRepository semesterRepository;
+    private UserRepository userRepository;
+    private ThesisRepository thesisRepository;
+    private SemesterService semesterService;
 
     @Autowired
-    public CoordinatorServiceImpl(ThesisRepository thesisRepository, FeedbackRepository feedbackRepository,
-                           SubmissionRepository submissionRepository, UserRepository userRepository) {
+    public CoordinatorServiceImpl(ThesisRepository thesisRepository, UserRepository userRepository, SemesterRepository semesterRepository, SemesterService semesterService) {
 
-        super(thesisRepository, feedbackRepository, submissionRepository, userRepository);
+        this.semesterRepository = semesterRepository;
+        this.userRepository = userRepository;
+        this.thesisRepository = thesisRepository;
+        this.semesterService = semesterService;
     }
 
     @Override
-    public Thesis assignOpponent(User student, User opponent) throws MissingRoleException {
+    public List<Thesis> getThesis() {
 
-        if(!student.getRoles().contains(Role.ROLE_STUDENT))
-            throw new MissingRoleException("Could not assign opponent; User is not a student");
-
-        Thesis thesis = getThesisByStudent(student);
-        thesis.setOpponent(opponent);
-        return thesis;
+        return thesisRepository.findAll();
     }
 
     @Override
-    public Thesis assignSupervisor(User student, User supervisor) throws MissingRoleException {
+    public void initSemester(Year Year, SemesterPeriod semesterPeriod) {
+        // Set all other semesters to not active
+        List<Semester> previousSemesters = semesterService.getSemesters();
 
-        if(!student.getRoles().contains(Role.ROLE_STUDENT))
-            throw new MissingRoleException("Could not assign supervisor; User is not a student");
-        if(!supervisor.getRoles().contains(Role.ROLE_SUPERVISOR))
-            throw new MissingRoleException("Could not assign supervisor; User is not a supervisor");
+        for (Semester s : previousSemesters) {
 
-        Thesis thesis = getThesisByStudent(student);
+            s.setActive(false);
+        }
+
+        // Create new semester and set it to active
+        Semester semester = new Semester();
+        semester.setYear(Year);
+        semester.setSemesterPeriod(semesterPeriod);
+        semester.setActive(true);
+        semesterRepository.save(semester);
+    }
+
+    @Override
+    public Semester setAllDeadlines(LocalDateTime projectDescriptionDeadline,
+                            LocalDateTime projectPlanDeadline,
+                            LocalDateTime reportDeadline,
+                            LocalDateTime finalReportDeadline) {
+
+        if ((projectDescriptionDeadline != null && projectDescriptionDeadline.isBefore(LocalDateTime.now())) ||
+                (projectPlanDeadline != null && projectPlanDeadline.isBefore(LocalDateTime.now())) ||
+                (reportDeadline != null && reportDeadline.isBefore(LocalDateTime.now())) ||
+                (finalReportDeadline != null && finalReportDeadline.isBefore(LocalDateTime.now()))) {
+
+            throw new IllegalArgumentException("One or more of the given deadlines have already passed!");
+        }
+
+        Semester semester = semesterService.getCurrentSemester();
+
+        if((semester.getProjectDescriptionDeadline() == null && projectDescriptionDeadline != null) ||
+                (semester.getProjectDescriptionDeadline() != null && projectDescriptionDeadline != null)) {
+
+            semester.setProjectDescriptionDeadline(projectDescriptionDeadline);
+        }
+
+        if((semester.getProjectPlanDeadline() == null && projectPlanDeadline != null) ||
+                (semester.getProjectPlanDeadline() != null && projectPlanDeadline != null)) {
+
+            semester.setProjectPlanDeadline(projectPlanDeadline);
+        }
+
+        if((semester.getReportDeadline() == null && reportDeadline != null) ||
+                (semester.getReportDeadline() != null && reportDeadline != null)) {
+
+            semester.setReportDeadline(reportDeadline);
+        }
+
+        if((semester.getFinalReportDeadline() == null && finalReportDeadline != null) ||
+                (semester.getFinalReportDeadline() != null && finalReportDeadline != null)) {
+
+            semester.setFinalReportDeadline(finalReportDeadline);
+        }
+
+        return semesterRepository.save(semester);
+    }
+
+    @Override
+    public List<User> getStudents() {
+
+        return getUserByRole(Role.ROLE_STUDENT);
+    }
+
+    @Override
+    public List<User> getReaders() {
+
+        return getUserByRole(Role.ROLE_READER);
+    }
+
+    @Override
+    public List<User> getOpponents() {
+
+        return getUserByRole(Role.ROLE_OPPONENT);
+    }
+
+    @Override
+    public List<User> getSupervisors() {
+
+        return getUserByRole(Role.ROLE_SUPERVISOR);
+    }
+
+    @Override
+    public Thesis assignSupervisor(String supervisorUsername, Long thesisId) throws MissingRoleException {
+
+        User supervisor = userRepository.findByUsername(supervisorUsername).orElseThrow(() ->
+                new NotFoundException("User does not exist. Username: " + supervisorUsername));
+
+        if (!supervisor.getRoles().contains(Role.ROLE_SUPERVISOR)) {
+
+            throw new MissingRoleException("Could not assign supervisor; User is not an supervisor!");
+        }
+
+        Thesis thesis = thesisRepository.findById(thesisId).orElseThrow(() ->
+                new NotFoundException("Thesis does not exist. Id: " + thesisId));
+
         thesis.setSupervisor(supervisor);
-        return thesis;
-
+        thesis.setSupervisorRequestStatus(SupervisorRequestStatus.ACCEPTED);
+        return thesisRepository.save(thesis);
     }
 
     @Override
-    public Thesis evaluateProjectPlan(User student, Float grade) throws MissingRoleException {
+    public Thesis assignOpponent(String opponentUsername, Long thesisId) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.ROLE_STUDENT))
-            throw new MissingRoleException("Could not evaluate project plan; User is not a student");
+        User opponent = userRepository.findByUsername(opponentUsername).orElseThrow(() ->
+                new NotFoundException("User does not exist. Username: " + opponentUsername));
 
-        Thesis thesis = getThesisByStudent(student);
-        List<Submission> submissions = thesis.getSubmissions();
+        if (!opponent.getRoles().contains(Role.ROLE_OPPONENT)) {
 
-        Submission evaluatedSubmission = findSubmissionByType(SubmissionType.PROJECT_PLAN, submissions);
-        int index = submissions.indexOf(evaluatedSubmission);
-        evaluatedSubmission.setGrade(grade);
+            throw new MissingRoleException("Could not assign opponent; User is not an opponent!");
+        }
 
-        submissions.set(index, evaluatedSubmission);
-        thesis.setSubmissions(submissions);
-        return thesis;
+        Thesis thesis = thesisRepository.findById(thesisId).orElseThrow(() ->
+                new NotFoundException("Thesis does not exist. Id: " + thesisId));
+
+        thesis.setOpponent(opponent);
+        return thesisRepository.save(thesis);
     }
 
     @Override
-    public Thesis gradeFinalProject(User student, Float grade) throws MissingRoleException {
+    public Thesis assignReaders(List<String> readersUsername, Long thesisId) throws MissingRoleException {
 
-        if(!student.getRoles().contains(Role.ROLE_STUDENT))
-            throw new MissingRoleException("Could not grade final project; User is not a student");
+        List<User> readersList = new ArrayList<User>();
 
-        Thesis thesis = getThesisByStudent(student);
-        List<Submission> submissions = thesis.getSubmissions();
+        for(String readerUsername : readersUsername) {
 
-        Submission evaluatedSubmission = findSubmissionByType(SubmissionType.FINAL_REPORT, submissions);
-        int index = submissions.indexOf(evaluatedSubmission);
-        evaluatedSubmission.setGrade(grade);
+            User reader =  userRepository.findByUsername(readerUsername).orElseThrow(() ->
+                    new NotFoundException("User does not exist. Username: " + readerUsername));
 
-        submissions.set(index, evaluatedSubmission);
-        thesis.setSubmissions(submissions);
-        return thesis;
+            readersList.add(reader);
+        }
+
+        for (User user : readersList) {
+
+            if(!user.getRoles().contains(Role.ROLE_READER))
+                throw new MissingRoleException("Could not assign readers; User is not a reader!");
+        }
+
+        Thesis thesis = thesisRepository.findById(thesisId).orElseThrow(() ->
+                new NotFoundException("Thesis does not exist. Id: " + thesisId));
+
+        thesis.getReaders().clear();
+        thesis.getReaders().addAll(readersList);
+        return thesisRepository.save(thesis);
     }
 
-    @Override
-    public Thesis initiateThesis(User student) throws MissingRoleException {
+    private List<User> getUserByRole(Role role) {
 
-        if(!student.getRoles().contains(Role.ROLE_STUDENT))
-            throw new MissingRoleException("Could not initiate thesis; User is not a student");
-
-        Thesis thesis = new Thesis();
-        thesis.setStudent(student);
-        thesis.setSemester(new Semester());
-        return thesis;
-    }
-
-    @Override
-    public void setThesis(List<Thesis> thesisList) {
-
-        this.thesisList = thesisList;
-    }
-
-    private Submission findSubmissionByType(SubmissionType type, List<Submission> submissions) {
-
-        Submission submissionToReturn = submissions.stream()
-                .filter(s -> s.getType().equals(type))
-                .findFirst()
-                .orElseThrow(
-                        ()-> new NotFoundException("Submission not found"));
-
-        return submissionToReturn;
-    }
-
-    private Thesis getThesisByStudent(User student) throws MissingRoleException {
-
-        if(!student.getRoles().contains(Role.ROLE_STUDENT))
-            throw new MissingRoleException("Could not get thesis by student; User is not a student");
-
-        this.thesisList = getThesis();
-
-        return thesisList.stream()
-                .filter(x -> x.getStudent().equals(student))
-                .findFirst()
-                .orElseThrow( ()-> new NotFoundException("User does not exist." + student.getFirstName() + student.getLastName()));
+        return userRepository.findAll().stream().filter(
+                (u) -> u.getRoles().contains(role)).
+                collect(Collectors.toList());
     }
 }

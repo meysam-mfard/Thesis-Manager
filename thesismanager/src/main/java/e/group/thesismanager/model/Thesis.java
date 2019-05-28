@@ -35,7 +35,7 @@ public class Thesis extends BaseEntity {
 
     private Float finalGrade;
 
-    private boolean supervisorAccept;
+    private SupervisorRequestStatus supervisorRequestStatus = SupervisorRequestStatus.NOT_ASSIGNED;
 
     public void addSubmission(Submission submission) {
         submissions.add(submission);
@@ -58,4 +58,15 @@ public class Thesis extends BaseEntity {
 
         return Objects.hash(student, semester);
     }
+
+    public String toString() {
+        return "Thesis(student=" + this.getStudent() + ", opponent=" + this.getOpponent() + ", semester=" + this.getSemester() + ", coordinator=" + this.getCoordinator() + ", supervisor=" + this.getSupervisor() + ", readers=" + this.getReaders()
+                + ", finalGrade=" + this.getFinalGrade() + ", supervisorRequestStatus=" + this.getSupervisorRequestStatus() + ")";
+    }
+
+    /*public String toString() {
+        return "Thesis(student=" + this.getStudent().getId() + ", opponent=" + this.getOpponent().getId()
+                + ", semester=" + this.getSemester() + ", coordinator=" + this.getCoordinator().getId()
+                + ", supervisor=" + this.getSupervisor().getId() + ")";
+    }*/
 }

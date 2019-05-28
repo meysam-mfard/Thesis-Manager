@@ -1,12 +1,12 @@
 package e.group.thesismanager.repository;
 
 import e.group.thesismanager.model.Submission;
+import e.group.thesismanager.model.SubmissionType;
+import e.group.thesismanager.model.Thesis;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface SubmissionRepository extends JpaRepository<Submission, Long> {
-
-    List<Submission> findThesisById(Long thesisId);
+    Optional<Submission> findByThesisAndType(Thesis thesis, SubmissionType submissionType);
 }

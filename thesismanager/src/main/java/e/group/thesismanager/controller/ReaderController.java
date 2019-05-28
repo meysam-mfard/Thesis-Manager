@@ -1,54 +1,81 @@
 package e.group.thesismanager.controller;
 
-import e.group.thesismanager.model.Feedback;
 import e.group.thesismanager.model.User;
 import e.group.thesismanager.service.ReaderService;
+import e.group.thesismanager.service.SearchService;
+import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 
 @Slf4j
 @Controller
 public class ReaderController {
 
-    private static final String SAVE_SUCCESS = "success";
-    private static final String SAVE_FAIL = "fail";
+    private final static String SAVE_SUBMISSION_SUCCESS = "success";
+    private final static String SAVE_SUBMISSION_FAIL = "fail";
 
-    private ReaderService readerService;
+    private final ReaderService readerService;
+    private final UserService userService;
+    private final SearchService searchService;
 
-    public ReaderController(ReaderService readerService) {
+    public ReaderController(ReaderService readerService, UserService userService, SearchService searchService) {
+
         this.readerService = readerService;
+        this.userService = userService;
+        this.searchService = searchService;
     }
 
-    @PostMapping("reader/feedback/{{feedbackId}")
-    public String giveFeedback(Model model, @PathVariable Long feedbackId, @ModelAttribute("feedback")Feedback feedback){
+    @ModelAttribute("user")
+    public User loggedInUser(Model model) {
+
+        return userService.getCurrentUser();
+    }
+
+    @ModelAttribute("searchedUser")
+    public User emptyUser(Model model) {
+
+        return new User();
+    }
+
+    @GetMapping("reader")
+    public String getReaderHome(Model model) {
+
+        User reader = userService.getCurrentUser();
+
+        model.addAttribute("possibleTheses", readerService.getPossibleTheses(reader));
+        model.addAttribute("assignedTheses", readerService.getAssignedTheses(reader));
+        return "pages/reader";
+    }
+
+    @PostMapping("reader/{thesisId}/bid")
+    public String bidOnThesis(@PathVariable Long thesisId){
+
         try {
-            readerService.feedbackOnSubmission(feedbackId, feedback);
-            model.addAttribute("feedback",feedback);
+
+            readerService.bidOnThesis(thesisId, userService.getCurrentUser());
         } catch (Exception e) {
             //todo: replace with validator
             e.printStackTrace();
-            return "redirect:/reader?"+SAVE_FAIL;
+            return "redirect:/reader?" + SAVE_SUBMISSION_FAIL;
         }
 
-        return "redirect:/reader?"+SAVE_SUCCESS;
+        return "redirect:/reader?" + SAVE_SUBMISSION_SUCCESS;
     }
 
-    @PostMapping("reader/bid/{BidId}")
-    public String bidOnThesis(Model model, @PathVariable Long BidId, @ModelAttribute("user") User reader, @ModelAttribute("bid") Double bid){
-        try {
-            readerService.bidOnThesis(BidId,reader);
-            model.addAttribute("bid",bid);
-        } catch (Exception e) {
-            //todo: replace with validator
-            e.printStackTrace();
-            return "redirect:/reader?"+SAVE_FAIL;
-        }
+    @PostMapping("reader/search")
+    public String searchThesis(Model model, @ModelAttribute("searchedUser") User user){
 
-        return "redirect:/reader?"+SAVE_SUCCESS;
+        model.addAttribute("searchedThesisList", searchService.searchThesisForReader("%" + user.getFirstName() + "%",
+                "%" + user.getLastName() + "%"));
+        model.addAttribute("searchedPossibleThesisList", searchService.searchPossibleThesisForReader("%" + user.getFirstName() + "%",
+                "%" + user.getLastName() + "%"));
+
+        return "pages/reader";
     }
-
 }

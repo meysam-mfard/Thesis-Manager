@@ -1,6 +1,5 @@
 package e.group.thesismanager.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,8 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public WebSecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -23,12 +25,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/admin/**").authenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                //.anyRequest().authenticated()
+                .antMatchers("/coordinator/**").hasRole("COORDINATOR")
+                .antMatchers("/reader/**").hasRole("READER")
+                .antMatchers("/opponent/**").hasRole("OPPONENT")
+                .antMatchers("/supervisor/**").hasRole("SUPERVISOR")
+                .antMatchers("/student/**").hasRole("STUDENT")
+                .anyRequest().authenticated()
                 .and()
             .formLogin().loginPage("/login").permitAll()
                 .failureUrl("/login?error").permitAll().and()
             .logout().permitAll()
-                .logoutSuccessUrl("/login?logout").permitAll();
+                .logoutSuccessUrl("/login?logout").permitAll().and()
+            .exceptionHandling().accessDeniedPage("/403error");
 
         //Just for development phase
         httpSecurity.authorizeRequests().antMatchers("/h2-console/**").permitAll();

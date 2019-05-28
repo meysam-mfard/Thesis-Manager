@@ -1,82 +1,102 @@
 package e.group.thesismanager.controller;
 
+import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.*;
+import e.group.thesismanager.service.SemesterService;
 import e.group.thesismanager.service.StudentService;
+import e.group.thesismanager.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-
+@Slf4j
 @Controller
-@RequestMapping("student")
-public class StudentController {
-    private StudentService studentService;
+public class StudentController extends AbstractDocumentSubmission{
 
-    public StudentController(StudentService studentService) {
+    private final StudentService studentService;
+    private final UserService userService;
+    private final SemesterService semesterService;
+
+    public StudentController(StudentService studentService, UserService userService, SemesterService semesterService) {
         this.studentService = studentService;
+        this.userService = userService;
+        this.semesterService = semesterService;
     }
 
-    @RequestMapping("")
-    public String getStudentHome(Model model,
-                                 @ModelAttribute User student) {
+    @ModelAttribute("user")
+    public User loggedInUser(Model model) {
+        return userService.getCurrentUser();
+    }
 
-        model.addAttribute("theses", studentService.getTheses(student));
+    @GetMapping("student")
+    public String getStudentHome(Model model) throws MissingRoleException {
+
+        User student = userService.getCurrentUser();
+
+        model.addAttribute("allowedSubmissionTypes", studentService.getAllowedSubmissionTypes(student.getId()));
+
+        Thesis thesis = null;
+        try {
+            thesis = studentService.getThesisByStudentId(student.getId());
+        } catch (Exception e) {
+            thesis = null;
+        }
+        model.addAttribute("thesis", thesis);
+        //model.addAttribute("theses", studentService.getTheses(student));
 
         return "pages/student";
     }
 
-    @GetMapping("/submit")
-    public String getSubmit(Model model) {
-        model.addAttribute("semesters", studentService.getSemesters()); // todo: filter by "active" semesters?
-        model.addAttribute("submissionTypes", Arrays.asList(SubmissionType.values()));
-
-        return "pages/student-submit";
+    @GetMapping({"/student/thesis", "/reader/thesis", "/opponent/thesis", "/supervisor/thesis", "/coordinator/thesis"})
+    public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) {
+        model.addAttribute("thesis", studentService.getThesisByStudentId(studentId));
+        model.addAttribute("studentId", studentId);
+        return "pages/thesis";
     }
 
-    @PostMapping("/submit")
-    public String postSubmit(@ModelAttribute User student,
-                             @ModelAttribute Byte[] file,
-                             @ModelAttribute Semester semester,
-                             @ModelAttribute SubmissionType type) {
+    @PostMapping("/student/submit")
+    public String postSubmit(Model model, @RequestParam(name = "stdId") Long studentId
+            , @RequestParam(name = "subType") String submissionTypeStr
+            , @RequestParam String comment
+            , @RequestParam MultipartFile file) {
 
-        try {
-            Thesis thesis = studentService.getThesis(student, semester);
-
-            if(thesis == null) {
-                thesis = studentService.initThesis(student, semester);
-            }
-
-            Document document = new Document();
-            document.setFile(file);
-            document.setAuthor(student);
-
-            Submission submission = new Submission();
-            submission.setType(type);
-            submission.setSubmittedDocument(document);
-
-            thesis.addSubmission(submission);
-
-        } catch (MissingRoleException e) {
-            return "pages/student-submit?fail";
+        //Validating comment size, file type and file size
+        String errorMessage = getCommentErrorMessageIfNotAcceptable(comment);
+        if(errorMessage == null)
+            errorMessage = getFileErrorMessageIfNotAcceptable(file);
+        if( errorMessage != null) {
+            log.error(errorMessage);
+            model.addAttribute("errorMessage", errorMessage);
+            return "pages/error";
         }
 
-        return "pages/student-submit?success";
+        SubmissionType submissionType = SubmissionType.strToType(submissionTypeStr);
+        try {
+            Submission submission = studentService.submitDocument(studentId, comment, file, submissionType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", submissionType.toString() + " submission was not possible.");
+            return "pages/error";
+        }
+
+        return "redirect:/student";
     }
 
-    @GetMapping("/requestSupervisor")
+    @GetMapping("/student/requestSupervisor")
     public String getRequestSupervisor(Model model) {
         model.addAttribute("supervisors", studentService.getSupervisors());
-        model.addAttribute("semesters", studentService.getSemesters()); // todo: filter by "active" semesters?
+        model.addAttribute("semesters", semesterService.getSemesters()); // todo: filter by "active" semesters?
 
         return "request-supervisor";
     }
 
-    @PostMapping("/requestSupervisor")
+    @PostMapping("/student/requestSupervisor")
     public String postRequestSupervisor(@ModelAttribute User student,
                                         @ModelAttribute Semester semester,
                                         @ModelAttribute User supervisor) {
@@ -85,7 +105,7 @@ public class StudentController {
 
         try {
             studentService.proposeSupervisor(thesis, supervisor);
-        } catch (MissingRoleException e) {
+        } catch (MissingRoleException | InvalidSupervisorRequestException e) {
             return "request-supervisor?fail";
         }
 

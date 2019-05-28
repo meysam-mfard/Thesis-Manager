@@ -1,12 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Student Page</title>
+    <title>Student</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/student.css"/>
 </head>
+
 <body>
-<header>
-    <h1><br><br>Student Page</h1>
-</header>
+
+    <!--NAVBAR-->
+    <div th:replace="~{ /pages/menubar :: global-menubar(${user})}"></div>
+
+    <!--<div class="container" style="margin-top: 50px">
+        <div class="card rounded-lg bg-light shadow p-2">
+            <div class="card-body bg-dark rounded d-flex justify-content-around">
+                <a class="btn btn-info btn-lg" role="button" th:href="@{/student/thesis/(stdId=${user.id})}">Select Supervisor</a>
+                <a class="btn btn-info btn-lg" role="button" th:href="@{/student/thesis/(stdId=${user.id})}">Submit ...</a>
+                <a class="btn btn-info btn-lg" role="button" th:href="@{/student/thesis/(stdId=${user.id})}">???</a>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="container" style="margin-top: 50px">
+        <div class="card rounded-lg bg-light shadow">
+            <div class="card-body bg-dark rounded">
+                <p class="d-flex justify-content-around">
+                    <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#select-sup">Select Supervisor</button>
+                    <button th:each="submissionType: ${allowedSubmissionTypes}" th:text="'Submit '+${submissionType}" class="btn btn-info btn-lg"
+                            type="button" data-toggle="collapse" th:data-target="'#subType'+${submissionType.ordinal()}">dummy submission</button>
+                </p>
+                <div class="collapse " id="select-sup">
+                    <div class="card card-body">
+                        Select Supervisor
+                    </div>
+                </div>
+                <div class="collapse " th:each="submissionType: ${allowedSubmissionTypes}" th:id="'subType'+${submissionType.ordinal()}">
+                    <!--<div class="card card-body">-->
+                        <div th:replace="~{ /pages/studentSubmissionForm :: studentSubmissionFrom-fragment(${submissionType}, ${user})}"></div>
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--VIEW SUBMISSION-->
+    <div th:replace="~{ /pages/thesis :: #thesis-container}"></div>
+
 </body>
 </html>
+
+<style>
+    .card {margin-top: 5px}
+    body{
+        background-color:#EEEEEE;
+    }
+</style>

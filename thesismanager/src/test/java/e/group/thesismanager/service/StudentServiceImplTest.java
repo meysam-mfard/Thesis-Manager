@@ -20,20 +20,23 @@ import static org.mockito.Mockito.verify;
 class StudentServiceImplTest {
     private ThesisRepository mockThesisRepository;
     private SubmissionRepository mockSubmissionRepository;
-    private SemesterRepository mockSemesterRepository;
     private UserRepository mockUserRepository;
+    private SemesterService mockSemesterService;
 
+    private SemesterRepository semesterRepository;
     private StudentService studentService;
 
     @BeforeEach
     void setUp() {
         mockThesisRepository = Mockito.mock(ThesisRepository.class);
         mockSubmissionRepository = Mockito.mock(SubmissionRepository.class);
+        semesterRepository = Mockito.mock(SemesterRepository.class);
+        mockSemesterService = Mockito.mock(SemesterService.class);
 
         studentService = new StudentServiceImpl(mockThesisRepository,
                                                 mockSubmissionRepository,
-                                                mockSemesterRepository,
-                                                mockUserRepository);
+                                                mockUserRepository,
+                                                mockSemesterService);
     }
 
     @AfterEach
@@ -71,7 +74,7 @@ class StudentServiceImplTest {
 
         //creating a Byte array file
         String str = "fake file content";
-        Byte[] file = new Byte[str.getBytes().length];
+        byte[] file = new byte[str.getBytes().length];
         int i = 0;
         for (byte b : str.getBytes()){
             file[i++] = b;
@@ -82,6 +85,8 @@ class StudentServiceImplTest {
         doc1.setAuthor(student);
         doc1.setComment("This is my project description");
         doc1.setFile(file);
+        doc1.setFileName("fileName");
+        doc1.setFileType("pdf");
         /*Submission submission = new Submission();
         submission.setId(ID);
         submission.setType(SubmissionType.REPORT);
@@ -91,6 +96,8 @@ class StudentServiceImplTest {
         Thesis thesis = new Thesis();
         thesis.setId(ID);
         //thesis.addSubmission(submission);
+
+        Semester semester = semesterRepository.findByActiveIsTrue();
 
         ArgumentCaptor<Thesis> argumentCaptor = ArgumentCaptor.forClass(Thesis.class);
 
