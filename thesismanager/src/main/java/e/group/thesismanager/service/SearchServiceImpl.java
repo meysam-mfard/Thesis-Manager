@@ -107,7 +107,7 @@ public class SearchServiceImpl implements SearchService {
 
     private List<Thesis> getAllFoundStudentThesesList(String firstName, String lastName) {
 
-        List<User> allFoundUsersList = userRepository.findAllByFirstNameLikeAndLastNameLike(firstName, lastName);
+        List<User> allFoundUsersList = userRepository.findAllByFirstNameLikeIgnoreCaseAndLastNameLikeIgnoreCase(firstName, lastName);
         List<Thesis> allFoundStudentThesesList = new ArrayList<Thesis>();
 
         for(User user : allFoundUsersList) {

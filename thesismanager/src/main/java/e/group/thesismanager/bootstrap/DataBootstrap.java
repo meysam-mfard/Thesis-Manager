@@ -279,6 +279,7 @@ public class DataBootstrap implements ApplicationRunner {
         thesis3.setCoordinator(userCoo2);
         thesis3.setSemester(sem2);
         thesis3.setSupervisor(userSup1);
+        thesis3.setSupervisorRequestStatus(SupervisorRequestStatus.REQUEST_SENT);
         thesis3.setSubmissions(Arrays.asList(sub3_1, sub3_2, sub3_3));
         sub3_1.setThesis(thesis3);
         sub3_2.setThesis(thesis3);
@@ -340,6 +341,7 @@ public class DataBootstrap implements ApplicationRunner {
         thesis5.setCoordinator(userCoo1);
         thesis5.setSemester(sem2);
         thesis5.setSupervisor(userSupRea2);
+        thesis5.setSupervisorRequestStatus(SupervisorRequestStatus.REJECTED);
         thesis5.setSubmissions(Arrays.asList(sub5_1, sub5_2));
         sub5_1.setThesis(thesis5);
         sub5_2.setThesis(thesis5);

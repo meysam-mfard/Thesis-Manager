@@ -29,9 +29,6 @@
     <div class="card">
         <div class="card-header" id="headingZero">
             <div class="mb-0">
-                <a class="btn btn-info btn-lg" th:href="@{'/coordinator'}" role="button">
-                    Show All Settings
-                </a>
                 <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseZero">
                     Search Thesis
                 </button>
@@ -73,7 +70,7 @@
                                     <th scope="col">Student</th>
                                     <th scope="col">Submissions</th>
                                     <th scope="col">Assess</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -131,7 +128,7 @@
                                     <th scope="col">Current Opponent</th>
                                     <th scope="col">Set Opponent</th>
                                     <th scope="col">Assign</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -154,7 +151,11 @@
                                     </td>
 
                                     <td>
-                                 <span th:text="${eachThesis.opponent.firstName} + ' ' + ${eachThesis.opponent.lastName}">CurrentOpponentName
+                                 <span th:if="${eachThesis.opponent.firstName != null} and ${eachThesis.opponent.lastName != null}"
+                                       th:text="${eachThesis.opponent.firstName} + ' ' + ${eachThesis.opponent.lastName}">CurrentOpponentName
+                                 </span>
+                                        <span th:unless="${eachThesis.opponent.firstName != null} and ${eachThesis.opponent.lastName != null}"
+                                              th:text="''">CurrentOpponentName
                                  </span>
                                     </td>
 
@@ -171,6 +172,7 @@
                                                         th:field="*{opponent.username}">
                                                     <option th:each="opponent : ${opponents}"
                                                             th:value="${opponent.username}"
+                                                            th:if="${opponent.username} != ${eachThesis.student.username}"
                                                             th:text="${opponent.firstName} + ' ' + ${opponent.lastName}">
                                                         OpponentName
                                                     </option>
@@ -209,7 +211,7 @@
                                     <th scope="col">Current Readers</th>
                                     <th scope="col">Set Readers</th>
                                     <th scope="col">Assign</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -293,7 +295,7 @@
                                     <th scope="col">Current Supervisor</th>
                                     <th scope="col">Set Supervisor</th>
                                     <th scope="col">Assign</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -316,7 +318,11 @@
                                     </td>
 
                                     <td>
-                                 <span th:text="${eachThesis.supervisor.firstName} + ' ' + ${eachThesis.supervisor.lastName}">CurrentSupervisorName
+                                 <span th:if="${eachThesis.supervisor.firstName != null} and ${eachThesis.supervisor.lastName != null} and ${eachThesis.supervisorRequestStatus.getText() == 'Accepted'}"
+                                       th:text="${eachThesis.supervisor.firstName} + ' ' + ${eachThesis.supervisor.lastName}">CurrentSupervisorName
+                                 </span>
+                                        <span th:if="${eachThesis.supervisor.firstName != null} and ${eachThesis.supervisor.lastName != null} and ${eachThesis.supervisorRequestStatus.getText() == 'Accepted'}"
+                                              th:text="''">CurrentSupervisorName
                                  </span>
                                     </td>
 
@@ -332,9 +338,18 @@
                                                         style="overflow: auto"
                                                         th:field="*{supervisor.username}">
                                                     <option th:each="supervisor : ${supervisors}"
-                                                            th:value="${supervisor.username}"
-                                                            th:text="${supervisor.firstName} + ' ' + ${supervisor.lastName}">
-                                                        SupervisorName
+                                                            th:value="${supervisor.username}">
+
+                                                        <span th:if="${supervisor == eachThesis.supervisor} and ${eachThesis.supervisorRequestStatus.getText() == 'Request Sent'}"
+                                                              th:text="${supervisor.firstName} + ' ' + ${supervisor.lastName} + ' (requested)'">
+                                                            RequestedSupervisorName
+                                                        </span>
+
+                                                        <span th:unless="${supervisor == eachThesis.supervisor} and ${eachThesis.supervisorRequestStatus.getText() == 'Request Sent'}"
+                                                              th:text="${supervisor.firstName} + ' ' + ${supervisor.lastName}">
+                                                            SupervisorName
+                                                        </span>
+
                                                     </option>
                                                 </select>
                                             </div>
@@ -386,7 +401,7 @@
                                     <th scope="col">Student</th>
                                     <th scope="col">Submissions</th>
                                     <th scope="col">Assess</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -459,7 +474,7 @@
                                     <th scope="col">Current Opponent</th>
                                     <th scope="col">Set Opponent</th>
                                     <th scope="col">Assign</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -482,7 +497,11 @@
                                     </td>
 
                                     <td>
-                                 <span th:text="${eachThesis.opponent.firstName} + ' ' + ${eachThesis.opponent.lastName}">CurrentOpponentName
+                                 <span th:if="${eachThesis.opponent.firstName != null} and ${eachThesis.opponent.lastName != null}"
+                                       th:text="${eachThesis.opponent.firstName} + ' ' + ${eachThesis.opponent.lastName}">CurrentOpponentName
+                                 </span>
+                                        <span th:unless="${eachThesis.opponent.firstName != null} and ${eachThesis.opponent.lastName != null}"
+                                              th:text="''">CurrentOpponentName
                                  </span>
                                     </td>
 
@@ -499,8 +518,9 @@
                                                         th:field="*{opponent.username}">
                                                     <option th:each="opponent : ${opponents}"
                                                             th:value="${opponent.username}"
+                                                            th:if="${opponent.username} != ${eachThesis.student.username}"
                                                             th:text="${opponent.firstName} + ' ' + ${opponent.lastName}">
-                                                        OpponentName
+                                                            OpponentName
                                                     </option>
                                                 </select>
                                             </div>
@@ -551,7 +571,7 @@
                                     <th scope="col">Current Readers</th>
                                     <th scope="col">Set Readers</th>
                                     <th scope="col">Assign</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -648,7 +668,7 @@
                                     <th scope="col">Current Supervisor</th>
                                     <th scope="col">Set Supervisor</th>
                                     <th scope="col">Assign</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -671,7 +691,11 @@
                                     </td>
 
                                     <td>
-                                 <span th:text="${eachThesis.supervisor.firstName} + ' ' + ${eachThesis.supervisor.lastName}">CurrentSupervisorName
+                                 <span th:if="${eachThesis.supervisor.firstName != null} and ${eachThesis.supervisor.lastName != null} and ${eachThesis.supervisorRequestStatus.getText() == 'Accepted'}"
+                                       th:text="${eachThesis.supervisor.firstName} + ' ' + ${eachThesis.supervisor.lastName}">CurrentSupervisorName
+                                 </span>
+                                        <span th:if="${eachThesis.supervisor.firstName != null} and ${eachThesis.supervisor.lastName != null} and ${eachThesis.supervisorRequestStatus.getText() == 'Accepted'}"
+                                              th:text="''">CurrentSupervisorName
                                  </span>
                                     </td>
 
@@ -687,9 +711,18 @@
                                                         style="overflow: auto"
                                                         th:field="*{supervisor.username}">
                                                     <option th:each="supervisor : ${supervisors}"
-                                                            th:value="${supervisor.username}"
-                                                            th:text="${supervisor.firstName} + ' ' + ${supervisor.lastName}">
-                                                        SupervisorName
+                                                            th:value="${supervisor.username}">
+
+                                                        <span th:if="${supervisor == eachThesis.supervisor} and ${eachThesis.supervisorRequestStatus.getText() == 'Request Sent'}"
+                                                              th:text="${supervisor.firstName} + ' ' + ${supervisor.lastName} + ' (requested)'">
+                                                            RequestedSupervisorName
+                                                        </span>
+
+                                                        <span th:unless="${supervisor == eachThesis.supervisor} and ${eachThesis.supervisorRequestStatus.getText() == 'Request Sent'}"
+                                                              th:text="${supervisor.firstName} + ' ' + ${supervisor.lastName}">
+                                                            SupervisorName
+                                                        </span>
+
                                                     </option>
                                                 </select>
                                             </div>
@@ -740,7 +773,7 @@
                                     <th scope="col">Semester Period</th>
                                     <th scope="col">Year</th>
                                     <th scope="col">Initialize</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -831,7 +864,7 @@
                                     <th scope="col">Current Project Plan Deadline</th>
                                     <th scope="col">Current Report Deadline</th>
                                     <th scope="col">Current Final Report Deadline</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
@@ -884,7 +917,7 @@
                                     <th scope="col">Set Report Deadline</th>
                                     <th scope="col">Set Final Report Deadline</th>
                                     <th scope="col">Set</th>
-
+                                </tr>
                                 </thead>
 
                                 <tbody>
