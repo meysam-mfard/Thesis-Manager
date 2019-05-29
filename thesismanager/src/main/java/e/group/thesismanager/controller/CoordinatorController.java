@@ -67,12 +67,7 @@ public class CoordinatorController {
     @GetMapping("coordinator")
     public String getCoordinatorHome(Model model) {
 
-        model.addAttribute("currentSemester", semesterService.getCurrentSemester());
-        model.addAttribute("readers", coordinatorService.getReaders());
-        model.addAttribute("opponents", coordinatorService.getOpponents());
-        model.addAttribute("supervisors", coordinatorService.getSupervisors());
-        model.addAttribute("theses", coordinatorService.getThesis());
-        model.addAttribute("semesterPeriods", SemesterPeriod.values());
+        addModelAttributes(model);
 
         return "pages/coordinator";
     }
@@ -85,15 +80,15 @@ public class CoordinatorController {
 
         try {
 
-        coordinatorService.setAllDeadlines(parseDateTimeString(projectDescriptionDeadline),
-                parseDateTimeString(projectPlanDeadline), parseDateTimeString(reportDeadline),
-                        parseDateTimeString(finalReportDeadline));
+            coordinatorService.setAllDeadlines(parseDateTimeString(projectDescriptionDeadline),
+                    parseDateTimeString(projectPlanDeadline), parseDateTimeString(reportDeadline),
+                    parseDateTimeString(finalReportDeadline));
 
-         } catch (Exception e) {
-        //todo: replace with validator
-        e.printStackTrace();
-        return "redirect:/coordinator?" + FAIL;
-          }
+        } catch (Exception e) {
+            //todo: replace with validator
+            e.printStackTrace();
+            return "redirect:/coordinator?" + FAIL;
+        }
 
         return "redirect:/coordinator?" + SUCCESS;
     }
@@ -103,13 +98,13 @@ public class CoordinatorController {
                                          @ModelAttribute Year year) {
         try {
 
-        coordinatorService.initSemester(year, SemesterPeriod.fromString(semesterPeriod));
+            coordinatorService.initSemester(year, SemesterPeriod.fromString(semesterPeriod));
 
-         } catch (Exception e) {
-        //todo: replace with validator
-        e.printStackTrace();
-        return "redirect:/coordinator?" + FAIL;
-          }
+        } catch (Exception e) {
+            //todo: replace with validator
+            e.printStackTrace();
+            return "redirect:/coordinator?" + FAIL;
+        }
 
         return "redirect:/coordinator?" + SUCCESS;
     }
@@ -135,7 +130,7 @@ public class CoordinatorController {
 
             List<String> readersUsername = new ArrayList<String>();
 
-            for(User reader : thesis.getReaders()) {
+            for (User reader : thesis.getReaders()) {
 
                 readersUsername.add(reader.getUsername());
             }
@@ -164,26 +159,57 @@ public class CoordinatorController {
     }
 
     @PostMapping("coordinator/search")
-    public String searchThesis(Model model, @ModelAttribute("searchedUser") User user){
+    public String searchThesis(Model model, @ModelAttribute("searchedUser") User user) {
 
-        model.addAttribute("searchedThesisList", searchService.searchThesisForCoordinator("%" + user.getFirstName() + "%",
-                "%" + user.getLastName() + "%"));
-        model.addAttribute("readers", coordinatorService.getReaders());
-        model.addAttribute("opponents", coordinatorService.getOpponents());
-        model.addAttribute("supervisors", coordinatorService.getSupervisors());
+        List<Thesis> foundList = searchService.searchThesisForCoordinator("%" + user.getFirstName() + "%",
+                "%" + user.getLastName() + "%");
 
-        return "pages/coordinator";
+        if (foundList != null && !foundList.isEmpty()) {
+
+            model.addAttribute("searchedThesisList", foundList);
+
+            addModelAttributes(model);
+
+            return "pages/coordinator";
+        }
+
+        return "redirect:/coordinator?" + "NoThesisFound";
     }
 
     private LocalDateTime parseDateTimeString(String dateTimeString) {
 
 
-        if(!dateTimeString.isEmpty()) {
+        if (!dateTimeString.isEmpty()) {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
             return LocalDateTime.parse(dateTimeString, formatter);
         }
 
         return null;
+    }
+
+    private void addModelAttributes(Model model) {
+
+        model.addAttribute("readers", coordinatorService.getReaders());
+        model.addAttribute("opponents", coordinatorService.getOpponents());
+        model.addAttribute("supervisors", coordinatorService.getSupervisors());
+        model.addAttribute("currentSemester", semesterService.getCurrentSemester());
+        model.addAttribute("semesterPeriods", SemesterPeriod.values());
+
+        List<Thesis> theses = coordinatorService.getThesis();
+        for (Thesis thesis : theses) {
+
+            if (thesis.getOpponent() == null) {
+
+                thesis.setOpponent(new User());
+            }
+
+            if (thesis.getSupervisor() == null) {
+
+                thesis.setSupervisor(new User());
+            }
+        }
+
+        model.addAttribute("theses", theses);
     }
 }

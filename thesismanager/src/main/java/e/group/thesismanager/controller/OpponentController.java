@@ -52,6 +52,8 @@ public class OpponentController {
         model.addAttribute("searchedThesisList", searchService.searchThesisForOpponent("%" + user.getFirstName() + "%",
                 "%" + user.getLastName() + "%"));
 
+        model.addAttribute("thesisList", opponentService.getThesis(userService.getCurrentUser()));
+
         return "pages/opponent";
     }
 }
