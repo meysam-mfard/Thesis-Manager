@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -81,14 +82,15 @@ public class StudentServiceImpl implements StudentService {
         return thesisRepository.findThesesByStudentId(studentId);
     }
 
+    //Returns list of all supervisors. If a supervisor has accepted a request for this student
+    // in the active semester the list will only contain that supervisor.
     @Override
-    public List<User> getSupervisors() {
-        List<User> users = userRepository.findAll();
-        for (User u : users) {
-            if(!u.getRoles().contains(Role.ROLE_SUPERVISOR))
-                users.remove(u);
-        }
-        return users;
+    public List<User> getSupervisors(Thesis thesis) {
+        if (thesis == null)
+            return Collections.emptyList();
+        if (thesis.getSupervisorRequestStatus().equals(SupervisorRequestStatus.ACCEPTED))
+            return Collections.singletonList(thesis.getSupervisor());
+        return userRepository.findAllByRolesContaining(Role.ROLE_SUPERVISOR);
     }
 
     @Override
@@ -102,6 +104,7 @@ public class StudentServiceImpl implements StudentService {
 
         thesis.setSupervisor(supervisor);
         thesis.setSupervisorRequestStatus(SupervisorRequestStatus.REQUEST_SENT);
+        thesisRepository.save(thesis);
     }
 
     @Override
