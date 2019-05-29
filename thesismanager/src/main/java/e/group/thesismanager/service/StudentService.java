@@ -22,7 +22,9 @@ public interface StudentService {
 
     List<Thesis> getThesesByStudentId(Long studentId);
 
-    List<User> getSupervisors();
+    //Returns list of all supervisors. If a supervisor has accepted a request for this student
+    // in the active semester the list will only contain that supervisor.
+    List<User> getSupervisors(Thesis thesis);
 
     void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException, InvalidSupervisorRequestException;
 

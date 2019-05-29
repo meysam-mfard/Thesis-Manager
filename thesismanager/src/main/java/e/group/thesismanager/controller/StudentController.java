@@ -2,7 +2,10 @@ package e.group.thesismanager.controller;
 
 import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
-import e.group.thesismanager.model.*;
+import e.group.thesismanager.model.Submission;
+import e.group.thesismanager.model.SubmissionType;
+import e.group.thesismanager.model.Thesis;
+import e.group.thesismanager.model.User;
 import e.group.thesismanager.service.SemesterService;
 import e.group.thesismanager.service.StudentService;
 import e.group.thesismanager.service.UserService;
@@ -48,6 +51,7 @@ public class StudentController extends AbstractDocumentSubmission{
             thesis = null;
         }
         model.addAttribute("thesis", thesis);
+        model.addAttribute("supervisors", studentService.getSupervisors(thesis));
         //model.addAttribute("theses", studentService.getTheses(student));
 
         return "pages/student";
@@ -89,34 +93,25 @@ public class StudentController extends AbstractDocumentSubmission{
             Submission submission = studentService.submitDocument(studentId, comment, file, submissionType);
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("errorMessage", submissionType.toString() + " submission was not possible.");
+            model.addAttribute("errorMessage", submissionType.toString()
+                    + " submission was not possible.");
             return "pages/error";
         }
 
         return "redirect:/student";
     }
 
-    @GetMapping("/student/requestSupervisor")
-    public String getRequestSupervisor(Model model) {
-        model.addAttribute("supervisors", studentService.getSupervisors());
-        model.addAttribute("semesters", semesterService.getSemesters()); // todo: filter by "active" semesters?
-
-        return "request-supervisor";
-    }
-
     @PostMapping("/student/requestSupervisor")
-    public String postRequestSupervisor(@ModelAttribute User student,
-                                        @ModelAttribute Semester semester,
-                                        @ModelAttribute User supervisor) {
+    public String postRequestSupervisor(@RequestParam(name = "thId") Long thesisId,
+                                        @RequestParam(name = "supId") Long supervisorId) {
 
-        Thesis thesis = studentService.getThesis(student, semester);
-
+        Thesis thesis = studentService.getThesisById(thesisId);
         try {
-            studentService.proposeSupervisor(thesis, supervisor);
+            studentService.proposeSupervisor(thesis, userService.getUserById(supervisorId));
         } catch (MissingRoleException | InvalidSupervisorRequestException e) {
-            return "request-supervisor?fail";
+            return "redirect:/student?fail";
         }
 
-        return "request-supervisor?success";
+        return "redirect:/student?success";
     }
 }
