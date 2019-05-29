@@ -11,10 +11,12 @@
 </head>
 
 <body>
-<div th:fragment="global-menubar (user)">
+<div th:fragment="global-menubar (user,currRole)">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand"><a href="/home"><h3 th:text="${user}? ${user.firstName}+ ' ' + ${user.lastName} : ' '"></h3></a></a>
+        <a class="navbar-brand"><a href="/home"><h3 th:text="${user}? ${user.firstName}+ ' ' + ${user.lastName} + ' '"></h3></a>
+            <h5 class="mx-4 text-dark" th:text="${currRole}"></h5>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,7 +24,7 @@
         <div class="collapse navbar-collapse offset-md-1" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown h4">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                         Go to
                     </a>
                     <div class="dropdown-menu">
