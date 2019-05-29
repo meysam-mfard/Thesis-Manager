@@ -3,10 +3,17 @@
 <head>
     <title>Supervisor page</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 
 
@@ -50,8 +57,8 @@
 
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-10 offset-md-1">
-                            <table class="table table-striped table-bordered table-hover">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-hover shadow">
                                 <thead>
                                 <tr class="bg-warning">
                                     <th scope="col">Author</th>
@@ -110,8 +117,8 @@
 
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-10 offset-md-1">
-                            <table class="table table-striped table-bordered table-hover">
+                        <div class="col-md-8 offset-md-2">
+                            <table class="table table-striped table-bordered table-hover shadow">
                                 <thead>
                                 <tr class="bg-warning">
                                     <th scope="col">Requester</th>
@@ -127,7 +134,7 @@
                                         <form class="form" th:object="${request}"
                                               th:action="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Accepted'}"
                                               method="post">
-                                            <button class="col-md-5 offset-md-2 btn btn-success"
+                                            <button class="col-md-6 btn btn-success" style="float: left"
                                                     th:href="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Accepted'}"
                                                     type="submit">Accept Supervision Request
                                             </button>
@@ -135,7 +142,7 @@
                                         <form class="form" th:object="${request}"
                                               th:action="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Rejected'}"
                                               method="post">
-                                            <button class="col-md-5 offset-md-2 btn btn-danger"
+                                            <button class="col-md-6 btn btn-danger" style="left: 5px"
                                                     th:href="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Rejected'}"
                                                     type="submit">Reject Supervision Request
                                             </button>
@@ -168,8 +175,8 @@
 
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-10 offset-md-1">
-                            <table class="table table-striped table-bordered table-hover">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered table-hover shadow">
                                 <thead>
                                 <tr class="bg-warning">
                                     <th scope="col">Author</th>
@@ -242,41 +249,43 @@
             <div id="collapseThree" class="collapse" data-parent="#accordion">
                 <div class="card-body" style="background-color: #e3f2fd;">
 
-                    <div class="row">
-                        <div class="col-md-10 offset-md-1">
-                            <table class="table table-striped table-bordered table-hover">
-                                <thead>
-                                <tr class="bg-warning">
-                                    <th scope="col">Requester</th>
-                                    <th scope="col">Reply</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="table-primary" th:each="request : ${supervisionRequestsList}">
-                                    <td><a th:href="@{'/supervisor/thesis/id?thesisId=' + ${request.id}}"><span
-                                            th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">StudentName</span></a>
-                                    </td>
-                                    <td>
-                                        <form class="form" th:object="${request}"
-                                              th:action="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Accepted'}"
-                                              method="post">
-                                            <button class="col-md-5 offset-md-2 btn btn-success"
-                                                    th:href="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Accepted'}"
-                                                    type="submit">Accept Supervision Request
-                                            </button>
-                                        </form>
-                                        <form class="form" th:object="${request}"
-                                              th:action="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Rejected'}"
-                                              method="post">
-                                            <button class="col-md-5 offset-md-2 btn btn-danger"
-                                                    th:href="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Rejected'}"
-                                                    type="submit">Reject Supervision Request
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2">
+                                <table class="table table-striped table-bordered table-hover shadow">
+                                    <thead>
+                                    <tr class="bg-warning">
+                                        <th scope="col">Requester</th>
+                                        <th scope="col">Reply</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="table-primary" th:each="request : ${supervisionRequestsList}">
+                                        <td><a th:href="@{'/supervisor/thesis/id?thesisId=' + ${request.id}}"><span
+                                                th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">StudentName</span></a>
+                                        </td>
+                                        <td>
+                                            <form class="form" th:object="${request}"
+                                                  th:action="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Accepted'}"
+                                                  method="post">
+                                                <button class="col-md-6 btn btn-success" style="float: left"
+                                                        th:href="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Accepted'}"
+                                                        type="submit">Accept Supervision Request
+                                                </button>
+                                            </form>
+                                            <form class="form" th:object="${request}"
+                                                  th:action="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Rejected'}"
+                                                  method="post">
+                                                <button class="col-md-6 btn btn-danger" style="left: 5px"
+                                                        th:href="@{'/supervisor/replyToSupervisionRequest/' + ${request.id} + '/Rejected'}"
+                                                        type="submit">Reject Supervision Request
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
