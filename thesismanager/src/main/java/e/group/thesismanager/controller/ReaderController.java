@@ -76,6 +76,9 @@ public class ReaderController {
         model.addAttribute("searchedPossibleThesisList", searchService.searchPossibleThesisForReader("%" + user.getFirstName() + "%",
                 "%" + user.getLastName() + "%"));
 
+        model.addAttribute("possibleTheses", readerService.getPossibleTheses(userService.getCurrentUser()));
+        model.addAttribute("assignedTheses", readerService.getAssignedTheses(userService.getCurrentUser()));
+
         return "pages/reader";
     }
 }

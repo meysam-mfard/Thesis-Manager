@@ -76,6 +76,9 @@ public class SupervisorController {
         model.addAttribute("searchedRequestList", searchService.searchThesisForSupervisor("%" + user.getFirstName() + "%",
                 "%" + user.getLastName() + "%", SupervisorRequestStatus.REQUEST_SENT));
 
+        model.addAttribute("thesisList", supervisorService.getThesis(userService.getCurrentUser()));
+        model.addAttribute("supervisionRequestsList", supervisorService.getRequests(userService.getCurrentUser()));
+
         return "pages/supervisor";
     }
 }
