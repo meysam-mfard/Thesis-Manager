@@ -85,7 +85,7 @@
                                 <tr>
                                     <th scope="row">Given by</th>
                                     <td th:text="${feedback.author.firstName}+' ' +${feedback.author.lastName}
-                                    +' ('+${feedback.authorRole}+')'">Professor</td>
+                                    +' (Role: '+${feedback.authorRole.getText()}+')'">Professor</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Comment</th>

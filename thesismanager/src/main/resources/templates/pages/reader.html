@@ -3,10 +3,17 @@
 <head>
     <title>Reader page</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -61,15 +68,15 @@
                                 </thead>
                                 <tbody>
                                 <tr class="table-primary" th:each="thesis : ${searchedThesisList}">
+
                                     <td>
-                                        <a th:href="@{'/reader/thesis/id?thesisId=' + ${thesis.id}}"><span
-                                                th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
+                                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                         StudentName</span>
-                                        </a>
                                     </td>
 
                                     <td>
                                         <a th:each="submission : ${thesis.submissions}"
+                                           th:if="${submission.getType().toString() == 'Report'} or ${submission.getType().toString() == 'Final Report'}"
                                            th:href="@{'/submission/view?subId=' + ${submission.id}}">
                                             <div th:text="${submission.type}">SubmissionType
                                             </div>
@@ -81,10 +88,13 @@
                                         <a th:each="submission : ${thesis.submissions}">
                                             <a th:if="${submission.type.toString() == 'Report'}"
                                                th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_READER'}">
-                                                Give Feedback</a>
-                                            <span th:unless="${submission.type.toString() == 'Report'}">
-                            Not authorized to feedback this submission</span>
-                                            <hr>
+                                                Give Feedback
+                                                <hr>
+                                            </a>
+                                            <a th:if="${submission.type.toString() == 'Final Report'}">
+                                                Not authorized to feedback this submission
+                                                <hr>
+                                            </a>
                                         </a>
                                     </td>
 
@@ -92,10 +102,13 @@
                                         <a th:each="submission : ${thesis.submissions}">
                                             <a th:if="${submission.type.toString() == 'Final Report'}"
                                                th:href="@{'/submission/assess?subId=' + ${submission.id} + '&decGr=true'}">
-                                                Give Assessment</a>
-                                            <a th:unless="${submission.type.toString() == 'Final Report'}">
-                                                Not authorized to assess this submission</a>
-                                            <hr>
+                                                Give Assessment
+                                                <hr>
+                                            </a>
+                                            <a th:if="${submission.type.toString() == 'Report'}">
+                                                Not authorized to assess this submission
+                                                <hr>
+                                            </a>
                                         </a>
                                     </td>
 
@@ -120,12 +133,12 @@
                                 </thead>
                                 <tbody>
                                 <tr class="table-primary" th:each="thesis : ${searchedPossibleThesisList}">
+
                                     <td>
-                                        <a th:href="@{'/reader/thesis/id?thesisId=' + ${thesis.id}}">
-                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
-                            StudentName</span>
-                                        </a>
+                                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
+                        StudentName</span>
                                     </td>
+
                                     <td>
                                         <form class="form" th:object="${thesis}"
                                               th:action="@{'/reader/' + ${thesis.id} + '/bid'}"
@@ -175,15 +188,15 @@
                             </thead>
                             <tbody>
                             <tr class="table-primary" th:each="thesis : ${assignedTheses}">
+
                                 <td>
-                                    <a th:href="@{'/reader/thesis/id?thesisId=' + ${thesis.id}}"><span
-                                            th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
+                                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                         StudentName</span>
-                                    </a>
                                 </td>
 
                                 <td>
                                     <a th:each="submission : ${thesis.submissions}"
+                                       th:if="${submission.getType().toString() == 'Report'} or ${submission.getType().toString() == 'Final Report'}"
                                        th:href="@{'/submission/view?subId=' + ${submission.id}}">
                                         <div th:text="${submission.type}">SubmissionType
                                         </div>
@@ -195,10 +208,13 @@
                                     <a th:each="submission : ${thesis.submissions}">
                                         <a th:if="${submission.type.toString() == 'Report'}"
                                            th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_READER'}">
-                                            Give Feedback</a>
-                                        <span th:unless="${submission.type.toString() == 'Report'}">
-                            Not authorized to feedback this submission</span>
-                                        <hr>
+                                            Give Feedback
+                                            <hr>
+                                        </a>
+                                        <a th:if="${submission.type.toString() == 'Final Report'}">
+                                            Not authorized to feedback this submission
+                                            <hr>
+                                        </a>
                                     </a>
                                 </td>
 
@@ -206,10 +222,13 @@
                                     <a th:each="submission : ${thesis.submissions}">
                                         <a th:if="${submission.type.toString() == 'Final Report'}"
                                            th:href="@{'/submission/assess?subId=' + ${submission.id} + '&decGr=true'}">
-                                            Give Assessment</a>
-                                        <a th:unless="${submission.type.toString() == 'Final Report'}">
-                                            Not authorized to assess this submission</a>
-                                        <hr>
+                                            Give Assessment
+                                            <hr>
+                                        </a>
+                                        <a th:if="${submission.type.toString() == 'Report'}">
+                                            Not authorized to assess this submission
+                                            <hr>
+                                        </a>
                                     </a>
                                 </td>
 
@@ -250,12 +269,12 @@
                             </thead>
                             <tbody>
                             <tr class="table-primary" th:each="thesis : ${possibleTheses}">
+
                                 <td>
-                                    <a th:href="@{'/reader/thesis/id?thesisId=' + ${thesis.id}}">
-                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
-                            StudentName</span>
-                                    </a>
+                                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
+                        StudentName</span>
                                 </td>
+
                                 <td>
                                     <form class="form" th:object="${thesis}"
                                           th:action="@{'/reader/' + ${thesis.id} + '/bid'}"

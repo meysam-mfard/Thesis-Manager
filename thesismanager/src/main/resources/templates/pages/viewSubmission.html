@@ -3,10 +3,17 @@
 <head>
     <title>View Submission</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 
 </head>
 
@@ -21,7 +28,8 @@
         <div class="card rounded-lg bg-light">
             <div class="card-header rounded" id="headingProjectDescription">
                 <div class="mb-0">
-                    <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#projectDescription"
+                    <button class="btn btn-info btn-lg" type="button" data-toggle="collapse"
+                            data-target="#projectDescription"
                             th:text="${submission.type}">
                         Project Description
                     </button>
@@ -56,7 +64,7 @@
                                     <td>
                                         <a th:if="${submission.submittedDocument} != null" th:href="@{/submission/download(stdId=${studentId}
                                             , docId=${submission.submittedDocument.id})}" class="btn btn-link"
-                                            th:text="${submission.submittedDocument.fileName}">
+                                           th:text="${submission.submittedDocument.fileName}">
                                             DummyFileName.pdf
                                         </a>
                                     </td>
@@ -77,7 +85,8 @@
                                 <tr>
                                     <th scope="row">Given by</th>
                                     <td th:text="${feedback.author.firstName}+' ' +${feedback.author.lastName}
-                                    +' ('+${feedback.authorRole}+')'">Professor</td>
+                                    +' (Role: '+${feedback.authorRole.getText()}+')'">Professor
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Comment</th>
@@ -88,7 +97,7 @@
                                     <td>
                                         <a th:if="${feedback.file} != null" th:href="@{/submission/download(stdId=${studentId}
                                             , docId=${feedback.id})}" class="btn btn-link"
-                                            th:text="${feedback.fileName}">
+                                           th:text="${feedback.fileName}">
                                             DummyFileName.pdf
                                         </a>
                                     </td>
@@ -128,8 +137,11 @@
 </html>
 
 <style>
-    .card {margin-top: 10px}
-    body{
-        background-color:#EEEEEE;
+    .card {
+        margin-top: 10px
+    }
+
+    body {
+        background-color: #EEEEEE;
     }
 </style>
