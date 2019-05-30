@@ -9,4 +9,6 @@ public interface UserService {
     User getUserByUsername(String useName);
 
     User getCurrentUser();
+
+    User changePassword(User user, String currentPassword, String newPassword, String newPasswordAgain);
 }

@@ -28,6 +28,7 @@
                         Go to
                     </a>
                     <div class="dropdown-menu">
+                        <a class="dropdown-item" th:href="@{/personalInformations}">Personal Informations Page</a>
                         <a class="dropdown-item" sec:authorize="hasRole('ROLE_STUDENT')" th:href="@{/student}">Student Page</a>
                         <a class="dropdown-item" sec:authorize="hasRole('ROLE_COORDINATOR')" th:href="@{/coordinator}">Coordinator Page</a>
                         <a class="dropdown-item" sec:authorize="hasRole('ROLE_SUPERVISOR')" th:href="@{/supervisor}">Supervisor Page</a>
