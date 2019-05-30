@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -84,17 +85,29 @@ public class StudentServiceImpl implements StudentService {
 
     //Returns list of all supervisors. If a supervisor has accepted a request for this student
     // in the active semester the list will only contain that supervisor.
+    // If thesis is not initiated or project description is not passed, returns an empty list
     @Override
     public List<User> getSupervisors(Thesis thesis) {
         if (thesis == null)
             return Collections.emptyList();
+
         if (thesis.getSupervisorRequestStatus().equals(SupervisorRequestStatus.ACCEPTED))
             return Collections.singletonList(thesis.getSupervisor());
+        else if(semesterService.isDeadlinePassed(SubmissionType.PROJECT_PLAN))
+            return Collections.emptyList();
+
+        //Supervisor selection is not possible if project description is not passed
+        if ((!thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).isPresent())
+                || thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).get()
+                .getGradeOptional().orElse(0F).equals(0F))
+            return Collections.emptyList();
+
         return userRepository.findAllByRolesContaining(Role.ROLE_SUPERVISOR);
     }
 
     @Override
-    public void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException, InvalidSupervisorRequestException {
+    public void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException
+            , InvalidSupervisorRequestException {
 
         if(!supervisor.getRoles().contains(Role.ROLE_SUPERVISOR))
             throw new MissingRoleException("Could not propose supervisor; Proposed user is not a supervisor");
@@ -131,83 +144,6 @@ public class StudentServiceImpl implements StudentService {
         submitDocument(thesis, finalReport, SubmissionType.FINAL_REPORT);
     }
 
-    //Is student allowed to edit/add a Submission(considering criteria such as deadline)
-    @Override
-    public Boolean isSubmissionAllowed(Long studentId, SubmissionType submissionType) {
-
-        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
-                new NotFoundException("Student does not exist. Student Id:" + studentId));
-
-        switch (submissionType) {
-            case PROJECT_DESCRIPTION:
-                return isProjectDescriptionSubmissionAllowed(student);
-            case PROJECT_PLAN:
-                return isProjectPlanSubmissionAllowed(student);
-            case REPORT:
-                return isReportSubmissionAllowed(student);
-            case FINAL_REPORT:
-                return isFinalReportSubmissionAllowed(student);
-            default:
-                log.error("No such role exists.");
-                return false;
-        }
-    }
-
-    //Get the list of Submissions that the student is allowed to edit/add
-    @Override
-    public List<SubmissionType> getAllowedSubmissionTypes(Long studentId) {
-        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
-                new NotFoundException("Student does not exist. Student Id:" + studentId));
-
-        List<SubmissionType> result = new LinkedList<>();
-        if(!thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).isPresent())
-            return result;
-
-        if(isProjectDescriptionSubmissionAllowed(student))
-            result.add(SubmissionType.PROJECT_DESCRIPTION);
-        if(isProjectPlanSubmissionAllowed(student))
-            result.add(SubmissionType.PROJECT_PLAN);
-        if(isReportSubmissionAllowed(student))
-            result.add(SubmissionType.REPORT);
-        if(isFinalReportSubmissionAllowed(student))
-            result.add(SubmissionType.FINAL_REPORT);
-
-        return result;
-    }
-
-    private Boolean isProjectDescriptionSubmissionAllowed(User student) {
-
-        return true;
-    }
-
-    private Boolean isProjectPlanSubmissionAllowed(User student) {
-
-        return true;
-    }
-
-    private Boolean isReportSubmissionAllowed(User student) {
-
-        return true;
-    }
-    private Boolean isFinalReportSubmissionAllowed(User student) {
-
-        return true;
-    }
-
-    private void submitDocument(Thesis thesis, Document document, SubmissionType type){
-
-        if (!semesterService.isDeadlinePassed(type)) {
-            Submission submission = new Submission(thesis, type);
-            submission.setType(type);
-            submission.setSubmittedDocument(document);
-            thesis.addSubmission(submission);
-            thesisRepository.save(thesis);
-        }
-        else
-            throw new DeadlinePassed("Deadline is passed.");
-
-    }
-
     @Override
     public Submission submitDocument(Long studentId, String comment, MultipartFile multipartFile
             , SubmissionType submissionType) throws IOException {
@@ -228,15 +164,149 @@ public class StudentServiceImpl implements StudentService {
             for (byte b : multipartFile.getBytes()){
                 file[i++] = b;
             }
-
             document.setFile(file);
             document.setFileName(multipartFile.getOriginalFilename());
             document.setFileType(multipartFile.getContentType());
+            document.setSubmissionTime(LocalDateTime.now());
         }
 
-        document.setComment(comment);
+        if (comment.length()!=0) {
+            document.setComment(comment);
+            document.setSubmissionTime(LocalDateTime.now());
+        }
         document.setAuthor(thesis.getStudent());
 
         return submissionRepository.save(submission);
+    }
+
+    //Is student allowed to edit/add a Submission(considering criteria such as deadline)
+    @Override
+    public Boolean isSubmissionAllowed(Long studentId, SubmissionType submissionType) {
+
+        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+                new NotFoundException("Student does not exist. Student Id:" + studentId));
+
+        Thesis thesis = thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).orElse(null);
+        //If student does not have an active thesis
+        if(thesis == null)
+            return false;
+
+        //If final report is already graded
+        if(thesis.getSubmissionByType(SubmissionType.FINAL_REPORT).isPresent()
+                && thesis.getSubmissionByType(SubmissionType.FINAL_REPORT).get().getGradeOptional().isPresent())
+            return false;
+
+        switch (submissionType) {
+            case PROJECT_DESCRIPTION:
+                return isProjectDescriptionSubmissionAllowed(student, thesis);
+            case PROJECT_PLAN:
+                return isProjectPlanSubmissionAllowed(student, thesis);
+            case REPORT:
+                return isReportSubmissionAllowed(student, thesis);
+            case FINAL_REPORT:
+                return isFinalReportSubmissionAllowed(student, thesis);
+            default:
+                log.error("No such submission type exists.");
+                return false;
+        }
+    }
+
+    //Get the list of Submissions that the student is allowed to edit/add
+    @Override
+    public List<SubmissionType> getAllowedSubmissionTypes(Long studentId) {
+
+        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+                new NotFoundException("Student does not exist. Student Id:" + studentId));
+
+        List<SubmissionType> result = new LinkedList<>();
+        Thesis thesis = thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).orElse(null);
+        //If student does not have an active thesis
+        if(thesis == null)
+            return result;
+
+        //If final report is already graded
+        if(thesis.getSubmissionByType(SubmissionType.FINAL_REPORT).isPresent()
+                && thesis.getSubmissionByType(SubmissionType.FINAL_REPORT).get().getGradeOptional().isPresent())
+            return result;
+
+        if(isProjectDescriptionSubmissionAllowed(student, thesis))
+            result.add(SubmissionType.PROJECT_DESCRIPTION);
+        if(isProjectPlanSubmissionAllowed(student, thesis))
+            result.add(SubmissionType.PROJECT_PLAN);
+        if(isReportSubmissionAllowed(student, thesis))
+            result.add(SubmissionType.REPORT);
+        if(isFinalReportSubmissionAllowed(student, thesis))
+            result.add(SubmissionType.FINAL_REPORT);
+
+        return result;
+    }
+
+    private Boolean isProjectDescriptionSubmissionAllowed(User student, Thesis thesis) {
+        if (semesterService.isDeadlinePassed(SubmissionType.PROJECT_DESCRIPTION))
+            return false;
+
+        //Cannot submit if already passed
+        if (thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).isPresent()
+                && thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).get()
+                .getGradeOptional().orElse(0F).equals(1F))
+            return false;
+
+        return true;
+    }
+
+    private Boolean isProjectPlanSubmissionAllowed(User student, Thesis thesis) {
+        if (semesterService.isDeadlinePassed(SubmissionType.PROJECT_PLAN))
+            return false;
+
+        //Cannot submit if already passed
+        if (thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).isPresent()
+                && thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).get()
+                .getGradeOptional().orElse(0F).equals(1F))
+            return false;
+
+        //Cannot submit if project description is not passed
+        if ( (!thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).isPresent()) ||
+                thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).get()
+                        .getGradeOptional().orElse(0F).equals(0F))
+            return false;
+
+        return true;
+    }
+
+    private Boolean isReportSubmissionAllowed(User student, Thesis thesis) {
+        if (semesterService.isDeadlinePassed(SubmissionType.REPORT))
+            return false;
+
+        //Cannot submit if project plan is not passed
+        if ( (!thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).isPresent()) ||
+                thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).get()
+                        .getGradeOptional().orElse(0F).equals(0F))
+            return false;
+        return true;
+    }
+    private Boolean isFinalReportSubmissionAllowed(User student, Thesis thesis) {
+        if (semesterService.isDeadlinePassed(SubmissionType.FINAL_REPORT))
+            return false;
+
+        //Cannot submit if project plan is not passed
+        if (!thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).isPresent() ||
+                thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).get()
+                        .getGradeOptional().orElse(0F).equals(0F))
+            return false;
+        return true;
+    }
+
+    private void submitDocument(Thesis thesis, Document document, SubmissionType type){
+
+        if (!semesterService.isDeadlinePassed(type)) {
+            Submission submission = new Submission(thesis, type);
+            submission.setType(type);
+            submission.setSubmittedDocument(document);
+            thesis.addSubmission(submission);
+            thesisRepository.save(thesis);
+        }
+        else
+            throw new DeadlinePassed("Deadline is passed.");
+
     }
 }
