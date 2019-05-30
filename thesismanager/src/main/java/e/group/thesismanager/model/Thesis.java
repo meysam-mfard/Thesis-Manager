@@ -42,6 +42,11 @@ public class Thesis extends BaseEntity {
         submission.setThesis(this);
     }
 
+    public Optional<Submission> getSubmissionByType(SubmissionType submissionType) {
+        return submissions.stream().filter(submission -> submission.getType().equals(submissionType))
+                .findFirst();
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -59,14 +64,12 @@ public class Thesis extends BaseEntity {
         return Objects.hash(student, semester);
     }
 
+    @Override
     public String toString() {
-        return "Thesis(student=" + this.getStudent() + ", opponent=" + this.getOpponent() + ", semester=" + this.getSemester() + ", coordinator=" + this.getCoordinator() + ", supervisor=" + this.getSupervisor() + ", readers=" + this.getReaders()
-                + ", finalGrade=" + this.getFinalGrade() + ", supervisorRequestStatus=" + this.getSupervisorRequestStatus() + ")";
+        return "Thesis(student=" + this.getStudent() + ", opponent=" + this.getOpponent()
+                + ", semester=" + this.getSemester() + ", coordinator=" + this.getCoordinator()
+                + ", supervisor=" + this.getSupervisor() + ", readers=" + this.getReaders()
+                + ", finalGrade=" + this.getFinalGrade()
+                + ", supervisorRequestStatus=" + this.getSupervisorRequestStatus() + ")";
     }
-
-    /*public String toString() {
-        return "Thesis(student=" + this.getStudent().getId() + ", opponent=" + this.getOpponent().getId()
-                + ", semester=" + this.getSemester() + ", coordinator=" + this.getCoordinator().getId()
-                + ", supervisor=" + this.getSupervisor().getId() + ")";
-    }*/
 }

@@ -35,6 +35,7 @@ public class Document extends BaseEntity {
 
     @PrePersist
     private void setUpdateTime() {
-        submissionTime = LocalDateTime.now();
+        if (submissionTime == null)
+            submissionTime = LocalDateTime.now();
     }
 }

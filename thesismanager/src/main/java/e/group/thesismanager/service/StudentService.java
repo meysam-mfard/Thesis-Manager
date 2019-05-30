@@ -36,10 +36,10 @@ public interface StudentService {
 
     void submitFinalReport(Thesis thesis, Document finalReport);
 
+    Submission submitDocument(Long studentId, String comment, MultipartFile multipartFile
+            , SubmissionType submissionType) throws IOException;
+
     Boolean isSubmissionAllowed(Long studentId, SubmissionType submissionType);
 
     List<SubmissionType> getAllowedSubmissionTypes(Long studentId);
-
-    Submission submitDocument(Long studentId, String comment, MultipartFile multipartFile
-            , SubmissionType submissionType) throws IOException;
 }
