@@ -1,11 +1,19 @@
-create table document (dtype varchar(31) not null, id bigint not null auto_increment, comment longtext, file longblob, file_name varchar(50), file_type varchar(50), submission_time datetime, author_role integer, author_id bigint, primary key (id)) engine=InnoDB;
+
+# JUST FOR DEVELOPMENT PHASE
+DROP DATABASE IF EXISTS thesis_manager;
+
+CREATE DATABASE thesis_manager;
+
+USE thesis_manage;
+
+create table document (dtype varchar(31) not null, id bigint not null auto_increment, comment longtext, file longblob, file_name varchar(100), file_type varchar(50), submission_time datetime, author_role integer, author_id bigint, primary key (id)) engine=InnoDB;
 create table semester (id bigint not null auto_increment, active bit not null, final_report_deadline datetime, project_description_deadline datetime, project_plan_deadline datetime, report_deadline datetime, semester_period integer, year tinyblob, primary key (id)) engine=InnoDB;
 create table submission (id bigint not null auto_increment, grade float, type varchar(50), submitted_document_id bigint, thesis_id bigint, primary key (id)) engine=InnoDB;
 create table submission_feedbacks (submission_id bigint not null, feedbacks_id bigint not null) engine=InnoDB;
 create table thesis (id bigint not null auto_increment, final_grade float, supervisor_request_status integer, coordinator_id bigint, opponent_id bigint, semester_id bigint, student_id bigint, supervisor_id bigint, primary key (id)) engine=InnoDB;
 create table thesis_bidders (thesis_id bigint not null, bidders_id bigint not null, primary key (thesis_id, bidders_id)) engine=InnoDB;
 create table thesis_readers (thesis_id bigint not null, readers_id bigint not null, primary key (thesis_id, readers_id)) engine=InnoDB;
-create table user (id bigint not null auto_increment, account_is_active bit, first_name varchar(50), last_name varchar(50), password varchar(50), username varchar(50), primary key (id)) engine=InnoDB;
+create table user (id bigint not null auto_increment, account_is_active bit, first_name varchar(50), last_name varchar(50), password varchar(255), username varchar(50), primary key (id)) engine=InnoDB;
 create table user_roles (user_id bigint not null, roles varchar(50)) engine=InnoDB;
 alter table submission_feedbacks add constraint UK_y09lpv0s5k0m36khyq80pmip unique (feedbacks_id);
 alter table user add constraint UK_sb8bbouer5wak8vyiiy4pf2bx unique (username);
