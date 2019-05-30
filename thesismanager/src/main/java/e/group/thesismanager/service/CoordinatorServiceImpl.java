@@ -161,6 +161,18 @@ public class CoordinatorServiceImpl implements CoordinatorService {
     }
 
     @Override
+    public Thesis initThesis(Long studentId) throws MissingRoleException {
+
+        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+                new MissingRoleException("Failed to initiate thesis. A student does not exist with ID: " + studentId));
+
+        Thesis thesis = new Thesis();
+        thesis.setStudent(student);
+        thesis.setSemester(semesterService.getCurrentSemester());
+        return thesisRepository.save(thesis);
+    }
+
+    @Override
     public Thesis assignReaders(List<String> readersUsername, Long thesisId) throws MissingRoleException {
 
         List<User> readersList = new ArrayList<User>();
@@ -185,6 +197,13 @@ public class CoordinatorServiceImpl implements CoordinatorService {
         thesis.getReaders().clear();
         thesis.getReaders().addAll(readersList);
         return thesisRepository.save(thesis);
+    }
+
+    @Override
+    public List<User> getStudentsWithoutThesis() {
+        return userRepository.findAllByRolesContaining(Role.ROLE_STUDENT).stream().filter(student ->
+                !thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(student.getId()).isPresent())
+                .collect(Collectors.toList());
     }
 
     private List<User> getUserByRole(Role role) {

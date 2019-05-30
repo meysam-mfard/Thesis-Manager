@@ -176,6 +176,19 @@ public class CoordinatorController {
         return "redirect:/coordinator?" + "NoThesisFound";
     }
 
+    @PostMapping("coordinator/initThesis/{studentId}")
+    public String initThesis(Model model, @PathVariable Long studentId) {
+        try {
+            coordinatorService.initThesis(studentId);
+        } catch (MissingRoleException e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "Unable to initialize thesis for student: "
+                    + userService.getUserById(studentId));
+            return "pages/error";
+        }
+        return "redirect:/coordinator?" + SUCCESS;
+    }
+
     private LocalDateTime parseDateTimeString(String dateTimeString) {
 
 
@@ -195,6 +208,7 @@ public class CoordinatorController {
         model.addAttribute("supervisors", coordinatorService.getSupervisors());
         model.addAttribute("currentSemester", semesterService.getCurrentSemester());
         model.addAttribute("semesterPeriods", SemesterPeriod.values());
+        model.addAttribute("studentsWithoutThesis", coordinatorService.getStudentsWithoutThesis());
 
         List<Thesis> theses = coordinatorService.getThesis();
         for (Thesis thesis : theses) {
