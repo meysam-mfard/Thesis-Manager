@@ -71,29 +71,24 @@
                                 <tr class="table-primary" th:each="eachThesis : ${searchedThesisList}">
 
                                     <td>
-                                        <a th:href="@{'/opponent/thesis/id?thesisId=' + ${eachThesis.id}}"><span
-                                                th:text="${eachThesis.student.firstName} + ' ' + ${eachThesis.student.lastName}">
+                                        <span th:text="${eachThesis.student.firstName} + ' ' + ${eachThesis.student.lastName}">
                         StudentName</span>
+                                    </td>
+
+                                    <td>
+                                        <a th:each="submission : ${eachThesis.submissions}"
+                                           th:if="${submission.getType().toString() == 'Report'}"
+                                           th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                            <div th:text="${submission.type}">SubmissionType
+                                            </div>
                                         </a>
                                     </td>
 
                                     <td>
                                         <a th:each="submission : ${eachThesis.submissions}"
-                                           th:href="@{'/submission/view?subId=' + ${submission.id}}">
-                                            <div th:text="${submission.type}">SubmissionType
-                                            </div>
-                                            <hr>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <a th:each="submission : ${eachThesis.submissions}">
-                                            <a th:if="${submission.type.toString() == 'Report'}"
-                                               th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_OPPONENT'}">
-                                                Give Feedback</a>
-                                            <span th:unless="${submission.type.toString() == 'Report'}">
-                            Not authorized to feedback this submission</span>
-                                            <hr>
+                                           th:if="${submission.getType().toString() == 'Report'}"
+                                           th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_OPPONENT'}">
+                                            Give Feedback
                                         </a>
                                     </td>
                                 </tr>
@@ -137,29 +132,24 @@
                                 <tr class="table-primary" th:each="thesis : ${thesisList}">
 
                                     <td>
-                                        <a th:href="@{'/opponent/thesis/id?thesisId=' + ${thesis.id}}"><span
-                                                th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
+                                        <span th:text="${thesis.student.firstName} + ' ' + ${thesis.student.lastName}">
                         StudentName</span>
+                                    </td>
+
+                                    <td>
+                                        <a th:each="submission : ${thesis.submissions}"
+                                           th:if="${submission.getType().toString() == 'Report'}"
+                                           th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                            <div th:text="${submission.type}">SubmissionType
+                                            </div>
                                         </a>
                                     </td>
 
                                     <td>
                                         <a th:each="submission : ${thesis.submissions}"
-                                           th:href="@{'/submission/view?subId=' + ${submission.id}}">
-                                            <div th:text="${submission.type}">SubmissionType
-                                            </div>
-                                            <hr>
-                                        </a>
-                                    </td>
-
-                                    <td>
-                                        <a th:each="submission : ${thesis.submissions}">
-                                            <a th:if="${submission.type.toString() == 'Report'}"
-                                               th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_OPPONENT'}">
-                                                Give Feedback</a>
-                                            <span th:unless="${submission.type.toString() == 'Report'}">
-                            Not authorized to feedback this submission</span>
-                                            <hr>
+                                           th:if="${submission.getType().toString() == 'Report'}"
+                                           th:href="@{'/submission/feedback?subId=' + ${submission.id} + '&role=ROLE_OPPONENT'}">
+                                            Give Feedback
                                         </a>
                                     </td>
                                 </tr>
