@@ -1,9 +1,9 @@
 
-CREATE DATABASE thesis_dev;
+CREATE DATABASE thesis_product;
 
-CREATE USER 'thesis_dev_user'@'localhost' IDENTIFIED BY 'th-pass';
+CREATE USER 'thesis_prod_user'@'localhost' IDENTIFIED BY 'th-pass';
 
-GRANT SELECT ON thesis_dev.* to 'thesis_dev_user'@'localhost';
-GRANT INSERT ON thesis_dev.* to 'thesis_dev_user'@'localhost';
-GRANT DELETE ON thesis_dev.* to 'thesis_dev_user'@'localhost';
-GRANT UPDATE ON thesis_dev.* to 'thesis_dev_user'@'localhost';
+GRANT SELECT ON thesis_product.* to 'thesis_prod_user'@'localhost';
+GRANT INSERT ON thesis_product.* to 'thesis_prod_user'@'localhost';
+GRANT DELETE ON thesis_product.* to 'thesis_prod_user'@'localhost';
+GRANT UPDATE ON thesis_product.* to 'thesis_prod_user'@'localhost';
