@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,20 +35,6 @@ public class StudentServiceImpl implements StudentService {
         this.submissionRepository = submissionRepository;
         this.userRepository = userRepository;
         this.semesterService = semesterService;
-    }
-
-    @Override
-    public Thesis initThesis(User student, Semester semester) throws MissingRoleException {
-
-        if(!student.getRoles().contains(Role.ROLE_STUDENT))
-            throw new MissingRoleException("Could not initialize thesis; User is not a student");
-
-
-        Thesis thesis = new Thesis();
-        thesis.setStudent(student);
-        thesis.setSemester(semester);
-        thesis.setSubmissions(new ArrayList<>());
-        return thesisRepository.save(thesis);
     }
 
     @Override

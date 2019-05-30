@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface StudentService {
 
-    Thesis initThesis(User student, Semester semester) throws MissingRoleException;
-
     Thesis getThesisById(Long id);
 
     Thesis getThesis(User student, Semester semester);

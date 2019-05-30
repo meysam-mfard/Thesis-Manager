@@ -1,7 +1,10 @@
 package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
-import e.group.thesismanager.model.*;
+import e.group.thesismanager.model.Semester;
+import e.group.thesismanager.model.SemesterPeriod;
+import e.group.thesismanager.model.Thesis;
+import e.group.thesismanager.model.User;
 
 import java.time.LocalDateTime;
 import java.time.Year;
@@ -31,4 +34,8 @@ public interface CoordinatorService {
     Thesis assignReaders(List<String> readersUsername, Long thesisId) throws MissingRoleException;
 
     Thesis assignOpponent(String opponentUsername, Long thesisId) throws MissingRoleException;
+
+    Thesis initThesis(Long studentId) throws MissingRoleException;
+
+    List<User> getStudentsWithoutThesis();
 }
