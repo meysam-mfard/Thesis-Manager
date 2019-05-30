@@ -36,6 +36,26 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(getCurrentUsername()).orElse(null);
     }
 
+    @Override
+    public User changePassword(User user, String currentPassword, String newPassword, String newPasswordAgain) {
+
+        String securityPrefix = "{noop}";
+
+        if(!newPassword.equals(newPasswordAgain)) {
+
+            throw new IllegalArgumentException("The new passwords are not the same!");
+        }
+
+        if(!user.getPassword().substring(securityPrefix.length()).equals(currentPassword)) {
+
+            throw new IllegalArgumentException("Current password is wrong!");
+        }
+
+        user.setPassword(securityPrefix + newPassword);
+
+        return userRepository.save(user);
+    }
+
     private String getCurrentUsername() {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
