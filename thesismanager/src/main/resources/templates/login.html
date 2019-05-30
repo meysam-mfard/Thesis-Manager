@@ -1,54 +1,66 @@
 <!DOCTYPE>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title> Login page</title>
-        <!--<link rel="stylesheet" type="text/css" href="/css/UserLogin.css"/>-->
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<head>
+    <title> Login page</title>
+    <!--<link rel="stylesheet" type="text/css" href="/css/UserLogin.css"/>-->
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 
     <head>
-            
-            <header>
-                    <h2 style="text-align: center; margin-top: 70px">Lnu Student Thesis Manager</h2>
-            </header>
-    <body>
-        <div class="container">
-            <div class="card rounded-lg bg-light shadow p-2 col-md-4 offset-md-4">
-                <div class="card-header bg-light rounded">
-                    <h4>Login</h4>
-                </div>
-                <div class="card-body bg-dark rounded">
-                    <form class="form-signin" th:action="@{/login}" method="post">
-                        <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                            Invalid username or password
-                        </div>
-                        <div th:if="${param.logout}" class="alert alert-success" role="alert">
-                            You have been logged out
-                        </div>
-                        <p>
-                            <label for="username" class="sr-only">Username</label>
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
-                        </p>
-                        <p>
-                            <label for="password" class="sr-only">Password</label>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                        </p>
-                        <div class="form-actions">
-                            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
+        <header>
+            <h1 style="text-align: center; margin-top: 70px"><span class="badge badge-pill badge-dark">Lnu Student Thesis Manager</span></h1>
+        </header>
+<body>
+<div class="container">
+    <div class="card rounded-lg bg-light shadow p-2 col-md-4 offset-md-4">
+        <div class="card-header bg-light rounded">
+            <h4>Login</h4>
         </div>
-    </body>
+        <div class="card-body bg-dark rounded">
+            <form class="form-signin" th:action="@{/login}" method="post">
+                <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                    Invalid username or password
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                    You have been logged out
+                </div>
+                <p>
+                    <label for="username" class="sr-only">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username"
+                           required autofocus>
+                </p>
+                <p>
+                    <label for="password" class="sr-only">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                           required>
+                </p>
+                <div class="form-actions">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
 </html>
 
 <style>
-    .card {margin-top: 100px}
-    body{
-        background-color:#EEEEEE;
+    .card {
+        margin-top: 100px
+    }
+
+    body {
+        background-color: #EEEEEE;
     }
 </style>

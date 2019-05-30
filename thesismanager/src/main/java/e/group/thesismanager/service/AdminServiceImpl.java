@@ -115,7 +115,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<User> searchUser(String firstName, String lastName, String username) {
-        return userRepository.findAllByFirstNameLikeAndLastNameLikeAndUsernameLike(firstName, lastName, username);
+        return userRepository.findAllByFirstNameLikeIgnoreCaseAndLastNameLikeIgnoreCaseAndUsernameLike(firstName, lastName, username);
     }
 
     @Override

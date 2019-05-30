@@ -128,6 +128,7 @@
                                 <thead>
                                 <tr class="bg-warning">
                                     <th scope="col">Author</th>
+                                    <th scope="col">Submission</th>
                                     <th scope="col">Bid</th>
                                 </tr>
                                 </thead>
@@ -140,10 +141,19 @@
                                     </td>
 
                                     <td>
+                                        <a th:each="submission : ${thesis.submissions}"
+                                           th:if="${submission.getType().toString() == 'Report'}"
+                                           th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                            <div th:text="${submission.type}">SubmissionType
+                                            </div>
+                                        </a>
+                                    </td>
+
+                                    <td>
                                         <form class="form" th:object="${thesis}"
                                               th:action="@{'/reader/' + ${thesis.id} + '/bid'}"
                                               method="post">
-                                            <button class="col-md-5 offset-md-2 btn btn-success"
+                                            <button class="col-md-8 offset-md-2 btn btn-success"
                                                     th:href="@{'/reader/' + ${thesis.id} + '/bid'}" type="submit">
                                                 Bid On Thesis
                                             </button>
@@ -264,6 +274,7 @@
                             <thead>
                             <tr class="bg-warning">
                                 <th scope="col">Author</th>
+                                <th scope="col">Submission</th>
                                 <th scope="col">Bid</th>
                             </tr>
                             </thead>
@@ -276,10 +287,19 @@
                                 </td>
 
                                 <td>
+                                    <a th:each="submission : ${thesis.submissions}"
+                                       th:if="${submission.getType().toString() == 'Report'}"
+                                       th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                        <div th:text="${submission.type}">SubmissionType
+                                        </div>
+                                    </a>
+                                </td>
+
+                                <td>
                                     <form class="form" th:object="${thesis}"
                                           th:action="@{'/reader/' + ${thesis.id} + '/bid'}"
                                           method="post">
-                                        <button class="col-md-5 offset-md-2 btn btn-success"
+                                        <button class="col-md-8 offset-md-2 btn btn-success"
                                                 th:href="@{'/reader/' + ${thesis.id} + '/bid'}" type="submit">Bid On
                                             Thesis
                                         </button>
