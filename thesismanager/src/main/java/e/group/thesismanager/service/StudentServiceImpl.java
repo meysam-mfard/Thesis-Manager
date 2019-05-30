@@ -258,8 +258,8 @@ public class StudentServiceImpl implements StudentService {
             return false;
 
         //Cannot submit if project plan is not passed
-        return thesis.getSubmissionByType(SubmissionType.REPORT).isPresent() &&
-                !thesis.getSubmissionByType(SubmissionType.REPORT).get()
+        return thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).isPresent() &&
+                !thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).get()
                         .getGradeOptional().orElse(0F).equals(0F);
     }
 }
