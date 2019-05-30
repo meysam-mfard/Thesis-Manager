@@ -122,11 +122,12 @@
 
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-8 offset-md-2">
+                        <div class="col-md-10 offset-md-1">
                             <table class="table table-striped table-bordered table-hover shadow">
                                 <thead>
                                 <tr class="bg-warning">
                                     <th scope="col">Requester</th>
+                                    <th scope="col">Submission</th>
                                     <th scope="col">Reply</th>
                                 </tr>
                                 </thead>
@@ -136,6 +137,15 @@
                                     <td>
                                         <span th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">
                         StudentName</span>
+                                    </td>
+
+                                    <td>
+                                        <a th:each="submission : ${request.submissions}"
+                                           th:if="${submission.getType().toString() == 'Project Description'}"
+                                           th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                            <div th:text="${submission.type}">SubmissionType
+                                            </div>
+                                        </a>
                                     </td>
 
                                     <td>
@@ -264,11 +274,12 @@
 
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-8 offset-md-2">
+                            <div class="col-md-10 offset-md-1">
                                 <table class="table table-striped table-bordered table-hover shadow">
                                     <thead>
                                     <tr class="bg-warning">
                                         <th scope="col">Requester</th>
+                                        <th scope="col">Submission</th>
                                         <th scope="col">Reply</th>
                                     </tr>
                                     </thead>
@@ -278,6 +289,15 @@
                                         <td>
                                         <span th:text="${request.student.firstName} + ' ' + ${request.student.lastName}">
                         StudentName</span>
+                                        </td>
+
+                                        <td>
+                                            <a th:each="submission : ${request.submissions}"
+                                               th:if="${submission.getType().toString() == 'Project Description'}"
+                                               th:href="@{'/submission/view?subId=' + ${submission.id}}">
+                                                <div th:text="${submission.type}">SubmissionType
+                                                </div>
+                                            </a>
                                         </td>
 
                                         <td>
