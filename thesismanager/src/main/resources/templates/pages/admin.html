@@ -1,177 +1,192 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Admin page</title>
-        <meta charset="utf-8">
-        <meta property="og:title" content="Start page" />
-        <meta property="og:type" content="website" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <link rel="stylesheet" type="text/css" href="/css/admin.css"/>
-    </head>
-            
-    <header>
+<head>
+    <title>Admin page</title>
+    <meta charset="utf-8">
+    <meta property="og:title" content="Start page"/>
+    <meta property="og:type" content="website"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/css/admin.css"/>
+</head>
 
-            <h1 class="d-flex justify-content-center"><br><br>Admin Page</h1>
-    </header>
-    <body>
-    <div class="container">
+<header>
 
-        <div th:if="${param.success}" class="alert alert-success col-md-3" role="alert">
-            User was saved successfully.
-        </div>
-        <div th:if="${param.fail}" class="alert alert-danger col-md-3" role="alert">
-            Saving User failed!
-        </div>
+    <h1 class="d-flex justify-content-center"><br><br>Admin Page</h1>
+</header>
+<body>
+<div class="container">
+
+    <div th:if="${param.success}" class="alert alert-success col-md-3" role="alert">
+        User was saved successfully.
+    </div>
+    <div th:if="${param.fail}" class="alert alert-danger col-md-3" role="alert">
+        Saving User failed!
+    </div>
 
 
-        <div class="accordion" id="accordion">
+    <div class="accordion" id="accordion">
 
-            <!--SEARCH USER-->
-            <div class="card">
-                <div class="card-header" id="headingOne">
-                    <div class="mb-0">
-                        <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseOne">
-                            Search User
-                        </button>
-                        <a class="btn btn-info btn-lg" th:href="@{'/admin/'}" role="button">
-                            Show All Users
-                        </a>
-                        <a href="/logout" class="btn btn-secondary btn-lg offset-md-7" role="button">
-                            Logout
-                        </a>
-                    </div>
-                </div>
-
-                <div id="collapseOne" class="collapse" data-parent="#accordion">
-                    <div class="card-body" style="background-color: #e3f2fd;">
-                        <form class="form" th:object="${user}" th:action="@{'/admin/search'}" method="post">
-                            <div class="row">
-                                <div class="col-md-3 form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="search" placeholder="Search" id="firstName" class="form-control" th:field="*{firstName}">
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="search" placeholder="Search" id="lastName" class="form-control" th:field="*{lastName}">
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    <label for="username">Username (Email)</label>
-                                    <input type="search" placeholder="Search" id="username" class="form-control" th:field="*{username}">
-                                </div>
-                                <div class="col-md-3">
-                                    <div style="height: 30px"></div>
-                                    <button class="btn btn-success btn-lg" type="submit">Search</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+        <!--SEARCH USER-->
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <div class="mb-0">
+                    <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseOne">
+                        Search User
+                    </button>
+                    <a class="btn btn-info btn-lg" th:href="@{'/admin/'}" role="button">
+                        Show All Users
+                    </a>
+                    <a href="/logout" class="btn btn-secondary btn-lg offset-md-7" role="button">
+                        Logout
+                    </a>
                 </div>
             </div>
 
-            <!--NEW USER-->
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                    <h5 class="mb-0">
-                            <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseTwo">
-                            Create a New User
-                        </button>
-                    </h5>
-                </div>
-
-                <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                    <div class="card-body" style="background-color: #e3f2fd;">
-                        <form class="form" th:object="${user}" th:action="@{'/admin/newUser'}" method="post">
-                            <div class="row my-3">
-                                <div class="col-md-3 form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" id="firstName" class="form-control" th:field="*{firstName}" required>
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" class="form-control" th:field="*{lastName}" required>
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    <label for="username">Username (Email)</label>
-                                    <input type="email" id="username" class="form-control" th:field="*{username}" required>
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" id="password" class="form-control" th:field="*{password}">
-                                </div>
+            <div id="collapseOne" class="collapse" data-parent="#accordion">
+                <div class="card-body" style="background-color: #e3f2fd;">
+                    <form class="form" th:object="${user}" th:action="@{'/admin/search'}" method="post">
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="search" placeholder="Search" id="firstName" class="form-control"
+                                       th:field="*{firstName}">
                             </div>
-                            <div class="row">
-                                <div class="col">
-                                    Roles:
-                                </div>
-                                <div class="col form-check form-check-inline">
-                                    <input class="form-check-input" name="role" type="checkbox" id="coordinator" value="ROLE_COORDINATOR" th:field="*{roles}">
-                                    <!--<input class="form-check-input" name="role" type="checkbox" id="coordinator" value="COORDINATOR" th:checked="${#sets.contains(user.roles,'COORDINATOR')}">-->
-                                    <label class="form-check-label" for="coordinator">Coordinator</label>
-                                </div>
-                                <div class="col form-check form-check-inline">
-                                    <input class="form-check-input" name="role" type="checkbox" id="supervisor" value="ROLE_SUPERVISOR" th:field="*{roles}">
-                                    <label class="form-check-label" for="supervisor">Supervisor</label>
-                                </div>
-                                <div class="col form-check form-check-inline">
-                                    <input class="form-check-input" name="role" type="checkbox" id="student" value="ROLE_STUDENT" th:field="*{roles}">
-                                    <label class="form-check-label" for="student">Student</label>
-                                </div>
-                                <div class="col form-check form-check-inline">
-                                    <input class="form-check-input" name="role" type="checkbox" id="reader" value="ROLE_READER" th:field="*{roles}">
-                                    <label class="form-check-label" for="reader">Reader</label>
-                                </div>
-                                <div class="col form-check form-check-inline">
-                                    <input class="form-check-input" name="role" type="checkbox" id="opponent" value="ROLE_OPPONENT" th:field="*{roles}">
-                                    <label class="form-check-label" for="opponent">Opponent</label>
-                                </div>
+                            <div class="col-md-3 form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="search" placeholder="Search" id="lastName" class="form-control"
+                                       th:field="*{lastName}">
                             </div>
-                            <div class="row">
-                                <button class="col-md-2 offset-md-5 btn btn-success btn-lg mt-3" type="submit">Save</button>
-
+                            <div class="col-md-3 form-group">
+                                <label for="username">Username (Email)</label>
+                                <input type="search" placeholder="Search" id="username" class="form-control"
+                                       th:field="*{username}">
                             </div>
-                        </form>
-                    </div>
+                            <div class="col-md-3">
+                                <div style="height: 30px"></div>
+                                <button class="btn btn-success btn-lg" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-
         </div>
 
-        <div style="height: 30px"></div>
+        <!--NEW USER-->
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-info btn-lg" type="button" data-toggle="collapse" data-target="#collapseTwo">
+                        Create a New User
+                    </button>
+                </h5>
+            </div>
 
+            <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                <div class="card-body" style="background-color: #e3f2fd;">
+                    <form class="form" th:object="${user}" th:action="@{'/admin/newUser'}" method="post">
+                        <div class="row my-3">
+                            <div class="col-md-3 form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" class="form-control" th:field="*{firstName}" required>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" class="form-control" th:field="*{lastName}" required>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="username">Username (Email)</label>
+                                <input type="email" id="username" class="form-control" th:field="*{username}" required>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" class="form-control" th:field="*{password}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                Roles:
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="coordinator"
+                                       value="ROLE_COORDINATOR" th:field="*{roles}">
+                                <!--<input class="form-check-input" name="role" type="checkbox" id="coordinator" value="COORDINATOR" th:checked="${#sets.contains(user.roles,'COORDINATOR')}">-->
+                                <label class="form-check-label" for="coordinator">Coordinator</label>
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="supervisor"
+                                       value="ROLE_SUPERVISOR" th:field="*{roles}">
+                                <label class="form-check-label" for="supervisor">Supervisor</label>
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="student"
+                                       value="ROLE_STUDENT" th:field="*{roles}">
+                                <label class="form-check-label" for="student">Student</label>
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="reader"
+                                       value="ROLE_READER" th:field="*{roles}">
+                                <label class="form-check-label" for="reader">Reader</label>
+                            </div>
+                            <div class="col form-check form-check-inline">
+                                <input class="form-check-input" name="role" type="checkbox" id="opponent"
+                                       value="ROLE_OPPONENT" th:field="*{roles}">
+                                <label class="form-check-label" for="opponent">Opponent</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button class="col-md-2 offset-md-5 btn btn-success btn-lg mt-3" type="submit">Save</button>
 
-        <!--LIST of USERS-->
-        <div class="row">
-            <div class="col">
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                    <tr class="bg-warning">
-                        <th scope="col">ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Active</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Edit</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="table-primary" th:each="user : ${userList}">
-                        <th scope="row" th:text="${user.id}">1</th>
-                        <td th:text="${user.firstName}">Albert</td>
-                        <td th:text="${user.lastName}">Einstein</td>
-                        <td th:text="${user.username}">Albi@lnu.se</td>
-                        <td th:text="${user.accountIsActive}">true</td>
-                        <td th:text="${user.roles}">Student</td>
-                        <td><a th:href="@{'/admin/' + ${user.id} + '/edit/'}">Edit</a></td>
-                    </tr>
-                    </tbody>
-                </table>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
     </div>
-    </body>
+
+    <div style="height: 30px"></div>
+
+
+    <!--LIST of USERS-->
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr class="bg-warning">
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Active</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-primary" th:each="user : ${userList}">
+                    <th scope="row" th:text="${user.id}">1</th>
+                    <td th:text="${user.firstName}">Albert</td>
+                    <td th:text="${user.lastName}">Einstein</td>
+                    <td th:text="${user.username}">Albi@lnu.se</td>
+                    <td th:text="${user.accountIsActive}">true</td>
+                    <td><span class="badge badge-pill badge-primary" th:each="role : ${user.roles}"  th:text="${role.getText()}"></span></td>
+                    <td><a th:href="@{'/admin/' + ${user.id} + '/edit/'}">Edit</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
 </html>     
