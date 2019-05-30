@@ -39,17 +39,18 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Thesis initThesis(User student, Semester semester) throws MissingRoleException {
+    public Thesis initThesis(Long studentId) {
 
-        if(!student.getRoles().contains(Role.ROLE_STUDENT))
-            throw new MissingRoleException("Could not initialize thesis; User is not a student");
-
+        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+                new NotFoundException("Student does not exist. Student Id:" + studentId));
 
         Thesis thesis = new Thesis();
         thesis.setStudent(student);
-        thesis.setSemester(semester);
+        thesis.setSemester(semesterService.getCurrentSemester());
         thesis.setSubmissions(new ArrayList<>());
-        return thesisRepository.save(thesis);
+        thesisRepository.save(thesis);
+
+        return thesis;
     }
 
     @Override
@@ -71,16 +72,6 @@ public class StudentServiceImpl implements StudentService {
     public Thesis getThesisByStudentId(Long studentId) {
         return thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId)
                 .orElseThrow(() -> new NotFoundException("No active thesis for student Id: "+studentId));
-    }
-
-    @Override
-    public List<Thesis> getTheses(User student) {
-        return thesisRepository.findThesesByStudent(student);
-    }
-
-    @Override
-    public List<Thesis> getThesesByStudentId(Long studentId) {
-        return thesisRepository.findThesesByStudentId(studentId);
     }
 
     //Returns list of all supervisors. If a supervisor has accepted a request for this student
@@ -121,34 +112,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void submitProjectDescription(Thesis thesis, Document projectDescription) {
+    public Submission submitDocument(Long studentId,
+                                     String comment,
+                                     MultipartFile multipartFile,
+                                     SubmissionType submissionType) throws IOException {
 
-        submitDocument(thesis, projectDescription, SubmissionType.PROJECT_DESCRIPTION);
-    }
-
-    @Override
-    public void submitProjectPlan(Thesis thesis, Document projectPlan) {
-
-        submitDocument(thesis, projectPlan, SubmissionType.PROJECT_PLAN);
-    }
-
-    @Override
-    public void submitReport(Thesis thesis, Document report) {
-
-        submitDocument(thesis, report, SubmissionType.REPORT);
-    }
-
-    @Override
-    public void submitFinalReport(Thesis thesis, Document finalReport) {
-
-        submitDocument(thesis, finalReport, SubmissionType.FINAL_REPORT);
-    }
-
-    @Override
-    public Submission submitDocument(Long studentId, String comment, MultipartFile multipartFile
-            , SubmissionType submissionType) throws IOException {
         Thesis thesis = thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).orElseThrow(() ->
                 new NotFoundException("No thesis exists for student ID : " + studentId));
+
         if (!isSubmissionAllowed(studentId, submissionType))
             throw new RuntimeException(submissionType + " submission is not allowed for Student ID " + studentId);
 
@@ -183,7 +154,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Boolean isSubmissionAllowed(Long studentId, SubmissionType submissionType) {
 
-        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+        // Check if student exist
+        userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
                 new NotFoundException("Student does not exist. Student Id:" + studentId));
 
         Thesis thesis = thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).orElse(null);
@@ -198,13 +170,13 @@ public class StudentServiceImpl implements StudentService {
 
         switch (submissionType) {
             case PROJECT_DESCRIPTION:
-                return isProjectDescriptionSubmissionAllowed(student, thesis);
+                return isProjectDescriptionSubmissionAllowed(thesis);
             case PROJECT_PLAN:
-                return isProjectPlanSubmissionAllowed(student, thesis);
+                return isProjectPlanSubmissionAllowed(thesis);
             case REPORT:
-                return isReportSubmissionAllowed(student, thesis);
+                return isReportSubmissionAllowed(thesis);
             case FINAL_REPORT:
-                return isFinalReportSubmissionAllowed(student, thesis);
+                return isFinalReportSubmissionAllowed(thesis);
             default:
                 log.error("No such submission type exists.");
                 return false;
@@ -215,46 +187,46 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<SubmissionType> getAllowedSubmissionTypes(Long studentId) {
 
-        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+        // Check if student exists
+        userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
                 new NotFoundException("Student does not exist. Student Id:" + studentId));
 
         List<SubmissionType> result = new LinkedList<>();
         Thesis thesis = thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).orElse(null);
-        //If student does not have an active thesis
+
+        // Initialize thesis If student does not have an active thesis
         if(thesis == null)
-            return result;
+            thesis = initThesis(studentId);
 
         //If final report is already graded
         if(thesis.getSubmissionByType(SubmissionType.FINAL_REPORT).isPresent()
                 && thesis.getSubmissionByType(SubmissionType.FINAL_REPORT).get().getGradeOptional().isPresent())
             return result;
 
-        if(isProjectDescriptionSubmissionAllowed(student, thesis))
+        if(isProjectDescriptionSubmissionAllowed(thesis))
             result.add(SubmissionType.PROJECT_DESCRIPTION);
-        if(isProjectPlanSubmissionAllowed(student, thesis))
+        if(isProjectPlanSubmissionAllowed(thesis))
             result.add(SubmissionType.PROJECT_PLAN);
-        if(isReportSubmissionAllowed(student, thesis))
+        if(isReportSubmissionAllowed(thesis))
             result.add(SubmissionType.REPORT);
-        if(isFinalReportSubmissionAllowed(student, thesis))
+        if(isFinalReportSubmissionAllowed(thesis))
             result.add(SubmissionType.FINAL_REPORT);
 
         return result;
     }
 
-    private Boolean isProjectDescriptionSubmissionAllowed(User student, Thesis thesis) {
+    private Boolean isProjectDescriptionSubmissionAllowed(Thesis thesis) {
         if (semesterService.isDeadlinePassed(SubmissionType.PROJECT_DESCRIPTION))
             return false;
 
         //Cannot submit if already passed
-        if (thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).isPresent()
-                && thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).get()
-                .getGradeOptional().orElse(0F).equals(1F))
-            return false;
+        return !thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).isPresent()
+                || !thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).get()
+                .getGradeOptional().orElse(0F).equals(1F);
 
-        return true;
     }
 
-    private Boolean isProjectPlanSubmissionAllowed(User student, Thesis thesis) {
+    private Boolean isProjectPlanSubmissionAllowed(Thesis thesis) {
         if (semesterService.isDeadlinePassed(SubmissionType.PROJECT_PLAN))
             return false;
 
@@ -265,48 +237,29 @@ public class StudentServiceImpl implements StudentService {
             return false;
 
         //Cannot submit if project description is not passed
-        if ( (!thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).isPresent()) ||
-                thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).get()
-                        .getGradeOptional().orElse(0F).equals(0F))
-            return false;
+        return (thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).isPresent()) &&
+                !thesis.getSubmissionByType(SubmissionType.PROJECT_DESCRIPTION).get()
+                        .getGradeOptional().orElse(0F).equals(0F);
 
-        return true;
     }
 
-    private Boolean isReportSubmissionAllowed(User student, Thesis thesis) {
+    private Boolean isReportSubmissionAllowed(Thesis thesis) {
         if (semesterService.isDeadlinePassed(SubmissionType.REPORT))
             return false;
 
         //Cannot submit if project plan is not passed
-        if ( (!thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).isPresent()) ||
-                thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).get()
-                        .getGradeOptional().orElse(0F).equals(0F))
-            return false;
-        return true;
+        return (thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).isPresent()) &&
+                !thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).get()
+                        .getGradeOptional().orElse(0F).equals(0F);
     }
-    private Boolean isFinalReportSubmissionAllowed(User student, Thesis thesis) {
+
+    private Boolean isFinalReportSubmissionAllowed(Thesis thesis) {
         if (semesterService.isDeadlinePassed(SubmissionType.FINAL_REPORT))
             return false;
 
         //Cannot submit if project plan is not passed
-        if (!thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).isPresent() ||
-                thesis.getSubmissionByType(SubmissionType.PROJECT_PLAN).get()
-                        .getGradeOptional().orElse(0F).equals(0F))
-            return false;
-        return true;
-    }
-
-    private void submitDocument(Thesis thesis, Document document, SubmissionType type){
-
-        if (!semesterService.isDeadlinePassed(type)) {
-            Submission submission = new Submission(thesis, type);
-            submission.setType(type);
-            submission.setSubmittedDocument(document);
-            thesis.addSubmission(submission);
-            thesisRepository.save(thesis);
-        }
-        else
-            throw new DeadlinePassed("Deadline is passed.");
-
+        return thesis.getSubmissionByType(SubmissionType.REPORT).isPresent() &&
+                !thesis.getSubmissionByType(SubmissionType.REPORT).get()
+                        .getGradeOptional().orElse(0F).equals(0F);
     }
 }
