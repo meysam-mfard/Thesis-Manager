@@ -1,6 +1,5 @@
 package e.group.thesismanager.service;
 
-import e.group.thesismanager.exception.DeadlinePassed;
 import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
@@ -58,16 +57,6 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> new NotFoundException("No active thesis for student Id: "+studentId));
     }
 
-    @Override
-    public List<Thesis> getTheses(User student) {
-        return thesisRepository.findThesesByStudent(student);
-    }
-
-    @Override
-    public List<Thesis> getThesesByStudentId(Long studentId) {
-        return thesisRepository.findThesesByStudentId(studentId);
-    }
-
     //Returns list of all supervisors. If a supervisor has accepted a request for this student
     // in the active semester the list will only contain that supervisor.
     // If thesis is not initiated or project description is not passed, returns an empty list
@@ -103,30 +92,6 @@ public class StudentServiceImpl implements StudentService {
         thesis.setSupervisor(supervisor);
         thesis.setSupervisorRequestStatus(SupervisorRequestStatus.REQUEST_SENT);
         thesisRepository.save(thesis);
-    }
-
-    @Override
-    public void submitProjectDescription(Thesis thesis, Document projectDescription) {
-
-        submitDocument(thesis, projectDescription, SubmissionType.PROJECT_DESCRIPTION);
-    }
-
-    @Override
-    public void submitProjectPlan(Thesis thesis, Document projectPlan) {
-
-        submitDocument(thesis, projectPlan, SubmissionType.PROJECT_PLAN);
-    }
-
-    @Override
-    public void submitReport(Thesis thesis, Document report) {
-
-        submitDocument(thesis, report, SubmissionType.REPORT);
-    }
-
-    @Override
-    public void submitFinalReport(Thesis thesis, Document finalReport) {
-
-        submitDocument(thesis, finalReport, SubmissionType.FINAL_REPORT);
     }
 
     @Override
@@ -168,7 +133,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Boolean isSubmissionAllowed(Long studentId, SubmissionType submissionType) {
 
-        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+        // Check if student exist
+        userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
                 new NotFoundException("Student does not exist. Student Id:" + studentId));
 
         Thesis thesis = thesisRepository.findThesisByStudentIdAndSemesterActiveIsTrue(studentId).orElse(null);
@@ -183,13 +149,13 @@ public class StudentServiceImpl implements StudentService {
 
         switch (submissionType) {
             case PROJECT_DESCRIPTION:
-                return isProjectDescriptionSubmissionAllowed(student, thesis);
+                return isProjectDescriptionSubmissionAllowed(thesis);
             case PROJECT_PLAN:
-                return isProjectPlanSubmissionAllowed(student, thesis);
+                return isProjectPlanSubmissionAllowed(thesis);
             case REPORT:
-                return isReportSubmissionAllowed(student, thesis);
+                return isReportSubmissionAllowed(thesis);
             case FINAL_REPORT:
-                return isFinalReportSubmissionAllowed(student, thesis);
+                return isFinalReportSubmissionAllowed(thesis);
             default:
                 log.error("No such submission type exists.");
                 return false;
@@ -200,7 +166,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<SubmissionType> getAllowedSubmissionTypes(Long studentId) {
 
-        User student = userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
+        // Check if student exist
+        userRepository.findUserByIdAndRolesContaining(studentId, Role.ROLE_STUDENT).orElseThrow(() ->
                 new NotFoundException("Student does not exist. Student Id:" + studentId));
 
         List<SubmissionType> result = new LinkedList<>();
@@ -214,19 +181,19 @@ public class StudentServiceImpl implements StudentService {
                 && thesis.getSubmissionByType(SubmissionType.FINAL_REPORT).get().getGradeOptional().isPresent())
             return result;
 
-        if(isProjectDescriptionSubmissionAllowed(student, thesis))
+        if(isProjectDescriptionSubmissionAllowed(thesis))
             result.add(SubmissionType.PROJECT_DESCRIPTION);
-        if(isProjectPlanSubmissionAllowed(student, thesis))
+        if(isProjectPlanSubmissionAllowed(thesis))
             result.add(SubmissionType.PROJECT_PLAN);
-        if(isReportSubmissionAllowed(student, thesis))
+        if(isReportSubmissionAllowed(thesis))
             result.add(SubmissionType.REPORT);
-        if(isFinalReportSubmissionAllowed(student, thesis))
+        if(isFinalReportSubmissionAllowed(thesis))
             result.add(SubmissionType.FINAL_REPORT);
 
         return result;
     }
 
-    private Boolean isProjectDescriptionSubmissionAllowed(User student, Thesis thesis) {
+    private Boolean isProjectDescriptionSubmissionAllowed(Thesis thesis) {
         if (semesterService.isDeadlinePassed(SubmissionType.PROJECT_DESCRIPTION))
             return false;
 
@@ -239,7 +206,7 @@ public class StudentServiceImpl implements StudentService {
         return true;
     }
 
-    private Boolean isProjectPlanSubmissionAllowed(User student, Thesis thesis) {
+    private Boolean isProjectPlanSubmissionAllowed(Thesis thesis) {
         if (semesterService.isDeadlinePassed(SubmissionType.PROJECT_PLAN))
             return false;
 
@@ -258,7 +225,7 @@ public class StudentServiceImpl implements StudentService {
         return true;
     }
 
-    private Boolean isReportSubmissionAllowed(User student, Thesis thesis) {
+    private Boolean isReportSubmissionAllowed(Thesis thesis) {
         if (semesterService.isDeadlinePassed(SubmissionType.REPORT))
             return false;
 
@@ -269,7 +236,7 @@ public class StudentServiceImpl implements StudentService {
             return false;
         return true;
     }
-    private Boolean isFinalReportSubmissionAllowed(User student, Thesis thesis) {
+    private Boolean isFinalReportSubmissionAllowed(Thesis thesis) {
         if (semesterService.isDeadlinePassed(SubmissionType.FINAL_REPORT))
             return false;
 
@@ -279,19 +246,5 @@ public class StudentServiceImpl implements StudentService {
                         .getGradeOptional().orElse(0F).equals(0F))
             return false;
         return true;
-    }
-
-    private void submitDocument(Thesis thesis, Document document, SubmissionType type){
-
-        if (!semesterService.isDeadlinePassed(type)) {
-            Submission submission = new Submission(thesis, type);
-            submission.setType(type);
-            submission.setSubmittedDocument(document);
-            thesis.addSubmission(submission);
-            thesisRepository.save(thesis);
-        }
-        else
-            throw new DeadlinePassed("Deadline is passed.");
-
     }
 }

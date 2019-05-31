@@ -24,27 +24,25 @@ public class StudentController extends AbstractDocumentSubmission{
 
     private final StudentService studentService;
     private final UserService userService;
-    private final SemesterService semesterService;
 
-    public StudentController(StudentService studentService, UserService userService, SemesterService semesterService) {
+    public StudentController(StudentService studentService, UserService userService) {
         this.studentService = studentService;
         this.userService = userService;
-        this.semesterService = semesterService;
     }
 
     @ModelAttribute("user")
-    public User loggedInUser(Model model) {
+    public User loggedInUser() {
         return userService.getCurrentUser();
     }
 
     @GetMapping("student")
-    public String getStudentHome(Model model) throws MissingRoleException {
+    public String getStudentHome(Model model) {
 
         User student = userService.getCurrentUser();
 
         model.addAttribute("allowedSubmissionTypes", studentService.getAllowedSubmissionTypes(student.getId()));
 
-        Thesis thesis = null;
+        Thesis thesis;
         try {
             thesis = studentService.getThesisByStudentId(student.getId());
         } catch (Exception e) {
@@ -52,7 +50,6 @@ public class StudentController extends AbstractDocumentSubmission{
         }
         model.addAttribute("thesis", thesis);
         model.addAttribute("supervisors", studentService.getSupervisors(thesis));
-        //model.addAttribute("theses", studentService.getTheses(student));
 
         return "pages/student";
     }
@@ -90,7 +87,7 @@ public class StudentController extends AbstractDocumentSubmission{
 
         SubmissionType submissionType = SubmissionType.strToType(submissionTypeStr);
         try {
-            Submission submission = studentService.submitDocument(studentId, comment, file, submissionType);
+            studentService.submitDocument(studentId, comment, file, submissionType);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("errorMessage", submissionType.toString()

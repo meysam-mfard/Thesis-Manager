@@ -16,23 +16,11 @@ public interface StudentService {
 
     Thesis getThesisByStudentId(Long studentId);
 
-    List<Thesis> getTheses(User student);
-
-    List<Thesis> getThesesByStudentId(Long studentId);
-
     //Returns list of all supervisors. If a supervisor has accepted a request for this student
     // in the active semester the list will only contain that supervisor.
     List<User> getSupervisors(Thesis thesis);
 
     void proposeSupervisor(Thesis thesis, User supervisor) throws MissingRoleException, InvalidSupervisorRequestException;
-
-    void submitProjectDescription(Thesis thesis, Document projectDescription);
-
-    void submitProjectPlan(Thesis thesis, Document projectPlan);
-
-    void submitReport(Thesis thesis, Document report);
-
-    void submitFinalReport(Thesis thesis, Document finalReport);
 
     Submission submitDocument(Long studentId, String comment, MultipartFile multipartFile
             , SubmissionType submissionType) throws IOException;
