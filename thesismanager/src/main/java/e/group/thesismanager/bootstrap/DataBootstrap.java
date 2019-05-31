@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Component
-@Profile("default")
+@Profile({"default", "productH2", "productMysql-loadData"})
 public class DataBootstrap implements ApplicationRunner {
 
     private final UserRepository userRepository;
@@ -40,6 +40,8 @@ public class DataBootstrap implements ApplicationRunner {
     @Transactional
     public void run(ApplicationArguments args) {
         createData();
+
+        log.info("\n *** Sample data was loaded into database. ***");
     }
 
     private void createData() {
