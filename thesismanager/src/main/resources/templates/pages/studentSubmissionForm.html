@@ -18,7 +18,7 @@
 </head>
 
 <body>
-<div th:replace="~{ /pages/menubar :: global-menubar(${user},'as Student')}"></div>
+<div th:replace="~{ pages/menubar :: global-menubar(${user},'as Student')}"></div>
 <div class="container" style="margin-top: 100px">
 
     <div class="card rounded-lg bg-light shadow p-2" th:fragment="studentSubmissionFrom-fragment (submissionType, user)">

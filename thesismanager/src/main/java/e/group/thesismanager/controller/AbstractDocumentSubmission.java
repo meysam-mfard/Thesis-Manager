@@ -5,8 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 
-public abstract class AbstractDocumentSubmission {
-    @Value("${spring.servlet.multipart.max-file-size}")
+public abstract class AbstractDocumentSubmission{
+    @Value("${maxFileSize}")
     private String MAX_FILE_SIZE;
 
     @Value("${uploadedFile_type}")

@@ -38,6 +38,6 @@ public class LoginController {
 
     @GetMapping("403error")
     public String get403Error() {
-        return "/pages/403error";
+        return "pages/403error";
     }
 }
