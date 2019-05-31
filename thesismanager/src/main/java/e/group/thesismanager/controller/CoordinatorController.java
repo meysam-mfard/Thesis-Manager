@@ -41,25 +41,25 @@ public class CoordinatorController {
     }
 
     @ModelAttribute("user")
-    public User loggedInUser(Model model) {
+    public User loggedInUser() {
 
         return userService.getCurrentUser();
     }
 
     @ModelAttribute("thesis")
-    public Thesis emptyThesis(Model model) {
+    public Thesis emptyThesis() {
 
         return new Thesis();
     }
 
     @ModelAttribute("semester")
-    public Semester emptySemester(Model model) {
+    public Semester emptySemester() {
 
         return new Semester();
     }
 
     @ModelAttribute("searchedUser")
-    public User emptyUser(Model model) {
+    public User emptyUser() {
 
         return new User();
     }

@@ -83,12 +83,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public User findUserByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() ->
-                new NotFoundException("User does not exist. Username: " + username));
-    }
-
-    @Override
     public Boolean usernameExist(String username) {
         return userRepository.findByUsername(username).isPresent();
     }

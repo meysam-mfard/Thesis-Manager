@@ -2,11 +2,9 @@ package e.group.thesismanager.controller;
 
 import e.group.thesismanager.exception.InvalidSupervisorRequestException;
 import e.group.thesismanager.exception.MissingRoleException;
-import e.group.thesismanager.model.Submission;
 import e.group.thesismanager.model.SubmissionType;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
-import e.group.thesismanager.service.SemesterService;
 import e.group.thesismanager.service.StudentService;
 import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
