@@ -100,12 +100,6 @@ public class CoordinatorServiceImpl implements CoordinatorService {
     }
 
     @Override
-    public List<User> getStudents() {
-
-        return getUserByRole(Role.ROLE_STUDENT);
-    }
-
-    @Override
     public List<User> getReaders() {
 
         return getUserByRole(Role.ROLE_READER);

@@ -18,24 +18,10 @@ public class AdminController {
     private final static String SAVE_USER_SUCCESS = "success";
     private final static String SAVE_USER_FAIL = "fail";
 
-    //////////////////////////////////////////////
-    //prevents changing User Id (Id is allocated automatically by DB)
-    /*@InitBinder
-    public void setDisallowedFields(WebDataBinder webDataBinder) {
-        webDataBinder.setDisallowedFields("id");
-    }*/
-
     @ModelAttribute("user")
-    public User emptyUser(Model model) {
+    public User emptyUser() {
         return new User();
     }
-
-    //runs for every controller
-    /*@ModelAttribute("userList")
-    public List<User> populateUserList(Model model) {
-        return adminService.findAllUsers();
-    }*/
-    //////////////////////////////////////////////
 
     private final AdminService adminService;
 

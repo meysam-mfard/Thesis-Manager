@@ -21,8 +21,6 @@ public interface AdminService {
 
     User assignRoleToUserById(Long id, Role role);
 
-    User findUserByUsername(String username);
-
     Boolean usernameExist(String username);
 
     User editUser(User updateUser) throws Exception;

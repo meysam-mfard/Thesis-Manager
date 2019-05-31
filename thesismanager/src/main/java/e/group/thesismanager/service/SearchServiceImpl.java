@@ -31,7 +31,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @ModelAttribute("thesis")
-    public Thesis emptyThesis(Model model) {
+    public Thesis emptyThesis() {
 
         return new Thesis();
     }

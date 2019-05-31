@@ -44,13 +44,13 @@ public class SubmissionController extends AbstractDocumentSubmission {
     }
 
     @ModelAttribute("user")
-    public User loggedInUser(Model model) {
+    public User loggedInUser() {
 
         return userService.getCurrentUser();
     }
 
     @GetMapping("thesis")
-    public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) throws MissingRoleException {
+    public String getThesis(Model model, @RequestParam(name = "stdId") Long studentId ) {
 
         model.addAttribute("thesis", studentService.getThesisByStudentId(studentId));
         model.addAttribute("studentId", studentId);
@@ -67,12 +67,7 @@ public class SubmissionController extends AbstractDocumentSubmission {
     }
 
     @GetMapping("/submission/download")
-    public ResponseEntity<Resource> downloadSubmission(Model model, @RequestParam(name = "stdId") Long studentId
-            , @RequestParam(name = "docId") Long documentId) {
-       /* Submission submission = studentService.getThesisById(studentId).getSubmissions().stream()
-                .filter(tempSub -> tempSub.getId().equals(submissionId)).findFirst().orElseThrow(() ->
-                        new NotFoundException("Submission does not exist. Id: " + submissionId));
-        Document document = submission.getSubmittedDocument();*/
+    public ResponseEntity<Resource> downloadSubmission(@RequestParam(name = "docId") Long documentId) {
 
         Document document = documentRepository.findById(documentId).orElseThrow(() ->
                 new NotFoundException("Document does not exist. ID: " + documentId));
