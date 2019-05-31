@@ -21,8 +21,6 @@ public interface CoordinatorService {
                          LocalDateTime reportDeadline,
                          LocalDateTime finalReportDeadline);
 
-    List<User> getStudents();
-
     List<User> getReaders();
 
     List<User> getOpponents();

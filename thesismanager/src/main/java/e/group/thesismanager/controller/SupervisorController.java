@@ -32,13 +32,13 @@ public class SupervisorController {
     }
 
     @ModelAttribute("user")
-    public User loggedInUser(Model model) {
+    public User loggedInUser() {
 
         return userService.getCurrentUser();
     }
 
     @ModelAttribute("searchedUser")
-    public User emptyUser(Model model) {
+    public User emptyUser() {
 
         return new User();
     }
