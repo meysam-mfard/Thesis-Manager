@@ -5,6 +5,7 @@ import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.model.SubmissionType;
 import e.group.thesismanager.model.Thesis;
 import e.group.thesismanager.model.User;
+import e.group.thesismanager.service.SemesterService;
 import e.group.thesismanager.service.StudentService;
 import e.group.thesismanager.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +23,12 @@ public class StudentController extends AbstractDocumentSubmission{
 
     private final StudentService studentService;
     private final UserService userService;
+    private final SemesterService semesterService;
 
-    public StudentController(StudentService studentService, UserService userService) {
+    public StudentController(StudentService studentService, UserService userService, SemesterService semesterService) {
         this.studentService = studentService;
         this.userService = userService;
+        this.semesterService = semesterService;
     }
 
     @ModelAttribute("user")
@@ -47,6 +50,7 @@ public class StudentController extends AbstractDocumentSubmission{
             thesis = null;
         }
         model.addAttribute("thesis", thesis);
+        model.addAttribute("semester", semesterService.getCurrentSemester());
         model.addAttribute("supervisors", studentService.getSupervisors(thesis));
 
         return "pages/student";

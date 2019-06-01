@@ -10,7 +10,7 @@
     </parent>
     <groupId>e.group</groupId>
     <artifactId>thesismanager</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>thesismanager</name>
     <description>The thesis manager system for LNU Computer Science Department.</description>
 

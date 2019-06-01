@@ -17,14 +17,17 @@ public class SemesterServiceImpl implements SemesterService{
         this.semesterRepository = semesterRepository;
     }
 
+    @Override
     public List<Semester> getSemesters() {
         return semesterRepository.findAll();
     }
 
+    @Override
     public Semester getCurrentSemester() {
         return semesterRepository.findByActiveIsTrue();
     }
 
+    @Override
     public Boolean isDeadlinePassed(SubmissionType submissionType) {
         Boolean isDeadlinePassed = null;
         switch (submissionType) {
