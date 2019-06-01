@@ -3,6 +3,7 @@ package e.group.thesismanager.service;
 import e.group.thesismanager.exception.MissingRoleException;
 import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.*;
+import e.group.thesismanager.repository.DocumentRepository;
 import e.group.thesismanager.repository.SubmissionRepository;
 import e.group.thesismanager.repository.ThesisRepository;
 import e.group.thesismanager.repository.UserRepository;
@@ -20,13 +21,15 @@ public class FeedbackServiceImpl implements FeedbackService {
     private ThesisRepository thesisRepository;
     private SubmissionRepository submissionRepository;
     private UserRepository userRepository;
+    private DocumentRepository documentRepository;
 
     public FeedbackServiceImpl(ThesisRepository thesisRepository,
-                           SubmissionRepository submissionRepository, UserRepository userRepository) {
+                           SubmissionRepository submissionRepository, UserRepository userRepository, DocumentRepository documentRepository) {
 
         this.thesisRepository = thesisRepository;
         this.submissionRepository = submissionRepository;
         this.userRepository = userRepository;
+        this.documentRepository = documentRepository;
     }
 
     @Override
@@ -107,5 +110,13 @@ public class FeedbackServiceImpl implements FeedbackService {
         }
 
         return submissionRepository.save(submission);
+    }
+
+    @Override
+    @Transactional
+    public Document getDocument(Long documentId) {
+
+        return documentRepository.findById(documentId).orElseThrow(() ->
+                new NotFoundException("Document does not exist. ID: " + documentId));
     }
 }

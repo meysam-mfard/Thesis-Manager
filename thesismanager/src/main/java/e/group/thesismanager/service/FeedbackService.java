@@ -1,6 +1,7 @@
 package e.group.thesismanager.service;
 
 import e.group.thesismanager.exception.MissingRoleException;
+import e.group.thesismanager.model.Document;
 import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.Submission;
 import e.group.thesismanager.model.Thesis;
@@ -19,4 +20,6 @@ public interface FeedbackService {
             , Long authorId, Role authorRole) throws IOException, MissingRoleException;
 
     Submission assessSubmission(Long submissionId, Float grade);
+
+    Document getDocument(Long documentId);
 }
