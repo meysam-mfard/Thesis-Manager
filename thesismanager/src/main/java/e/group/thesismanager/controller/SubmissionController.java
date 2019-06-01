@@ -1,7 +1,6 @@
 package e.group.thesismanager.controller;
 
 import e.group.thesismanager.exception.MissingRoleException;
-import e.group.thesismanager.exception.NotFoundException;
 import e.group.thesismanager.model.Document;
 import e.group.thesismanager.model.Role;
 import e.group.thesismanager.model.Submission;
@@ -33,14 +32,12 @@ public class SubmissionController extends AbstractDocumentSubmission {
     private final StudentService studentService;
     private final UserService userService;
     private final FeedbackService feedbackService;
-    private final DocumentRepository documentRepository;
 
-    public SubmissionController(StudentService studentService, UserService userService, FeedbackService feedbackService, DocumentRepository documentRepository) {
+    public SubmissionController(StudentService studentService, UserService userService, FeedbackService feedbackService) {
 
         this.studentService = studentService;
         this.userService = userService;
         this.feedbackService = feedbackService;
-        this.documentRepository = documentRepository;
     }
 
     @ModelAttribute("user")
@@ -69,8 +66,7 @@ public class SubmissionController extends AbstractDocumentSubmission {
     @GetMapping("/submission/download")
     public ResponseEntity<Resource> downloadSubmission(@RequestParam(name = "docId") Long documentId) {
 
-        Document document = documentRepository.findById(documentId).orElseThrow(() ->
-                new NotFoundException("Document does not exist. ID: " + documentId));
+        Document document = feedbackService.getDocument(documentId);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(document.getFileType()))
