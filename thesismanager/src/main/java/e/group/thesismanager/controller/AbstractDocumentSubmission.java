@@ -24,7 +24,7 @@ public abstract class AbstractDocumentSubmission{
         if (file.isEmpty())
             return null;
 
-        if (!Arrays.asList(FILE_TYPE.split(", ")).contains(file.getContentType()))
+        if (!Arrays.asList(FILE_TYPE.split(",")).contains(file.getContentType()))
             return " File type is not acceptable. Accepted types: " + FILE_TYPE;
         if (file.getSize() > Long.valueOf(MAX_FILE_SIZE.split("MB")[0])*1048576)
             return " File size is more than maximum acceptable size " + MAX_FILE_SIZE;
