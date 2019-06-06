@@ -9,8 +9,8 @@ To run the application and load the sample data into the database, activate prof
 #### with MySQL
 The SQL [scripts](./thesismanager/src/main/scripts) can be used to configure the database.
 
-- To run the application and load the sample data into the database, activate profile `productMysql-loadData`
-(should not be activated more than once).
+- To run the application and load the sample data into the database,
+activate profile `productMysql-loadData` (should not be activated more than once).
 
 - To run without loading the sample data or once it is loaded, activate profile `productMysql`.
 
